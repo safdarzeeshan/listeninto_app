@@ -21,8 +21,9 @@ $(function() {
         audio.load(first);
 
         // Load in a track on click
-        $('ol li').click(function(e) {
+//        $('ol li').click(function(e) {
 
+          $('#playlist').on('click', 'li',function(e) {
           console.log("test of click")
           e.preventDefault();
           $(this).addClass('playing').siblings().removeClass('playing');
