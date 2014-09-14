@@ -50,6 +50,8 @@ $(document).ready(function () {
 
         var song_url = document.getElementById("song_url").value;
 
+        $('#save_song').val('')
+
         getInfoFromSC(song_url);
 
     });
@@ -76,7 +78,10 @@ function loadSongToPlayer(track) {
 
 function saveToDB(track) {
     console.log('saving...', track);
-    $.ajax({url: "/listeningto/addsong?song_url=" + track.id ,async:true}).done(function(response){
+
+    var track_info = "track_url=" + track.permalink_url+ "&track_name=" +track.title + "&track_id=" +track.id+ "&stream_url=" + track.stream_url + "&track_artwork_url="+track.artwork_url ;
+
+    $.ajax({url: "/listeningto/addsong?" + track_info ,async:true}).done(function(response){
         console.log('new songs: ', response);
     });
 }
