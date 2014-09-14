@@ -30,3 +30,25 @@ def add_song(request):
 def delete_song(request, pk):
     get_object_or_404(Songs, pk=pk).delete()
     return HttpResponseRedirect(reverse('home'))
+
+
+def youtube(request):
+
+    return render(request, 'videojs_youtube.html')
+
+def jplayer(request):
+
+    return render(request, 'jplayer_example.html')
+
+def jplayer_youtube_custom(request):
+
+    return render(request, 'jplayer_youtube_custom.html')
+
+def jplayer_youtube(request):
+
+    return render(request, 'jplayer_youtube.html')
+
+def jplayer_soundcloud(request):
+
+    return render(request, 'jplayer_soundcloud.html')
+
