@@ -5,7 +5,6 @@ from django.http import HttpResponse
 
 def home(request):
     songs = Songs.objects.all()
-    print songs
     return render(request, 'home.html', {'songs': songs})
 
 
