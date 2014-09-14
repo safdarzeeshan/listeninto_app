@@ -50,8 +50,6 @@ $(document).ready(function () {
 
         var song_url = document.getElementById("song_url").value;
 
-        $('#save_song').val('')
-
         getInfoFromSC(song_url);
 
     });
@@ -78,6 +76,8 @@ function loadSongToPlayer(track) {
 
 function saveToDB(track) {
     console.log('saving...', track);
+
+    $('#song_url').val('');
 
     var track_info = "track_url=" + track.permalink_url+ "&track_name=" +track.title + "&track_id=" +track.id+ "&stream_url=" + track.stream_url + "&track_artwork_url="+track.artwork_url ;
 
