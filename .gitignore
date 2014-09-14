@@ -1,0 +1,11 @@
+# Ignoring compiled files
+*.pot
+*.pyc
+__pycache__/
+
+# Log Files
+*.log
+
+# Workspace
+
+.idea/
