@@ -1,54 +1,84 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
+<html><head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title> - jsFiddle demo by antishok</title>
+  
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.4.js"></script>
+  
+  <link rel="stylesheet" type="text/css" href="/css/normalize.css">
+  
+  
+  <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+  
+    
+      <script type="text/javascript" src="http://jplayer.org/1.2.0/js/jquery.jplayer.min.js"></script>
+    
+  
+  <style type="text/css">
+    
+  </style>
+  
+
+
+<script type="text/javascript">//<![CDATA[ 
+$(window).load(function(){
+	$("#jquery_jplayer").jPlayer({
+	  ready: function () {
+	    this.element.jPlayer("setFile", "http://api.soundcloud.com/tracks/72186759/stream?client_id=4ead13387d69695b62b1168c307f222d").jPlayer("play");
+
+	  },
+	  swfPath: "http://jplayer.org/1.2.0/js",
+	  volume: 50,
+	  preload: 'none'
+	})
+});//]]>  
+
+</script>
+
+
 </head>
 <body>
-
-<!-- JSPLAYER -->
-<div id="jquery_jplayer_1" class="jp-jplayer">
-</div><!-- jquery_jplayer_1 -->
-<div id="jp_container_1" class="jp-audio">
-	<div class="jp-type-playlist">
-		<div class="cover">
-			<a href="#"><img src="#.jpg" alt="#"></a>
-
-			<div class="jp-gui">
-				<div class="jp-interface">
-					<ul class="jp-controls">
-						<li><a href="javascript:;" class="jp-play" tabindex="1">play</a></li>
-						<li><a href="javascript:;" class="jp-pause" tabindex="1">pause</a></li>
-					</ul>
-
-					<div class="jp-progress">
-						<div class="jp-seek-bar">
-							<div class="jp-play-bar"></div>
-						</div>
-					</div>
-
-				</div>
-			</div><!-- GUI -->
-
-		</div><!-- COVER -->
-
-
-			<div class="jp-playlist">
-				<ul>
-					<!-- The method Playlist.displayPlaylist() uses this unordered list -->
-					<li></li>
-				</ul>
-			</div>
-			<div class="jp-no-solution">
-				<span>Update Required</span>
-				To play the media you will need to either update your browser to a recent version or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.
-			</div>
-
-	</div><!-- jp-type-playlist -->
-</div><!-- jp_container_1 -->
-<!-- JSPLAYER END -->
+  <script type="text/javascript" src="http://jplayer.org/1.2.0/js/jquery.jplayer.min.js"></script>
+<script type="text/javascript" src="http://jplayer.org/1.2.0/js/demos.common.js"></script>
+<div id="container">
+  <div id="content_main">
+    <div class="section demo_section_top">
+      <div id="jquery_jplayer" style="position: absolute; top: 0px; left: -9999px;"><audio id="jqjp_audio_0" preload="none" src="http://api.soundcloud.com/tracks/72186759/stream?client_id=4ead13387d69695b62b1168c307f222d"></audio><div id="jqjp_force_0" style="text-indent: -9999px;">0.34356774343177676</div></div>
+      <div class="jp-single-player">
+        <div class="jp-interface">
+          <ul class="jp-controls">
+            <li><a href="#" id="jplayer_play" class="jp-play" tabindex="1" style="display: inline;">play</a>
+            </li>
+            <li><a href="#" id="jplayer_pause" class="jp-pause" tabindex="1" style="display: none;">pause</a>
+            </li>
+            <li><a href="#" id="jplayer_stop" class="jp-stop" tabindex="1">stop</a>
+            </li>
+            <li><a href="#" id="jplayer_volume_min" class="jp-volume-min" tabindex="1">min volume</a>
+            </li>
+            <li><a href="#" id="jplayer_volume_max" class="jp-volume-max" tabindex="1">max volume</a>
+            </li>
+          </ul>
+          <div class="jp-progress">
+            <div id="jplayer_load_bar" class="jp-load-bar" style="width: 100%;">
+              <div id="jplayer_play_bar" class="jp-play-bar" style="width: 0.642547607715889%;"></div>
+            </div>
+          </div>
+          <div id="jplayer_volume_bar" class="jp-volume-bar">
+            <div id="jplayer_volume_bar_value" class="jp-volume-bar-value" style="width: 50%;"></div>
+          </div>
+          <div id="jplayer_play_time" class="jp-play-time"></div>
+          <div id="jplayer_total_time" class="jp-total-time"></div>
+        </div>
+        <div id="jplayer_playlist" class="jp-playlist">
+          <ul>
+            <li>Bubble</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  
 
 
 
-</body>
-</html>
+
+
+</div></div></body></html>
