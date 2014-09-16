@@ -1,0 +1,298 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"track",
+				"trackInfo"
+			],
+			[
+				"las",
+				"lastName"
+			],
+			[
+				"fr",
+				"firstName"
+			],
+			[
+				"la",
+				"lastName"
+			],
+			[
+				"fir",
+				"firstName"
+			],
+			[
+				"T",
+				"Templates"
+			],
+			[
+				"Dj",
+				"DjangoTest"
+			],
+			[
+				"prin",
+				"printer_name"
+			],
+			[
+				"s",
+				"subprocess"
+			],
+			[
+				"pr",
+				"print"
+			],
+			[
+				"connect",
+				"connected"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 117.0,
+		"selected_items":
+		[
+			[
+				"pretty",
+				"Pretty JSON: Format (Pretty Print) JSON"
+			],
+			[
+				"json",
+				"Set Syntax: JSON"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"java",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"prev brow",
+				"Markdown Preview: Python Markdown: Preview in Browser"
+			],
+			[
+				"prev bro",
+				"Markdown Preview: Python Markdown: Preview in Browser"
+			],
+			[
+				"markd",
+				"Markdown Preview: Python Markdown: Preview in Browser"
+			],
+			[
+				"mark",
+				"Markdown Preview: Python Markdown: Preview in Browser"
+			],
+			[
+				"syn mark",
+				"Set Syntax: Markdown"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 139.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/zeeshan/Downloads/jQuery.jPlayer.2.7.0/jQuery.jPlayer.2.7.0/jquery.jplayer.min.js",
+		"/home/zeeshan/Downloads/youtube-player/youtube-player.html",
+		"/home/zeeshan/Downloads/jQuery.jPlayer.2.7.0/jQuery.jPlayer.2.7.0/popcorn/popcorn.jplayer.js",
+		"/home/zeeshan/Downloads/jplayer/youtube-custom.html",
+		"/home/zeeshan/Downloads/jplayer/youtube.html",
+		"/home/zeeshan/Downloads/gist6404150-7d7a9954bd640b12ef834ebbcd87fc2cf927a471/sc-jp.html",
+		"/home/zeeshan/Downloads/youtube-player/script.js",
+		"/home/zeeshan/Downloads/youtube-player/youTubeEmbed/youTubeEmbed-jquery-1.0.js",
+		"/home/zeeshan/Downloads/youtube-player/youTubeEmbed/youTubeEmbed-jquery-1.0.css",
+		"/home/zeeshan/Downloads/youtube-player/jquery.swfobject.1-1-1.min.js",
+		"/home/zeeshan/Development/jQuery-Calendar-Plugin-Using-HTML-Templates-CLNDR-js/example/index.html",
+		"/home/zeeshan/Development/jQuery-Calendar-Plugin-Using-HTML-Templates-CLNDR-js/example/site.js",
+		"/home/zeeshan/Development/jQuery-Calendar-Plugin-Using-HTML-Templates-CLNDR-js/bower.json",
+		"/home/zeeshan/Development/jQuery-Calendar-Plugin-Using-HTML-Templates-CLNDR-js/example/test.html",
+		"/home/zeeshan/Development/DjangoTest/reservations/views.py",
+		"/home/zeeshan/Development/DjangoTest/DjangoTest/Templates/base.html",
+		"/home/zeeshan/Development/DjangoTest/reservations/templates/base.html",
+		"/home/zeeshan/Development/DjangoTest/reservations/urls.py",
+		"/home/zeeshan/Development/DjangoTest/db.sqlite3",
+		"/home/zeeshan/Development/DjangoTest/DjangoTest/settings.py",
+		"/home/zeeshan/Development/DjangoTest/Test/views.py",
+		"/home/zeeshan/Development/DjangoTest/DjangoTest/urls.py",
+		"/home/zeeshan/Development/DjangoTest/Test/urls.py",
+		"/home/zeeshan/Development/DjangoTest/DjangoTest/Templates/result.html",
+		"/home/zeeshan/Development/DjangoTest/DjangoTest/Templates/index.html",
+		"/home/zeeshan/Development/DjangoTest/Templates/base.html",
+		"/home/zeeshan/Development/DjangoTest/Test/Templates/Test/index.html",
+		"/home/zeeshan/Development/DjangoTest/Test/Templates/index.html",
+		"/home/zeeshan/Development/test123",
+		"/home/zeeshan/Development/.editorconfig",
+		"/home/zeeshan/Development/barcodeScanner/scanTest2.py",
+		"/home/zeeshan/Development/package.json",
+		"/home/zeeshan/Development/test.py",
+		"/home/zeeshan/Development/ads_project/usbMonitor.py",
+		"/home/zeeshan/Development/AngularJS/helloWorld.html",
+		"/home/zeeshan/Development/AngularJS/clock.html",
+		"/home/zeeshan/Development/SuperMario/license.old.txt",
+		"/home/zeeshan/Development/AngularJS/AngularJS Example/clock.html",
+		"/home/zeeshan/Development/AngularJS Example/switchable-grid/script.js",
+		"/home/zeeshan/Development/AngularJS Example/switchable-grid/index.html",
+		"/home/zeeshan/Development/AngularJS Example/inline-editor/index.html",
+		"/home/zeeshan/Development/AngularJS Example/inline-editor/script.js",
+		"/home/zeeshan/Development/AngularJS Example/order-form/script.js",
+		"/home/zeeshan/Development/AngularJS Example/order-form/index.html",
+		"/home/zeeshan/Development/AngularJS Example/navigation-menu/index.html",
+		"/home/zeeshan/Development/ads_project/test.py",
+		"/home/zeeshan/Development/ads_project/usbMonitorSample.py",
+		"/home/zeeshan/Development/ads_project/hello.py",
+		"/home/zeeshan/Development/usbtest2.py",
+		"/home/zeeshan/Development/ads_project/azhar_usb2.py",
+		"/home/zeeshan/Development/pyUsbTest.py",
+		"/home/zeeshan/Development/azhar_usb2.py",
+		"/home/zeeshan/Development/ads_project/",
+		"/home/zeeshan/.config/sublime-text-2/Packages/User/Preferences.sublime-settings",
+		"/usr/share/applications/sublime.desktop",
+		"/usr/share/applications/defaults.list"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			"/home/zeeshan/Development/DjangoTest/reservations"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"progress",
+			"controller",
+			"clndr",
+			"class",
+			"user",
+			"auth",
+			"year",
+			"update",
+			"reservationModel",
+			"sql",
+			"db",
+			"query",
+			"login",
+			"test",
+			"gedit.desktop",
+			"ged"
+		],
+		"highlight": false,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"sublime.desktop"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": false
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 33.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"",
+				"azhar_usb2.py"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true
+}
