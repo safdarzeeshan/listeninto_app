@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^jplayeryoutubecustom/$', views.jplayer_youtube_custom, name='jplayer_youtube_custom'),
     url(r'^jplayeryoutube/$', views.jplayer_youtube, name='jplayer_youtube'),
     url(r'^jplayersoundcloud/$', views.jplayer_soundcloud, name='jplayer_soundcloud'),
-    url(r'^jplayerscyt/$', views.jplayer_scyt, name='jplayer_scyt')
+    url(r'^jplayerscyt/$', views.jplayer_scyt, name='jplayer_scyt'),
+    url(r'^simpleytsc/$', views.simple_yt_sc, name='simpleytsc')
 
 ]

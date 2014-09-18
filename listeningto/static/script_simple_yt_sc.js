@@ -16,7 +16,8 @@ $(document).ready(function(){
 	$('.stop').click(function(){
 		console.log('stopping for youtube');
 
-		yt_player_1.stopVideo();		
+		yt_player_1.stopVideo();
+	
 	})
 
 })

@@ -55,3 +55,7 @@ def jplayer_soundcloud(request):
 def jplayer_scyt(request):
 
     return render(request, 'jplayer_scyt.html')
+
+def simple_yt_sc(request):
+
+    return render(request, 'simple_yt_sc.html')
