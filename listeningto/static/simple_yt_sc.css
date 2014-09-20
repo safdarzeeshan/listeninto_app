@@ -32,3 +32,12 @@ ol li a {
   text-decoration: none;
 }
 
+.controls span {
+  padding: 1em;
+  font-size: 2em;
+}
+
+li a {
+  cursor: pointer;
+}
+

@@ -3,31 +3,38 @@ tag.src = "https://www.youtube.com/iframe_api";
 var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
+var currentPlaying = {};
+
 var media = [
   {
     id: 1,
     url: 'http://api.soundcloud.com/tracks/72186759/stream?client_id=4ead13387d69695b62b1168c307f222d',
-    type: 'soundcloud'
+    type: 'soundcloud',
+    name: 'Zeeshan Dev Demo'
   },
   {
     id: 2,
     url: 'i4VeO9PGppA',
-    type: 'youtube'
+    type: 'youtube',
+    name: 'Night Terrors of 1927 - No One to Complain'
   },
   {
     id: 3,
     url: 'https://api.soundcloud.com/tracks/166038167/stream?client_id=4ead13387d69695b62b1168c307f222d',
-    type: 'soundcloud'
+    type: 'soundcloud',
+    name: 'jamie xx - All Under One Roof Raving'
   },
   {
     id: 4,
     url: 'r0bS-YnLf4s',
-    type: 'youtube'
+    type: 'youtube',
+    name: 'Flight Facilities - Crave You'
   },
   {
     id: 5,
     url: 'https://api.soundcloud.com/tracks/148655100/stream?client_id=4ead13387d69695b62b1168c307f222d',
-    type: 'soundcloud'
+    type: 'soundcloud',
+    name: 'Fink - Looking too Closely'
   }
 ];
 
@@ -40,13 +47,20 @@ $(document).ready(function(){
 
 	//play youtube
 	$('.play').click(function(){
-		console.log('playing', currentPlaying);
+
+    // if no object loaded, load first file
+    if(jQuery.isEmptyObject(currentPlaying)) {
+      loadItem(media[0].id);
+    }
+
+    console.log('playing', currentPlaying);
+
+    // handle appropriate player
 
 		if(currentPlaying.type === 'youtube') { yt_player_1.playVideo(); }
     else { $("#jplayer_sc").jPlayer("play"); }
 	})
 
-	//pause youtube
 	$('.stop').click(function(){
 		console.log('stopping', currentPlaying);
 
@@ -56,15 +70,14 @@ $(document).ready(function(){
 	})
 
   $.each(media, function(index, item) {
-    $('.media-list').append('<li><a onClick=loadItem(' + item.id + ')>' + item.url + ' (' + item.type + ') </a></li>');
+    $('.media-list').append('<li><a onClick=loadItem(' + item.id + ')>' + item.name + ' (' + item.type + ') </a></li>');
   });
 
 });
 
 function loadItem(id) {
   // stop currently playing songs
-  $("#jplayer_sc").jPlayer('stop');
-  yt_player_1.stopVideo();
+  stopAllPlayers();
 
   // load new song
 
@@ -81,6 +94,11 @@ function loadItem(id) {
   else {
     loadSound(currentPlaying.url);
   }
+}
+
+function stopAllPlayers() {
+  $("#jplayer_sc").jPlayer('stop');
+  yt_player_1.stopVideo();
 }
 
 function onYouTubeIframeAPIReady(){
