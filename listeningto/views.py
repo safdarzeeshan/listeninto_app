@@ -5,12 +5,6 @@ from django.contrib import auth
 from listeningto.models import Songs
 from django.contrib.auth.forms import UserCreationForm
 
-
-def home(request):
-    songs = Songs.objects.all()
-    return render(request, 'home.html', {'songs': songs})
-
-
 def add_song(request):
     print "song about to be added"
 
@@ -67,7 +61,7 @@ def register(request):
     })
 
 
-def simple_yt_sc(request):
+def home(request):
     songs = Songs.objects.all()
 
-    return render(request, 'simple_yt_sc.html',  {'songs': songs})
+    return render(request, 'home.html',  {'songs': songs})
