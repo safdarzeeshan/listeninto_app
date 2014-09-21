@@ -29,23 +29,26 @@ def delete_song(request, pk):
 
 
 def login_view(request):
-    username = request.POST.get('username', '')
-    password = request.POST.get('password', '')
-    user = auth.authenticate(username=username, password=password)
-    if user is not None and user.is_active:
-        # Correct password, and the user is marked "active"
-        auth.login(request, user)
-        # Redirect to a success page.
-        return HttpResponseRedirect("/account/loggedin/")
+    if request.method == 'POST':
+        username = request.POST.get('username', '')
+        password = request.POST.get('password', '')
+        user = auth.authenticate(username=username, password=password)
+        if user is not None and user.is_active:
+            # Correct password, and the user is marked "active"
+            auth.login(request, user)
+            # Redirect to a success page.
+            return HttpResponseRedirect("/listeningto/home/")
+        else:
+            # Show an error page
+            return HttpResponseRedirect("/account/invalid/")
     else:
-        # Show an error page
-        return HttpResponseRedirect("/account/invalid/")
+        return render(request, "registration/login.html")
 
 
 def logout_view(request):
     auth.logout(request)
     # Redirect to a success page.
-    return HttpResponseRedirect("/account/loggedout/")
+    return HttpResponseRedirect("/listeningto/home/")
 
 
 def register(request):
@@ -53,7 +56,12 @@ def register(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             new_user = form.save()
-            return HttpResponseRedirect("/books/")
+            username = request.POST.get('username', '')
+            password = request.POST.get('password1', '')
+            user = auth.authenticate(username=username, password=password)
+            if user is not None and user.is_active:
+                auth.login(request, user)
+                return HttpResponseRedirect("/listeningto/home/")
     else:
         form = UserCreationForm()
     return render(request, "registration/register.html", {
@@ -64,4 +72,4 @@ def register(request):
 def home(request):
     songs = Song.objects.all()
 
-    return render(request, 'home.html',  {'songs': songs})
+    return render(request, 'home.html', {'songs': songs})

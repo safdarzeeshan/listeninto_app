@@ -10,9 +10,35 @@
     <script src="http://connect.soundcloud.com/sdk.js"></script>
 </head>
 <body>
-    <div class="container">
-        {% block content %}
-        {% endblock content%}
+<div class="container">
+{% if user.is_authenticated %}
+    <form method="get" action="/accounts/logout/">
+        <button type="submit">Logout</button>
+    </form>
+    <p>Welcome, {{ user.username }}. Thanks for logging in.</p>
+    <div>
+        <form class="song-upload">
+            <fieldset>
+                <input type="text" class="song_url_input" value="" id="song_url" placeholder="Enter Song URL">
+                <button type="button" class="save-button" id="save_song" onclick="saveSong()">Save Song</button>
+            </fieldset>
+        </form>
     </div>
+
+{% else %}
+    <form method="get" action="/accounts/register/">
+        <button type="submit">Register</button>
+    </form>
+
+    <form method="get" action="/accounts/login/?next=www.google.com">
+        <button type="submit">Login</button>
+    </form>
+    <p>Welcome, new user. Please log in.</p>
+{% endif %}
+
+{% block content %}
+{% endblock content %}
+</div>
+
 </body>
 </html>
