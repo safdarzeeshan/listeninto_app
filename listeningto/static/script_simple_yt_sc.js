@@ -6,9 +6,18 @@ firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 var currentPlaying = {};
 
 $(document).ready(function(){
+    
+  // var cssSelector = {
+  //   jPlayer: "#jplayer_sc",
+  //   cssSelectorAncestor: ".jp-jplayer"
+  // };
+
   var player = $("#jplayer_sc").jPlayer({
         swfPath: "/static/jQuery.jPlayer.2.7.0/Jplayer.swf",
-        supplied: "mp3"
+        supplied: "mp3",
+        timeupdate: function(event) {
+      $( ".progress-bar" ).slider("value", event.jPlayer.status.currentPercentAbsolute);
+    }
     });
 
   // Initialize SoundCloud API
@@ -40,6 +49,34 @@ $(document).ready(function(){
     else { $("#jplayer_sc").jPlayer("pause"); }
 
 	})
+
+  //progress bar
+  var PlayerData = $('#jplayer_sc').jPlayer("Data");
+  console.log(PlayerData)
+
+
+  $('.progress-bar').slider({
+    animate: "fast",
+    max: 100,
+    range: "min",
+    step: 0.1,
+    value : 0,
+    slide: function(event, ui) {
+      var sp = PlayerData.status.seekPercent;
+     
+      if(sp > 0) {
+        // Move the play-head to the value and factor in the seek percent.
+        $('#jplayer_sc').jPlayer("playHead", ui.value * (100 / sp));
+      } else {
+        // Create a timeout to reset this slider to zero.
+        setTimeout(function() {
+           $( ".progress" ).slider("value", 0);
+        }, 0);
+      }
+    }
+  });
+
+
 });
 
 
