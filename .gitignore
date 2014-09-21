@@ -9,3 +9,6 @@ __pycache__/
 # Workspace
 
 .idea/
+
+#ignoring log files
+logfile
