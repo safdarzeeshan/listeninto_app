@@ -5,32 +5,48 @@
     <title></title>
     <link rel="stylesheet" href="/static/style.css">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
-    <script src="/static/audiojs/audio.min.js"></script>
+    <script type="text/javascript" src="http://jplayer.org/1.2.0/js/jquery.jplayer.min.js"></script>
+    <script src="/static/player.js"></script>
     <script src="http://connect.soundcloud.com/sdk.js"></script>
-    <script src="/static/scripts.js"></script>
-</head>
-<body>
 
-  <div class="container">
-      <form class="song-upload">
+</head>
+
+<div class="container">
+    <div>
+        <form class="song-upload">
           <fieldset>
-            <input type="text" class="song_url_input" value="" id="song_url" placeholder="Enter SoundCloud URL">
+            <input type="text" class="song_url_input" value="" id="song_url" placeholder="Enter Song URL">
             <button type="button" class="save-button" id="save_song" onclick="saveSong()">Save Song</button>
           </fieldset>
-      </form>
+        </form>
+    </div>
 
-      <div class="audio-player">
-        <audio preload></audio>
+    <div id="jquery_jplayer_1" class="jp-jplayer">
+        <div id="jplayer_sc"></div>
+        <div  id="yt_player_1"></div>
+    </div>
+
+    <div class ="controls">
+        <span><a href="#"  class="play">play</a></span>
+        <span><a href="#"  class="stop">stop</a></span>
+    </div>
+
+    </ul>
+    <div class="audio-player">
         <ol id="playlist">
-          {% for song in songs %}
+            {% for song in songs %}
             <li id="song_{{song.pk}}">
-              <a href="#" data-src="{{ song.stream_url }}?client_id=ad504f994ee6c4b53cfb47aec786f595">{{ song.track_name }}</a>
+              <a href="#" onClick=loadItem('{{song.track_type}}','{{song.track_id}}')>{{ song.track_name }}</a>
             </li>
-          {% endfor %}
-        </ol>
-      </div>
-  </div>
+            {% endfor %}
+        </ol>    
+    </div>    
+
+
+
+
+</div>
+
 
 </body>
 </html>
