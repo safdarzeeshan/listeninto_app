@@ -1,0 +1,46 @@
+<html><head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title> - jsFiddle demo by antishok</title>
+  
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.4.js"></script>
+  <script type="text/javascript" src="http://jplayer.org/1.2.0/js/jquery.jplayer.min.js"></script>
+    
+  
+  <style type="text/css">
+    
+  </style>
+  
+
+
+<script type="text/javascript">//<![CDATA[ 
+$(window).load(function(){
+	$("#jquery_jplayer").jPlayer({
+	  ready: function () {
+	    this.element.jPlayer("setFile", "http://api.soundcloud.com/tracks/72186759/stream?client_id=4ead13387d69695b62b1168c307f222d").jPlayer("play");
+
+	  }
+	})
+});//]]>  
+
+</script>
+
+
+</head>
+<body>
+
+<div id="jquery_jplayer">
+</div>
+
+<div>
+   <ul>
+    <li><a href="#" id="jplayer_play" >play</a>
+    </li>
+    <li><a href="#" id="jplayer_stop" >stop</a>
+    </li>
+   </ul>
+</div>
+
+
+
+</body>
+</html>

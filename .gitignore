@@ -9,3 +9,5 @@ __pycache__/
 # Workspace
 
 .idea/
+*.sublime-project
+*.sublime-workspace

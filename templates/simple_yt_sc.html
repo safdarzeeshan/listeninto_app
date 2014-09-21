@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript" src="http://jplayer.org/1.2.0/js/jquery.jplayer.min.js"></script>
+    <script src="/static/script_simple_yt_sc.js"></script>
+    <script src="http://connect.soundcloud.com/sdk.js"></script>
+
+</head>
+
+<div class="container">
+    <div>
+        <form class="song-upload">
+          <fieldset>
+            <input type="text" class="song_url_input" value="" id="song_url" placeholder="Enter Song URL">
+            <button type="button" class="save-button" id="save_song" onclick="saveSong()">Save Song</button>
+          </fieldset>
+        </form>
+    </div>
+
+    <div id="jquery_jplayer_1" class="jp-jplayer">
+        <div id="jplayer_sc"></div>
+        <div  id="yt_player_1"></div>
+    </div>
+
+    <div class ="controls">
+        <span><a href="#"  class="play">play</a></span>
+        <span><a href="#"  class="stop">stop</a></span>
+    </div>
+
+    </ul>
+    <div class="audio-player">
+        <ol id="playlist">
+            {% for song in songs %}
+            <li id="song_{{song.pk}}">
+              <a href="#" onClick=loadItem('{{song.track_type}}','{{song.track_id}}')>{{ song.track_name }}</a>
+            </li>
+            {% endfor %}
+        </ol>    
+    </div>    
+
+
+
+
+</div>
+
+
+</body>
+</html>

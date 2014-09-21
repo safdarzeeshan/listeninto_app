@@ -14,6 +14,7 @@ def home(request):
 def add_song(request):
     print "song about to be added"
 
+    track_type = request.GET['track_type']
     track_url = request.GET['track_url']
     track_name = request.GET['track_name']
     track_id = request.GET['track_id']
@@ -21,7 +22,7 @@ def add_song(request):
     track_artwork_url = request.GET['track_artwork_url']
 
     #add song url to table in db
-    r = Songs.objects.create(track_url=track_url, track_name=track_name,
+    r = Songs.objects.create(track_type=track_type, track_url=track_url, track_name=track_name,
                              track_id=track_id, stream_url=stream_url, track_artwork_url=track_artwork_url)
     r.save()
 
@@ -64,3 +65,9 @@ def register(request):
     return render(request, "registration/register.html", {
         'form': form,
     })
+
+
+def simple_yt_sc(request):
+    songs = Songs.objects.all()
+
+    return render(request, 'simple_yt_sc.html',  {'songs': songs})

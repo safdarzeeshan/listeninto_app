@@ -9,6 +9,7 @@ class Songs(models.Model):
     stream_url = models.CharField(max_length=500, blank=False)
     track_id = models.CharField(max_length=500, blank=False)
     track_artwork_url = models.CharField(max_length=500, blank=False)
+    track_type = models.CharField(max_length=500, blank=False)
 
 
 def __str__(self):
