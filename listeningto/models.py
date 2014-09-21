@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 
 
-class Songs(models.Model):
+class Song(models.Model):
     track_url = models.CharField(max_length=500, blank=False)
     track_name = models.CharField(max_length=500, blank=False)
     stream_url = models.CharField(max_length=500, blank=False)
