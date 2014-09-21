@@ -11,11 +11,15 @@ $(document).ready(function(){
         supplied: "mp3"
     });
 
+  $("#jplayer_sc").bind($.jPlayer.event.play, function(event) {
+    console.log('status: ' + event.jPlayer.status);
+  });
+
   // Initialize SoundCloud API
 
   SC.initialize({
   client_id: 'ad504f994ee6c4b53cfb47aec786f595'
-  });  
+  });
 
 	//play youtube
 	$('.play').click(function(){
@@ -82,7 +86,7 @@ function loadYoutube(id) {
 
 function loadSoundcloud(id){
   console.log('Sound cloud setting up');
-  $("#jplayer_sc").jPlayer("setFile", "http://api.soundcloud.com/tracks/" +  id + "/stream?client_id=ad504f994ee6c4b53cfb47aec786f595");
+  $("#jplayer_sc").jPlayer("setMedia", {mp3: "http://api.soundcloud.com/tracks/" +  id + "/stream?client_id=ad504f994ee6c4b53cfb47aec786f595"});
   $("#jplayer_sc").jPlayer('play');
 }
 
@@ -105,7 +109,7 @@ function getSongInfo(song_url){
 
         domEl = "<li ><a href='#' onClick=loadItem('youtube','" + id + "')>" + data.data.title + "</a></li>"
         $('#playlist').append(domEl);
-        var track_info = "track_type=youtube" + "&track_url="  + url + "&track_name=" +data.data.title + "&track_id=" +id+ "&track_artwork_url="+ data.data.thumbnail.sqDefault + "&stream_url=''"; 
+        var track_info = "track_type=youtube" + "&track_url="  + url + "&track_name=" +data.data.title + "&track_id=" +id+ "&track_artwork_url="+ data.data.thumbnail.sqDefault + "&stream_url=''";
         console.log(track_info)
         saveToDB(track_info);
       });
@@ -121,7 +125,7 @@ function getSongInfo(song_url){
 
       domEl = "<li ><a href='#' onClick=loadItem('soundcloud','" + track.id + "')>" + track.title + "</a></li>"
       $('#playlist').append(domEl);
-      
+
       var track_info = "track_type=soundcloud" + "&track_url=" + track.permalink_url+ "&track_name=" +track.title + "&track_id=" +track.id+ "&stream_url=" + track.stream_url + "&track_artwork_url="+track.artwork_url ;
       console.log(track_info)
       saveToDB(track_info);
