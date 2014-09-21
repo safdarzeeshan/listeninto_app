@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>jPlayer</title>
+
+<!-- MOBILE SETTINGS -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<!-- CSS -->
+<link rel="stylesheet" type="text/css" href="/static/jplayer_youtube_assets/css/style.css" />
+<!--[if lte IE 8]>
+<script type="text/javascript" src="assets/js/html5shiv.js"></script>
+<![endif]-->
+<!-- JQUERY -->
+<script type="text/javascript" src="/static/jplayer_youtube_assets/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/jplayer_youtube_assets/js/jquery.easing.js"></script>
+</head>
+
+<body>
+<div id="content"><div class="container">
+    <!-- CONTENT -->
+	
+	<style>
+	@media only screen and (min-width: 768px) and (max-width: 959px){#yt_player_1{width:768px;height:432px;}}
+	@media only screen and (min-width: 480px) and (max-width: 767px){#yt_player_1{width:420px;height:236px;}}
+	@media only screen and (max-width: 479px){#yt_player_1{width:300px;height:167px;}}
+	</style>
+    <script>
+		
+	<!-- YOUTUBE API -->
+	var tag = document.createElement('script');
+	tag.src = "http://www.youtube.com/iframe_api";
+	var firstScriptTag = document.getElementsByTagName('script')[0];
+	firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+	
+	var yt_player_1;
+	function onYouTubeIframeAPIReady(){
+		yt_player_1 = new YT.Player('yt_player_1',{
+			height		: '540',
+			width		: '960',
+			videoId		: 'iABUHt-Z9Gc',
+			playerVars:{
+				'autohide':			1,
+				'autoplay':			0,
+				'controls': 		1,
+				'fs':				1,
+				'disablekb':		0,
+				'modestbranding':	1,
+				// 'cc_load_policy': 1, // forces closed captions on
+				'iv_load_policy':	3, // annotations, 1=on, 3=off
+				// 'playlist': videoID, videoID, videoID, etc,
+				'rel':				0,
+				'showinfo':			0,
+				'theme':			'dark',	// dark, light
+				'color':			'red'	// red, white
+				},
+			events:{
+				'onReady': onPlayerReady,
+				'onPlaybackQualityChange': onPlayerPlaybackQualityChange,
+				'onPlaybackRateChange' : onPlaybackRateChange,
+				'onStateChange': onPlayerStateChange,
+				'onError': onPlayerError
+				}
+			});
+		}
+	
+	function onPlayerReady(){
+		console.log('player ready');
+		} // END FUNCTION
+	
+	function onPlayerPlaybackQualityChange(quality){
+		console.log(quality);
+		} // END FUNCTION
+		
+	function onPlaybackRateChange(rate){
+		console.log(rate);
+		} // END FUNCTION
+	
+	function onPlayerStateChange(state){
+		switch(state.data){
+			case -1: //unstarted
+				/* do something */
+				break;
+			case 0: // ended
+				/* do something */
+				break;
+			case 1: // playing
+				/* do something */
+				break;
+			case 2: // paused
+				/* do something */
+				break;
+			case 3: // buffering
+				/* do something */
+				break;
+			case 5: // video cued
+				/* do something */
+				break;
+			default:
+				// do nothing
+			}
+		} // END FUNCTION
+		
+	function onPlayerError(error){
+		console.log(error);
+		} // END FUNCTION
+	
+	/*
+	yt_player_1.playVideo();
+	yt_player_1.pauseVideo();
+	yt_player_1.stopVideo();
+	yt_player_1.seekTo(seconds:0, true);
+	yt_player_1.clearVideo(); // clears display
+	
+	yt_player_1.nextVideo();
+	yt_player_1.previousVideo();
+	yt_player_1.playVideoAt(0); // playlist index
+	
+	yt_player_1.mute();
+	yt_player_1.unMute();
+	yt_player_1.isMuted();
+	yt_player_1.setVolume(80);
+	yt_player_1.getVolume();
+	
+	yt_player_1.setSize(width:420, height:315);
+	yt_player_1.getPlaybackRate();
+	yt_player_1.setPlaybackRate(1);
+	
+	yt_player_1.setLoop(false);
+	yt_player_1.setShuffle(false);
+	
+	yt_player_1.getVideoLoadedFraction();
+	yt_player_1.getPlayerState();
+	yt_player_1.getCurrentTime();
+	
+	yt_player_1.getPlaybackQuality();
+	yt_player_1.setPlaybackQuality('default') // small, medium, large, hd720, hd1080, highres, default
+	yt_player_1.getAvailableQualityLevels();
+	yt_player_1.getDuration();
+	yt_player_1.getVideoUrl();
+	yt_player_1.getVideoEmbedCode();
+	*/
+		
+	</script>
+    
+    <div  id="yt_player_1"></div>
+	
+    
+    <!-- END CONTENT -->
+</div></div>
+</body>
+</html>
