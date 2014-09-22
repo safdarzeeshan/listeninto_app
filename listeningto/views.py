@@ -4,6 +4,9 @@ from django.core.urlresolvers import reverse
 from django.contrib import auth
 from listeningto.models import Song
 from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render_to_response
+from django.template.context import RequestContext
+
 
 def add_song(request):
     print "song about to be added"
@@ -15,9 +18,9 @@ def add_song(request):
     stream_url = request.GET['stream_url']
     track_artwork_url = request.GET['track_artwork_url']
 
-    #add song url to table in db
+    # add song url to table in db
     r = Song.objects.create(track_type=track_type, track_url=track_url, track_name=track_name,
-                             track_id=track_id, stream_url=stream_url, track_artwork_url=track_artwork_url)
+                            track_id=track_id, stream_url=stream_url, track_artwork_url=track_artwork_url)
     r.save()
 
     return HttpResponse(status=201)
@@ -71,5 +74,6 @@ def register(request):
 
 def home(request):
     songs = Song.objects.all()
-    return render(request, 'home.html',  {'songs': songs})
-
+    context = RequestContext(request, {'request': request,
+                                       'songs': songs})
+    return render(request, 'home.html', context_instance=context)
