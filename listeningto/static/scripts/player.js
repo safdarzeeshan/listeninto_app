@@ -49,11 +49,9 @@ $(document).ready(function(){
 	})
 
 
-  // var sp = $("#jplayer_sc").bind($.jPlayer.event.play, function(event) {
-  //   console.log('status: ' + event.jPlayer.status.seekPercent);
-  // });
+   var seekProgress = 0;
 
-  $('.progress-bar').slider({ 
+  $('.progress-bar').slider({
     animate: "fast",
     max: 100,
     range: "min",
@@ -62,13 +60,13 @@ $(document).ready(function(){
     slide: function(event, ui) {
       // var sp = $('#jplayer_sc').jPlayer(event.jPlayer.status.seekPercent);
       $("#jplayer_sc").bind($.jPlayer.event.timeupdate, function(event) {
-        var sp = (event.jPlayer.status.seekPercent);
-      
+        seekProgress = (event.jPlayer.status.seekPercent);
+
       })
-     
-      if(sp > 0) {
+
+      if(seekProgress > 0) {
         // Move the play-head to the value and factor in the seek percent.
-        $('#jplayer_sc').jPlayer("playHead", ui.value * (100 / sp));
+        $('#jplayer_sc').jPlayer("playHead", ui.value * (100 / seekProgress));
       } else {
         // Create a timeout to reset this slider to zero.
         setTimeout(function() {
