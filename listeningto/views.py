@@ -71,5 +71,5 @@ def register(request):
 
 def home(request):
     songs = Song.objects.all()
+    return render(request, 'home.html',  {'songs': songs})
 
-    return render(request, 'home.html', {'songs': songs})

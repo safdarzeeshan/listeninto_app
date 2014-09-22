@@ -1,4 +1,6 @@
+
 {% extends 'base.html' %}
+
 
 {% block content %}
     <div id="jquery_jplayer_1" class="jp-jplayer">
@@ -19,6 +21,16 @@
                        onClick=loadItem('{{ song.track_type }}','{{ song.track_id }}')>{{ song.track_name }}</a>
                 </li>
             {% endfor %}
+        </ol> 
+        <div class='progress-bar'></div>   
+    </div>    
+
+
+
+
+</div>
+
         </ol>
     </div>
 {% endblock content %}
+

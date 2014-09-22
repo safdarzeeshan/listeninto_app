@@ -3,12 +3,16 @@ tag.src = "https://www.youtube.com/iframe_api";
 var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-var currentPlaying = {};
+var currentPlaying = '';
 
 $(document).ready(function(){
-  var player = $("#jplayer_sc").jPlayer({
-        swfPath: "//cdnjs.cloudflare.com/ajax/libs/jplayer/2.7.1/jquery.jplayer/Jplayer.swf",
-        supplied: "mp3"
+    
+   var player = $("#jplayer_sc").jPlayer({
+        swfPath: "/static/jQuery.jPlayer.2.7.0/Jplayer.swf",
+        supplied: "mp3",
+        timeupdate: function(event) {
+      $( ".progress-bar" ).slider("value", event.jPlayer.status.currentPercentAbsolute);
+    }
     });
 
   // Initialize SoundCloud API
@@ -19,39 +23,63 @@ $(document).ready(function(){
 
 	//play youtube
 	$('.play').click(function(){
-
     // if no object loaded, load first file
-    // if(jQuery.isEmptyObject(currentPlaying)) {
-    //   loadItem(media[0].id);
-    // }
-
-    console.log('playing', currentPlaying);
-
-    // handle appropriate player
+    if(jQuery.isEmptyObject(currentPlaying)) {
+      $('#playlist li:first a').trigger('click');
+    }
 
 		if(currentPlaying === 'youtube') { yt_player_1.playVideo(); }
     else { $("#jplayer_sc").jPlayer("play"); }
 	})
 
 	$('.stop').click(function(){
-		console.log('stopping', currentPlaying);
 
-    if(currentPlaying === 'youtube') { yt_player_1.stopVideo(); }
-    else { $("#jplayer_sc").jPlayer("pause"); }
+    if(currentPlaying === 'youtube') { yt_player_1.stopVideo(); 
+
+    }
+    else {$("#jplayer_sc").jPlayer("pause"); }
 
 	})
+
+
+   var seekProgress = 0;
+
+  $('.progress-bar').slider({
+    animate: "fast",
+    max: 100,
+    range: "min",
+    step: 0.1,
+    value : 0,
+    slide: function(event, ui) {
+      // var sp = $('#jplayer_sc').jPlayer(event.jPlayer.status.seekPercent);
+      $("#jplayer_sc").bind($.jPlayer.event.timeupdate, function(event) {
+        seekProgress = (event.jPlayer.status.seekPercent);
+
+      })
+
+      if(seekProgress > 0) {
+        // Move the play-head to the value and factor in the seek percent.
+        $('#jplayer_sc').jPlayer("playHead", ui.value * (100 / seekProgress));
+      } else {
+        // Create a timeout to reset this slider to zero.
+        setTimeout(function() {
+           $( ".progress" ).slider("value", 0);
+        }, 0);
+      }
+    }
+  });
+
+
 });
 
 
 function loadItem(type, id) {
   // stop currently playing songs
-  console.log(type)
   stopAllPlayers();
 
   // load new song
 
   currentPlaying = type;
-  // console.log(currentPlaying);
 
   if(type === 'youtube') {
     loadYoutube(id);
