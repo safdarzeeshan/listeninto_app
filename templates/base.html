@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="/static/styles/style.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jplayer/2.7.1/jquery.jplayer/jquery.jplayer.min.js"></script>
+    <script src="/static/scripts/player.js"></script>
+    <script src="http://connect.soundcloud.com/sdk.js"></script>
+</head>
+<body>
+<div class="container">
+
+{% if user.is_authenticated %}
+    <form method="get" action="/accounts/logout/">
+        <button type="submit">Logout</button>
+    </form>
+    <p>Welcome, {{ user.username }}. Thanks for logging in.</p>
+    <div>
+        <form class="song-upload">
+            <fieldset>
+                <input type="text" class="song_url_input" value="" id="song_url" placeholder="Enter Song URL">
+                <button type="button" class="save-button" id="save_song" onclick="saveSong()">Save Song</button>
+            </fieldset>
+        </form>
+    </div>
+
+    {% block content %}
+    {% endblock content %}
+
+{% else %}
+    <form method="get" action="/accounts/register/">
+        <button type="submit">Register</button>
+    </form>
+
+    <form method="get" action="/accounts/login/?next=www.google.com">
+        <button type="submit">Login</button>
+    </form>
+    <p>Welcome, new user. Please log in.</p>
+{% endif %}
+
+{% block auth %}{% endblock auth %}
+
+</div>
+
+</body>
+</html>
