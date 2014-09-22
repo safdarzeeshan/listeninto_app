@@ -35,7 +35,11 @@ $(document).ready(function(){
       $('#playlist li:first a').trigger('click');
     }
 
-		if(currentPlaying === 'youtube') { yt_player_1.playVideo(); }
+		if(currentPlaying === 'youtube') {
+      yt_player_1.playVideo();
+      $('.pause').show();
+      $('.play').hide();
+    }
     else { $("#jplayer_sc").jPlayer("play"); }
 	})
 
@@ -115,6 +119,9 @@ function loadItem(type, id) {
 function stopAllPlayers() {
   $("#jplayer_sc").jPlayer('stop');
   yt_player_1.stopVideo();
+
+  $('.pause').hide();
+  $('.play').show();
 }
 
 function onYouTubeIframeAPIReady(){
@@ -128,6 +135,9 @@ function loadYoutube(id) {
   console.log('Youtube loading video...', id);
 
   yt_player_1.loadVideoById(id);
+
+  $('.pause').show();
+  $('.play').hide();
 }
 
 function loadSoundcloud(id){
