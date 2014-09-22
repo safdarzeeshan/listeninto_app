@@ -7,7 +7,12 @@ __pycache__/
 *.log
 
 # Workspace
-
 .idea/
+
 *.sublime-project
 *.sublime-workspace
+venv
+staticfiles
+
+#ignoring log files
+logfile

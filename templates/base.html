@@ -12,6 +12,7 @@
 </head>
 <body>
 <div class="container">
+
 {% if user.is_authenticated %}
     <form method="get" action="/accounts/logout/">
         <button type="submit">Logout</button>
@@ -26,6 +27,9 @@
         </form>
     </div>
 
+    {% block content %}
+    {% endblock content %}
+
 {% else %}
     <form method="get" action="/accounts/register/">
         <button type="submit">Register</button>
@@ -37,8 +41,8 @@
     <p>Welcome, new user. Please log in.</p>
 {% endif %}
 
-{% block content %}
-{% endblock content %}
+{% block auth %}{% endblock auth %}
+
 </div>
 
 </body>

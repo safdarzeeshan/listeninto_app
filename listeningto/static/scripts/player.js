@@ -3,7 +3,7 @@ tag.src = "https://www.youtube.com/iframe_api";
 var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-var currentPlaying = {};
+var currentPlaying = '';
 
 $(document).ready(function(){
     
@@ -15,7 +15,6 @@ $(document).ready(function(){
     }
     });
 
-
   // Initialize SoundCloud API
 
   SC.initialize({
@@ -24,22 +23,16 @@ $(document).ready(function(){
 
 	//play youtube
 	$('.play').click(function(){
-
     // if no object loaded, load first file
-    // if(jQuery.isEmptyObject(currentPlaying)) {
-    //   loadItem(media[0].id);
-    // }
-
-    console.log('playing', currentPlaying);
-
-    // handle appropriate player
+    if(jQuery.isEmptyObject(currentPlaying)) {
+      $('#playlist li:first a').trigger('click');
+    }
 
 		if(currentPlaying === 'youtube') { yt_player_1.playVideo(); }
     else { $("#jplayer_sc").jPlayer("play"); }
 	})
 
 	$('.stop').click(function(){
-		console.log('stopping', currentPlaying);
 
     if(currentPlaying === 'youtube') { yt_player_1.stopVideo(); 
 
@@ -82,13 +75,11 @@ $(document).ready(function(){
 
 function loadItem(type, id) {
   // stop currently playing songs
-  console.log(type)
   stopAllPlayers();
 
   // load new song
 
   currentPlaying = type;
-  // console.log(currentPlaying);
 
   if(type === 'youtube') {
     loadYoutube(id);
