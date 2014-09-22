@@ -6,13 +6,17 @@ firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 var currentPlaying = '';
 
 $(document).ready(function(){
-    
+
    var player = $("#jplayer_sc").jPlayer({
         swfPath: "/static/jQuery.jPlayer.2.7.0/Jplayer.swf",
         supplied: "mp3",
         timeupdate: function(event) {
-      $( ".progress-bar" ).slider("value", event.jPlayer.status.currentPercentAbsolute);
-    }
+          $( ".progress-bar" ).slider("value", event.jPlayer.status.currentPercentAbsolute);
+        },
+        playing: function(event) {
+          $('.pause').show();
+          $('.play').hide();
+        }
     });
 
   // Initialize SoundCloud API
@@ -21,6 +25,9 @@ $(document).ready(function(){
   client_id: 'ad504f994ee6c4b53cfb47aec786f595'
   });
 
+  $('.pause').hide();
+
+
 	//play youtube
 	$('.play').click(function(){
     // if no object loaded, load first file
@@ -28,18 +35,37 @@ $(document).ready(function(){
       $('#playlist li:first a').trigger('click');
     }
 
-		if(currentPlaying === 'youtube') { yt_player_1.playVideo(); }
+		if(currentPlaying === 'youtube') {
+      yt_player_1.playVideo();
+      $('.pause').show();
+      $('.play').hide();
+    }
     else { $("#jplayer_sc").jPlayer("play"); }
 	})
 
 	$('.stop').click(function(){
+    $('.play').show();
+    $('.pause').hide();
 
-    if(currentPlaying === 'youtube') { yt_player_1.stopVideo(); 
-
+    if(currentPlaying === 'youtube') {
+      yt_player_1.stopVideo();
     }
-    else {$("#jplayer_sc").jPlayer("pause"); }
-
+    else {
+      $("#jplayer_sc").jPlayer("stop");
+    }
 	})
+
+  $('.pause').click(function() {
+
+    if(currentPlaying === 'youtube') {
+      yt_player_1.pauseVideo();
+    }
+    else {
+      $("#jplayer_sc").jPlayer("pause");
+    }
+    $('.pause').hide();
+    $('.play').show();
+  });
 
 
    var seekProgress = 0;
@@ -93,6 +119,9 @@ function loadItem(type, id) {
 function stopAllPlayers() {
   $("#jplayer_sc").jPlayer('stop');
   yt_player_1.stopVideo();
+
+  $('.pause').hide();
+  $('.play').show();
 }
 
 function onYouTubeIframeAPIReady(){
@@ -106,6 +135,9 @@ function loadYoutube(id) {
   console.log('Youtube loading video...', id);
 
   yt_player_1.loadVideoById(id);
+
+  $('.pause').show();
+  $('.play').hide();
 }
 
 function loadSoundcloud(id){
