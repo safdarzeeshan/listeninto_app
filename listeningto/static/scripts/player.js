@@ -11,8 +11,12 @@ $(document).ready(function(){
         swfPath: "/static/jQuery.jPlayer.2.7.0/Jplayer.swf",
         supplied: "mp3",
         timeupdate: function(event) {
-      $( ".progress-bar" ).slider("value", event.jPlayer.status.currentPercentAbsolute);
-    }
+          $( ".progress-bar" ).slider("value", event.jPlayer.status.currentPercentAbsolute);
+        },
+        playing: function(event) {
+          $('.pause').show();
+          $('.play').hide();
+        }
     });
 
   // Initialize SoundCloud API
@@ -20,6 +24,9 @@ $(document).ready(function(){
   SC.initialize({
   client_id: 'ad504f994ee6c4b53cfb47aec786f595'
   });
+
+  $('.pause').hide();
+
 
 	//play youtube
 	$('.play').click(function(){
@@ -33,13 +40,28 @@ $(document).ready(function(){
 	})
 
 	$('.stop').click(function(){
+    $('.play').show();
+    $('.pause').hide();
 
-    if(currentPlaying === 'youtube') { yt_player_1.stopVideo();
-
+    if(currentPlaying === 'youtube') {
+      yt_player_1.stopVideo();
     }
-    else {$("#jplayer_sc").jPlayer("stop"); }
-
+    else {
+      $("#jplayer_sc").jPlayer("stop");
+    }
 	})
+
+  $('.pause').click(function() {
+
+    if(currentPlaying === 'youtube') {
+      yt_player_1.pauseVideo();
+    }
+    else {
+      $("#jplayer_sc").jPlayer("pause");
+    }
+    $('.pause').hide();
+    $('.play').show();
+  });
 
 
    var seekProgress = 0;
