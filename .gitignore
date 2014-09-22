@@ -11,3 +11,6 @@ __pycache__/
 .idea/
 *.sublime-project
 *.sublime-workspace
+
+venv
+staticfiles
