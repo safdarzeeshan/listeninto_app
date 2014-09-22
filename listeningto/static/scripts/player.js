@@ -7,12 +7,7 @@ var currentPlaying = {};
 
 $(document).ready(function(){
     
-  // var cssSelector = {
-  //   jPlayer: "#jplayer_sc",
-  //   cssSelectorAncestor: ".jp-jplayer"
-  // };
-
-  var player = $("#jplayer_sc").jPlayer({
+   var player = $("#jplayer_sc").jPlayer({
         swfPath: "/static/jQuery.jPlayer.2.7.0/Jplayer.swf",
         supplied: "mp3",
         timeupdate: function(event) {
@@ -20,9 +15,6 @@ $(document).ready(function(){
     }
     });
 
-  $("#jplayer_sc").bind($.jPlayer.event.play, function(event) {
-    console.log('status: ' + event.jPlayer.status);
-  });
 
   // Initialize SoundCloud API
 
@@ -49,14 +41,17 @@ $(document).ready(function(){
 	$('.stop').click(function(){
 		console.log('stopping', currentPlaying);
 
-    if(currentPlaying === 'youtube') { 
-      yt_player_1.stopVideo(); 
-      console.log(yt_player_1.getDuration());
+    if(currentPlaying === 'youtube') { yt_player_1.stopVideo(); 
+
     }
-    else { $("#jplayer_sc").jPlayer("pause"); }
+    else {$("#jplayer_sc").jPlayer("pause"); }
 
 	})
 
+
+  // var sp = $("#jplayer_sc").bind($.jPlayer.event.play, function(event) {
+  //   console.log('status: ' + event.jPlayer.status.seekPercent);
+  // });
 
   $('.progress-bar').slider({ 
     animate: "fast",
@@ -66,9 +61,10 @@ $(document).ready(function(){
     value : 0,
     slide: function(event, ui) {
       // var sp = $('#jplayer_sc').jPlayer(event.jPlayer.status.seekPercent);
-
-      var sp = $('#jplayer_sc').jPlayer("value", event.jPlayer.status.seekPercent);
-      console.log(sp)
+      $("#jplayer_sc").bind($.jPlayer.event.timeupdate, function(event) {
+        var sp = (event.jPlayer.status.seekPercent);
+      
+      })
      
       if(sp > 0) {
         // Move the play-head to the value and factor in the seek percent.
