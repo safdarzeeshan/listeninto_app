@@ -45,24 +45,26 @@ $(document).ready(function(){
 	$('.stop').click(function(){
 		console.log('stopping', currentPlaying);
 
-    if(currentPlaying === 'youtube') { yt_player_1.stopVideo(); }
+    if(currentPlaying === 'youtube') { 
+      yt_player_1.stopVideo(); 
+      console.log(yt_player_1.getDuration());
+    }
     else { $("#jplayer_sc").jPlayer("pause"); }
 
 	})
 
-  //progress bar
-  var PlayerData = $('#jplayer_sc').jPlayer("Data");
-  console.log(PlayerData)
 
-
-  $('.progress-bar').slider({
+  $('.progress-bar').slider({ 
     animate: "fast",
     max: 100,
     range: "min",
     step: 0.1,
     value : 0,
     slide: function(event, ui) {
-      var sp = PlayerData.status.seekPercent;
+      // var sp = $('#jplayer_sc').jPlayer(event.jPlayer.status.seekPercent);
+
+      var sp = $('#jplayer_sc').jPlayer("value", event.jPlayer.status.seekPercent);
+      console.log(sp)
      
       if(sp > 0) {
         // Move the play-head to the value and factor in the seek percent.

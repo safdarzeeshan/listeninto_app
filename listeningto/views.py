@@ -65,3 +65,8 @@ def home(request):
     songs = Songs.objects.all()
 
     return render(request, 'home.html',  {'songs': songs})
+
+def test(request):
+
+
+    return render(request, 'test.html')
