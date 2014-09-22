@@ -6,7 +6,7 @@ firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 var currentPlaying = '';
 
 $(document).ready(function(){
-    
+
    var player = $("#jplayer_sc").jPlayer({
         swfPath: "/static/jQuery.jPlayer.2.7.0/Jplayer.swf",
         supplied: "mp3",
@@ -34,10 +34,10 @@ $(document).ready(function(){
 
 	$('.stop').click(function(){
 
-    if(currentPlaying === 'youtube') { yt_player_1.stopVideo(); 
+    if(currentPlaying === 'youtube') { yt_player_1.stopVideo();
 
     }
-    else {$("#jplayer_sc").jPlayer("pause"); }
+    else {$("#jplayer_sc").jPlayer("stop"); }
 
 	})
 
