@@ -6,9 +6,13 @@ firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 var currentPlaying = '';
 
 $(document).ready(function(){
-  var player = $("#jplayer_sc").jPlayer({
-        swfPath: "//cdnjs.cloudflare.com/ajax/libs/jplayer/2.7.1/jquery.jplayer/Jplayer.swf",
-        supplied: "mp3"
+    
+   var player = $("#jplayer_sc").jPlayer({
+        swfPath: "/static/jQuery.jPlayer.2.7.0/Jplayer.swf",
+        supplied: "mp3",
+        timeupdate: function(event) {
+      $( ".progress-bar" ).slider("value", event.jPlayer.status.currentPercentAbsolute);
+    }
     });
 
   // Initialize SoundCloud API
@@ -30,10 +34,42 @@ $(document).ready(function(){
 
 	$('.stop').click(function(){
 
-    if(currentPlaying === 'youtube') { yt_player_1.stopVideo(); }
-    else { $("#jplayer_sc").jPlayer("pause"); }
+    if(currentPlaying === 'youtube') { yt_player_1.stopVideo(); 
+
+    }
+    else {$("#jplayer_sc").jPlayer("pause"); }
 
 	})
+
+
+   var seekProgress = 0;
+
+  $('.progress-bar').slider({
+    animate: "fast",
+    max: 100,
+    range: "min",
+    step: 0.1,
+    value : 0,
+    slide: function(event, ui) {
+      // var sp = $('#jplayer_sc').jPlayer(event.jPlayer.status.seekPercent);
+      $("#jplayer_sc").bind($.jPlayer.event.timeupdate, function(event) {
+        seekProgress = (event.jPlayer.status.seekPercent);
+
+      })
+
+      if(seekProgress > 0) {
+        // Move the play-head to the value and factor in the seek percent.
+        $('#jplayer_sc').jPlayer("playHead", ui.value * (100 / seekProgress));
+      } else {
+        // Create a timeout to reset this slider to zero.
+        setTimeout(function() {
+           $( ".progress" ).slider("value", 0);
+        }, 0);
+      }
+    }
+  });
+
+
 });
 
 
