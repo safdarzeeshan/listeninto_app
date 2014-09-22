@@ -7,13 +7,9 @@ var currentPlaying = {};
 
 $(document).ready(function(){
   var player = $("#jplayer_sc").jPlayer({
-        swfPath: "/static/jQuery.jPlayer.2.7.0/Jplayer.swf",
+        swfPath: "//cdnjs.cloudflare.com/ajax/libs/jplayer/2.7.1/jquery.jplayer/Jplayer.swf",
         supplied: "mp3"
     });
-
-  $("#jplayer_sc").bind($.jPlayer.event.play, function(event) {
-    console.log('status: ' + event.jPlayer.status);
-  });
 
   // Initialize SoundCloud API
 
