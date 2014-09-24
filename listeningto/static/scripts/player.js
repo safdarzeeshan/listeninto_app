@@ -7,14 +7,19 @@ var currentPlaying = '';
 var progresspercentage = 0
 
 $(document).ready(function(){
-    
-    var player = $('#jplayer_sc').jPlayer({
-        swfPath: '/static/jQuery.jPlayer.2.7.0/Jplayer.swf',
-        supplied: 'mp3',
+
+   var player = $("#jplayer_sc").jPlayer({
+        swfPath: "/static/jQuery.jPlayer.2.7.0/Jplayer.swf",
+        supplied: "mp3",
         timeupdate: function(event) {
-          $( '.progress-bar' ).slider('value', event.jPlayer.status.currentPercentAbsolute);
+          $( ".progress-bar" ).slider("value", event.jPlayer.status.currentPercentAbsolute);
+        },
+        playing: function(event) {
+          $('.pause').show();
+          $('.play').hide();
         }
-      });
+    });
+
 
     // Initialize SoundCloud API
 
@@ -22,31 +27,46 @@ $(document).ready(function(){
         client_id: 'ad504f994ee6c4b53cfb47aec786f595'
       });
 
-	  //play 
-	  $('.play').click(function(){
-    // if no object loaded, load first file
-      if(jQuery.isEmptyObject(currentPlaying)) {
-        $('#playlist li:first a').trigger('click');
-      }
-
-		  if(currentPlaying === 'youtube') { yt_player_1.playVideo(); }
-      else { $("#jplayer_sc").jPlayer("play"); }
-	    })
-
     //stop
-	  $('.stop').click(function(){
 
-        console.log(yt_player_1.getCurrentTime())
+	//play youtube
+	$('.play').click(function(){
+    // if no object loaded, load first file
+    if(jQuery.isEmptyObject(currentPlaying)) {
+      $('#playlist li:first a').trigger('click');
+    }
 
-      if(currentPlaying === 'youtube') { 
-        yt_player_1.stopVideo(); 
-        
+		if(currentPlaying === 'youtube') {
+      yt_player_1.playVideo();
+      $('.pause').show();
+      $('.play').hide();
+    }
+    else { $("#jplayer_sc").jPlayer("play"); }
+	})
 
-      }
-      else {$("#jplayer_sc").jPlayer("pause"); }
+	$('.stop').click(function(){
+    $('.play').show();
+    $('.pause').hide();
 
-	  })
+    if(currentPlaying === 'youtube') {
+      yt_player_1.stopVideo();
+    }
+    else {
+      $("#jplayer_sc").jPlayer("stop");
+    }
+	})
 
+  $('.pause').click(function() {
+
+    if(currentPlaying === 'youtube') {
+      yt_player_1.pauseVideo();
+    }
+    else {
+      $("#jplayer_sc").jPlayer("pause");
+    }
+    $('.pause').hide();
+    $('.play').show();
+  });
 
   var seekProgressYT = 0;
   var seekProgressSC = 0;
@@ -105,6 +125,10 @@ function stopAllPlayers() {
   $("#jplayer_sc").jPlayer('stop');
   yt_player_1.stopVideo();
 
+
+  $('.pause').hide();
+  $('.play').show();
+
 }
 
 function onYouTubeIframeAPIReady(){
@@ -139,6 +163,9 @@ function loadYoutube(id) {
   console.log('Youtube loading video...', id);
 
   yt_player_1.loadVideoById(id);
+
+  $('.pause').show();
+  $('.play').hide();
 }
 
 function loadSoundcloud(id){
