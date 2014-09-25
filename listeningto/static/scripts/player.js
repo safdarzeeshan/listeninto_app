@@ -13,7 +13,7 @@ $(document).ready(function(){
         supplied: "mp3",
         timeupdate: function(event) {
           $( ".progress-bar" ).slider("value", event.jPlayer.status.currentPercentAbsolute);
-          $('.startTime').text(Math.floor(event.jPlayer.status.currentTime));
+          $('.startTime').text(convertTime((event.jPlayer.status.currentTime)));
         },
         playing: function(event) {
           $('.pause').show();
@@ -91,7 +91,7 @@ $(document).ready(function(){
           });
 
           if(currentPlaying && (progress.youtube > 0 || progress.soundcloud > 0)) {
-            setProgress(currentPlaying, progress);
+            setProgress(currentPlaying, progress, ui);
           }
           else {
             // Create a timeout to reset this slider to zero.
@@ -103,7 +103,7 @@ $(document).ready(function(){
     });
 });
 
-function setProgress(type, progress) {
+function setProgress(type, progress, ui) {
   if(type === 'soundcloud') {
     $('#jplayer_sc').jPlayer("playHead", ui.value * (100 / progress.soundcloud));
   }
@@ -157,7 +157,7 @@ function onYouTubeIframeAPIReady(){
 function onPlayerStateChange(state){
     switch(state.data){
         case 1: // playing
-          $( ".endTime" ).text(yt_player_1.getDuration())
+          $( ".endTime" ).text(convertTime(yt_player_1.getDuration()));
           setInterval("progressBar()",100);
           setInterval("songTimeYT()",1000);
 
@@ -177,15 +177,37 @@ function progressBar(){
 
 function songTimeYT(){
   if(currentPlaying === 'youtube') {
-    $( ".startTime" ).text(Math.floor(yt_player_1.getCurrentTime()));
+    $( ".startTime" ).text(convertTime(yt_player_1.getCurrentTime()));
   }
+}
+
+function convertTime(seconds) {
+  var timeString = '';
+  var hours = 0;
+  var mins = Math.round(seconds / 60);
+  var secs = Math.round((seconds / 60 % 1) * 60);
+
+  if (mins > 60) {
+    hours = mins / 60;
+    mins = (hours / 60 % 1) * 60;
+    secs = (mins / 60 % 1) * 60;
+    return Math.round(hour) + ':' + Math.round(mins) + ':' + Math.round(secs);
+  }
+
+  if (hours > 0 && hours < 10) { timeString += "0" + hours + ':'; }
+  if (hours >= 10) { timeString += hours + ':'; }
+
+  timeString += (mins < 10) ? '0' + mins + ':' : mins + ':'
+  timeString += (secs < 10) ? '0' + secs : secs
+
+  return timeString
 }
 
 function loadYoutube(id) {
   console.log('Youtube loading video...', id);
 
   yt_player_1.loadVideoById(id);
-  // $( ".duration" ).html(yt_player_1.getDuration())
+
   $('.pause').show();
   $('.play').hide();
 }
@@ -197,9 +219,9 @@ function loadSoundcloud(id){
   $("#jplayer_sc").jPlayer('play');
 
   $("#jplayer_sc").bind($.jPlayer.event.timeupdate, function(event) {
-    duration = (event.jPlayer.status.duration);
+    duration = convertTime(event.jPlayer.status.duration);
 
-    $( ".endTime" ).html(duration)
+    $( ".endTime" ).text(duration);
   });
 }
 

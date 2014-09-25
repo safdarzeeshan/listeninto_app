@@ -2,7 +2,7 @@ body {
   padding: 0;
   margin: 0;
   background: url(/static/images/congruent_pentagon.png) repeat;
-  font-family: 'PT Sans', Helvetica, Arial, sans-serif
+  font-family: 'PT Sans', Helvetica, Arial, sans-serif;
   font-size: 16px;
 }
 
@@ -12,7 +12,6 @@ body {
 
 .controls {
   font-size: 2em;
-  font-family: 'PT Sans', Helvetica, Arial, sans-serif;
   margin: 0 5em;
 }
 
@@ -23,6 +22,8 @@ body {
 
 .play-time {
   position: relative;
+  margin-top: 0.5em;
+  color: #393e62;
 }
 
 .play-time .endTime {
@@ -44,7 +45,6 @@ ol {
     width: 460px;
     font-size: 0.9em;
     background-color: rgba(37, 25, 9, 0.42);
-    font-family: 'PT Sans', Arial, sans-serif;
   }
 
 ol li {
