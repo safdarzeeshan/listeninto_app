@@ -191,7 +191,7 @@ function convertTime(seconds) {
     hours = mins / 60;
     mins = (hours / 60 % 1) * 60;
     secs = (mins / 60 % 1) * 60;
-    return Math.round(hour) + ':' + Math.round(mins) + ':' + Math.round(secs);
+    return Math.round(hours) + ':' + Math.round(mins) + ':' + Math.round(secs);
   }
 
   if (hours > 0 && hours < 10) { timeString += "0" + hours + ':'; }
