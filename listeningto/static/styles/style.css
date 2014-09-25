@@ -21,6 +21,15 @@ body {
   width: 30em;
 }
 
+.play-time {
+  position: relative;
+}
+
+.play-time .endTime {
+  position: absolute;
+  right: 0;
+}
+
 
 .audio-player p{
   position:relative;

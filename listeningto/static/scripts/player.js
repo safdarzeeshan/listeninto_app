@@ -13,6 +13,7 @@ $(document).ready(function(){
         supplied: "mp3",
         timeupdate: function(event) {
           $( ".progress-bar" ).slider("value", event.jPlayer.status.currentPercentAbsolute);
+          $('.startTime').text(Math.floor(event.jPlayer.status.currentTime));
         },
         playing: function(event) {
           $('.pause').show();
@@ -156,7 +157,7 @@ function onYouTubeIframeAPIReady(){
 function onPlayerStateChange(state){
     switch(state.data){
         case 1: // playing
-          $( ".durationYT" ).html(yt_player_1.getDuration())
+          $( ".endTime" ).text(yt_player_1.getDuration())
           setInterval("progressBar()",100);
           setInterval("songTimeYT()",1000);
 
@@ -175,8 +176,9 @@ function progressBar(){
 }
 
 function songTimeYT(){
-
-  $( ".timeYT" ).text(yt_player_1.getCurrentTime())
+  if(currentPlaying === 'youtube') {
+    $( ".startTime" ).text(Math.floor(yt_player_1.getCurrentTime()));
+  }
 }
 
 function loadYoutube(id) {
@@ -195,19 +197,10 @@ function loadSoundcloud(id){
   $("#jplayer_sc").jPlayer('play');
 
   $("#jplayer_sc").bind($.jPlayer.event.timeupdate, function(event) {
-  duration = (event.jPlayer.status.duration);
-  $( ".durationSC" ).html(duration)
-  })
+    duration = (event.jPlayer.status.duration);
 
-  setInterval("songTimeSC()",1000);
-}
-
-function songTimeSC(){
-
-  $("#jplayer_sc").bind($.jPlayer.event.timeupdate, function(event) {
-      currentTime = (event.jPlayer.status.currentTime);
-      $( ".timeSC" ).html(currentTime)
-  })
+    $( ".endTime" ).html(duration)
+  });
 }
 
 function saveSong() {
