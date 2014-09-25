@@ -29,7 +29,7 @@ $(document).ready(function(){
 
   $('.pause').hide();
 
-	//play 
+	//play
 	$('.play').click(function(){
     // if no object loaded, load first file
     if(jQuery.isEmptyObject(currentPlaying)) {
@@ -68,10 +68,12 @@ $(document).ready(function(){
     $('.play').show();
   });
 
-  var seekProgressYT = 0;
-  var seekProgressSC = 0;
+  var progress = {
+    soundcloud: '',
+    youtube: ''
+  };
 
-  //progress bar youtube  
+  //progress bar youtube
   $('.progress-bar').slider({
       animate: 'fast',
       max: 100,
@@ -80,28 +82,35 @@ $(document).ready(function(){
       value : 0,
       slide: function(event, ui) {
 
-          seekProgressYT = (ui.value/100) * yt_player_1.getDuration();
-          yt_player_1.seekTo(seekProgressYT,true);
+          progress.youtube = (ui.value/100) * yt_player_1.getDuration();
+          yt_player_1.seekTo(progress.youtube, true);
 
           $("#jplayer_sc").bind($.jPlayer.event.timeupdate, function(event) {
-          seekProgressSC = (event.jPlayer.status.seekPercent);
-          })
+            progress.soundcloud = (event.jPlayer.status.seekPercent);
+          });
 
-          if((seekProgressSC >0) || (seekProgressYT > 0)) {
-            // Move the play-head to the value and factor in the seek percent.
-            $('#jplayer_sc').jPlayer("playHead", ui.value * (100 / seekProgressSC));
-            yt_player_1.seekTo(seekProgressYT,true);
-          } 
+          if(currentPlaying && (progress.youtube > 0 || progress.soundcloud > 0)) {
+            setProgress(currentPlaying, progress);
+          }
           else {
             // Create a timeout to reset this slider to zero.
-            setTimeout(function() { 
+            setTimeout(function() {
                $( ".progress" ).slider("value", 0);
               }, 0);
           }
-
         }
     });
-})  
+});
+
+function setProgress(type, progress) {
+  if(type === 'soundcloud') {
+    $('#jplayer_sc').jPlayer("playHead", ui.value * (100 / progress.soundcloud));
+  }
+
+  if(type === 'youtube') {
+    yt_player_1.seekTo(progress.youtube,true);
+  }
+};
 
 function loadItem(type, id) {
   // stop currently playing songs
@@ -147,22 +156,22 @@ function onYouTubeIframeAPIReady(){
 function onPlayerStateChange(state){
     switch(state.data){
         case 1: // playing
-         $( ".durationYT" ).html(yt_player_1.getDuration())
-         setInterval("progressBar()",100);
-         setInterval("songTimeYT()",1000);
+          $( ".durationYT" ).html(yt_player_1.getDuration())
+          setInterval("progressBar()",100);
+          setInterval("songTimeYT()",1000);
 
         break;
 
         default:
-        // do nothing
+          // do nothing
     }
 
 }
 
 function progressBar(){
-
-  $( ".progress-bar" ).slider("value" ,yt_player_1.getCurrentTime()/yt_player_1.getDuration()*100);
-
+  if(currentPlaying === 'youtube') {
+    $( ".progress-bar" ).slider("value" ,yt_player_1.getCurrentTime()/yt_player_1.getDuration()*100);
+  }
 }
 
 function songTimeYT(){

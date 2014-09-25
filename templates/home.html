@@ -14,14 +14,14 @@
             <span><a href="#" class="play">play</a></span>
             <span><a href="#" class="pause">pause</a></span>
             <span><a href="#" class="stop">stop</a></span>
-                         <p class="timeYT"></p>
+                <p class="timeYT"></p>
                 <p class="durationYT"></p>
                 <p class="timeSC"></p>
                 <p class="durationSC"></p>
         </div>
 
-   
- 
+
+
     </div>
 
     <div class="user-songs">
@@ -32,10 +32,6 @@
                        onClick=loadItem('{{ song.track_type }}','{{ song.track_id }}')>{{ song.track_name }}</a>
                 </li>
             {% endfor %}
-        </ol>
-    </div>
-</div>
-
         </ol>
     </div>
 {% endblock content %}
