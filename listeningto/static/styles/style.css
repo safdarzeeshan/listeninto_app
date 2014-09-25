@@ -6,17 +6,25 @@ body {
   font-size: 16px;
 }
 
-.audio-player {
+.user-songs {
   margin: 0.5em 1em
 }
 
 .controls {
   font-size: 2em;
   font-family: 'PT Sans', Helvetica, Arial, sans-serif;
+  margin: 0 5em;
 }
 
-.controls span {
-  padding: 0 0.5em;
+.audio-player {
+  padding: 0 1em;
+  width: 30em;
+}
+
+
+.audio-player p{
+  position:relative;
+  float:right;
 }
 
 ol {
@@ -118,7 +126,7 @@ fieldset {
       height: 5px;
       border-radius: 0;
     }
-      
+
     .ui-slider-handle{
       position: absolute;
       top: -8px ;

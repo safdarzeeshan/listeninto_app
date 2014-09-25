@@ -8,12 +8,23 @@
         <div id="yt_player_1"></div>
     </div>
 
-    <div class="controls">
-        <span><a href="#" class="play">play</a></span>
-        <span><a href="#" class="stop">stop</a></span>
+    <div class="audio-player">
+        <div class='progress-bar'></div>
+        <div class="controls">
+            <span><a href="#" class="play">play</a></span>
+            <span><a href="#" class="pause">pause</a></span>
+            <span><a href="#" class="stop">stop</a></span>
+                         <p class="timeYT"></p>
+                <p class="durationYT"></p>
+                <p class="timeSC"></p>
+                <p class="durationSC"></p>
+        </div>
+
+   
+ 
     </div>
 
-    <div class="audio-player">
+    <div class="user-songs">
         <ol id="playlist">
             {% for song in songs %}
                 <li id="song_{{ song.pk }}">
@@ -21,13 +32,8 @@
                        onClick=loadItem('{{ song.track_type }}','{{ song.track_id }}')>{{ song.track_name }}</a>
                 </li>
             {% endfor %}
-        </ol> 
-        <div class='progress-bar'></div>   
-    </div>    
-
-
-
-
+        </ol>
+    </div>
 </div>
 
         </ol>
