@@ -27,9 +27,9 @@ $(document).ready(function(){
         client_id: 'ad504f994ee6c4b53cfb47aec786f595'
       });
 
-    //stop
+  $('.pause').hide();
 
-	//play youtube
+	//play 
 	$('.play').click(function(){
     // if no object loaded, load first file
     if(jQuery.isEmptyObject(currentPlaying)) {
@@ -125,6 +125,9 @@ function stopAllPlayers() {
   $("#jplayer_sc").jPlayer('stop');
   yt_player_1.stopVideo();
 
+  $( ".duration" ).html(0)
+  $( ".time" ).html(0)
+
 
   $('.pause').hide();
   $('.play').show();
@@ -144,7 +147,10 @@ function onYouTubeIframeAPIReady(){
 function onPlayerStateChange(state){
     switch(state.data){
         case 1: // playing
+         $( ".durationYT" ).html(yt_player_1.getDuration())
          setInterval("progressBar()",100);
+         setInterval("songTimeYT()",1000);
+
         break;
 
         default:
@@ -159,11 +165,16 @@ function progressBar(){
 
 }
 
+function songTimeYT(){
+
+  $( ".timeYT" ).text(yt_player_1.getCurrentTime())
+}
+
 function loadYoutube(id) {
   console.log('Youtube loading video...', id);
 
   yt_player_1.loadVideoById(id);
-
+  // $( ".duration" ).html(yt_player_1.getDuration())
   $('.pause').show();
   $('.play').hide();
 }
@@ -173,6 +184,21 @@ function loadSoundcloud(id){
   console.log('Sound cloud setting up');
   $("#jplayer_sc").jPlayer("setMedia", {mp3: "http://api.soundcloud.com/tracks/" +  id + "/stream?client_id=ad504f994ee6c4b53cfb47aec786f595"});
   $("#jplayer_sc").jPlayer('play');
+
+  $("#jplayer_sc").bind($.jPlayer.event.timeupdate, function(event) {
+  duration = (event.jPlayer.status.duration);
+  $( ".durationSC" ).html(duration)
+  })
+
+  setInterval("songTimeSC()",1000);
+}
+
+function songTimeSC(){
+
+  $("#jplayer_sc").bind($.jPlayer.event.timeupdate, function(event) {
+      currentTime = (event.jPlayer.status.currentTime);
+      $( ".timeSC" ).html(currentTime)
+  })
 }
 
 function saveSong() {

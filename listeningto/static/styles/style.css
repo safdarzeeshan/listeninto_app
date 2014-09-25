@@ -21,6 +21,12 @@ body {
   width: 30em;
 }
 
+
+.audio-player p{
+  position:relative;
+  float:right;
+}
+
 ol {
     padding: 0px;
     margin: 0px;
