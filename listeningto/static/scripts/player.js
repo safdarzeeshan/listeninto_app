@@ -1,9 +1,10 @@
 var tag = document.createElement('script');
-tag.src = "https://www.youtube.com/iframe_api";
+tag.src = 'https://www.youtube.com/iframe_api';
 var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 var currentPlaying = '';
+var progresspercentage = 0
 
 $(document).ready(function(){
 
@@ -12,6 +13,7 @@ $(document).ready(function(){
         supplied: "mp3",
         timeupdate: function(event) {
           $( ".progress-bar" ).slider("value", event.jPlayer.status.currentPercentAbsolute);
+          $('.startTime').text(Math.floor(event.jPlayer.status.currentTime));
         },
         playing: function(event) {
           $('.pause').show();
@@ -19,16 +21,16 @@ $(document).ready(function(){
         }
     });
 
-  // Initialize SoundCloud API
 
-  SC.initialize({
-  client_id: 'ad504f994ee6c4b53cfb47aec786f595'
-  });
+    // Initialize SoundCloud API
+
+    SC.initialize({
+        client_id: 'ad504f994ee6c4b53cfb47aec786f595'
+      });
 
   $('.pause').hide();
 
-
-	//play youtube
+	//play
 	$('.play').click(function(){
     // if no object loaded, load first file
     if(jQuery.isEmptyObject(currentPlaying)) {
@@ -67,37 +69,49 @@ $(document).ready(function(){
     $('.play').show();
   });
 
+  var progress = {
+    soundcloud: '',
+    youtube: ''
+  };
 
-   var seekProgress = 0;
-
+  //progress bar youtube
   $('.progress-bar').slider({
-    animate: "fast",
-    max: 100,
-    range: "min",
-    step: 0.1,
-    value : 0,
-    slide: function(event, ui) {
-      // var sp = $('#jplayer_sc').jPlayer(event.jPlayer.status.seekPercent);
-      $("#jplayer_sc").bind($.jPlayer.event.timeupdate, function(event) {
-        seekProgress = (event.jPlayer.status.seekPercent);
+      animate: 'fast',
+      max: 100,
+      range: 'min',
+      step: 0.1,
+      value : 0,
+      slide: function(event, ui) {
 
-      })
+          progress.youtube = (ui.value/100) * yt_player_1.getDuration();
+          yt_player_1.seekTo(progress.youtube, true);
 
-      if(seekProgress > 0) {
-        // Move the play-head to the value and factor in the seek percent.
-        $('#jplayer_sc').jPlayer("playHead", ui.value * (100 / seekProgress));
-      } else {
-        // Create a timeout to reset this slider to zero.
-        setTimeout(function() {
-           $( ".progress" ).slider("value", 0);
-        }, 0);
-      }
-    }
-  });
+          $("#jplayer_sc").bind($.jPlayer.event.timeupdate, function(event) {
+            progress.soundcloud = (event.jPlayer.status.seekPercent);
+          });
 
-
+          if(currentPlaying && (progress.youtube > 0 || progress.soundcloud > 0)) {
+            setProgress(currentPlaying, progress);
+          }
+          else {
+            // Create a timeout to reset this slider to zero.
+            setTimeout(function() {
+               $( ".progress" ).slider("value", 0);
+              }, 0);
+          }
+        }
+    });
 });
 
+function setProgress(type, progress) {
+  if(type === 'soundcloud') {
+    $('#jplayer_sc').jPlayer("playHead", ui.value * (100 / progress.soundcloud));
+  }
+
+  if(type === 'youtube') {
+    yt_player_1.seekTo(progress.youtube,true);
+  }
+};
 
 function loadItem(type, id) {
   // stop currently playing songs
@@ -109,41 +123,84 @@ function loadItem(type, id) {
 
   if(type === 'youtube') {
     loadYoutube(id);
+
   }
 
   if(type === 'soundcloud') {
     loadSoundcloud(id);
-  }
+    }
 }
 
 function stopAllPlayers() {
   $("#jplayer_sc").jPlayer('stop');
   yt_player_1.stopVideo();
 
+  $( ".duration" ).html(0)
+  $( ".time" ).html(0)
+
+
   $('.pause').hide();
   $('.play').show();
+
 }
 
 function onYouTubeIframeAPIReady(){
-  yt_player_1 = new YT.Player('yt_player_1', {
+    yt_player_1 = new YT.Player('yt_player_1', {
     height: '0',
     width: '960',
+    events:{
+      'onStateChange': onPlayerStateChange
+    }
   });
+}
+
+function onPlayerStateChange(state){
+    switch(state.data){
+        case 1: // playing
+          $( ".endTime" ).text(yt_player_1.getDuration())
+          setInterval("progressBar()",100);
+          setInterval("songTimeYT()",1000);
+
+        break;
+
+        default:
+          // do nothing
+    }
+
+}
+
+function progressBar(){
+  if(currentPlaying === 'youtube') {
+    $( ".progress-bar" ).slider("value" ,yt_player_1.getCurrentTime()/yt_player_1.getDuration()*100);
+  }
+}
+
+function songTimeYT(){
+  if(currentPlaying === 'youtube') {
+    $( ".startTime" ).text(Math.floor(yt_player_1.getCurrentTime()));
+  }
 }
 
 function loadYoutube(id) {
   console.log('Youtube loading video...', id);
 
   yt_player_1.loadVideoById(id);
-
+  // $( ".duration" ).html(yt_player_1.getDuration())
   $('.pause').show();
   $('.play').hide();
 }
 
 function loadSoundcloud(id){
+
   console.log('Sound cloud setting up');
   $("#jplayer_sc").jPlayer("setMedia", {mp3: "http://api.soundcloud.com/tracks/" +  id + "/stream?client_id=ad504f994ee6c4b53cfb47aec786f595"});
   $("#jplayer_sc").jPlayer('play');
+
+  $("#jplayer_sc").bind($.jPlayer.event.timeupdate, function(event) {
+    duration = (event.jPlayer.status.duration);
+
+    $( ".endTime" ).html(duration)
+  });
 }
 
 function saveSong() {
@@ -202,3 +259,4 @@ function saveToDB(track_info) {
 function getURLParameter(url,name) {
   return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(url)||[,""])[1].replace(/\+/g, '%20'))||null
 }
+
