@@ -77,3 +77,10 @@ def home(request):
     songs = Song.objects.filter(playlist=playlist)
 
     return render(request, 'home.html', {'songs': songs})
+
+
+def user_songs(request, username):
+    playlist = Playlist.objects.get(user__username=username)
+    songs = Song.objects.filter(playlist=playlist)
+
+    return render(request, 'playlist.html', {'songs': songs})
