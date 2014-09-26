@@ -27,7 +27,7 @@
         {% for song in songs %}
             <li id="song_{{ song.pk }}">
                 <a href="#"
-                   onClick=loadItem('{{ song.track_type }}','{{ song.track_id }}')>{{ song.track_name }}</a>
+                   onClick=loadItem('{{ song.track_type }}','{{ song.track_id }}','{{ song.pk }}')>{{ song.track_name }}</a>
             </li>
         {% endfor %}
     </ol>
