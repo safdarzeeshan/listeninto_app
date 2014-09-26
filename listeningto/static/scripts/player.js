@@ -3,12 +3,18 @@ tag.src = 'https://www.youtube.com/iframe_api';
 var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-var currentPlaying = '';
-var progresspercentage = 0
+var currentPlaying = {
+                      type : '', 
+                      trackName:'', 
+                      duration:'',
+                      songId:''
+                    };
+
+var progresspercentage = 0;
 
 $(document).ready(function(){
 
-   var player = $("#jplayer_sc").jPlayer({
+    var player = $('#jplayer_sc').jPlayer({
         swfPath: "/static/jQuery.jPlayer.2.7.0/Jplayer.swf",
         supplied: "mp3",
         timeupdate: function(event) {
@@ -37,7 +43,7 @@ $(document).ready(function(){
       $('#playlist li:first a').trigger('click');
     }
 
-		if(currentPlaying === 'youtube') {
+		if(currentPlaying.type === 'youtube') {
       yt_player_1.playVideo();
       $('.pause').show();
       $('.play').hide();
@@ -49,7 +55,7 @@ $(document).ready(function(){
     $('.play').show();
     $('.pause').hide();
 
-    if(currentPlaying === 'youtube') {
+    if(currentPlaying.type === 'youtube') {
       yt_player_1.stopVideo();
     }
     else {
@@ -59,7 +65,7 @@ $(document).ready(function(){
 
   $('.pause').click(function() {
 
-    if(currentPlaying === 'youtube') {
+    if(currentPlaying.type === 'youtube') {
       yt_player_1.pauseVideo();
     }
     else {
@@ -69,12 +75,19 @@ $(document).ready(function(){
     $('.play').show();
   });
 
+
+  //autopplay for next song - soundcloud song ended event
+  $("#jplayer_sc").bind($.jPlayer.event.ended, function(event) { 
+    nextSong();
+  });
+
+
   var progress = {
     soundcloud: '',
     youtube: ''
   };
 
-  //progress bar youtube
+  //progress bar
   $('.progress-bar').slider({
       animate: 'fast',
       max: 100,
@@ -90,8 +103,8 @@ $(document).ready(function(){
             progress.soundcloud = (event.jPlayer.status.seekPercent);
           });
 
-          if(currentPlaying && (progress.youtube > 0 || progress.soundcloud > 0)) {
-            setProgress(currentPlaying, progress, ui);
+          if(currentPlaying.type && (progress.youtube > 0 || progress.soundcloud > 0)) {
+            setProgress(currentPlaying.type, progress, ui);
           }
           else {
             // Create a timeout to reset this slider to zero.
@@ -113,25 +126,27 @@ function setProgress(type, progress, ui) {
   }
 };
 
-function loadItem(type, id) {
+function loadItem(type, id, songId) {
+  console.log($(this));
   // stop currently playing songs
   stopAllPlayers();
 
   // load new song
 
-  currentPlaying = type;
+  currentPlaying.type = type;
+  currentPlaying.songId = parseInt(songId, 10);
 
-  if(type === 'youtube') {
+  if(currentPlaying.type === 'youtube') {
     loadYoutube(id);
 
   }
 
-  if(type === 'soundcloud') {
+  if(currentPlaying.type === 'soundcloud') {
     loadSoundcloud(id);
     }
 }
 
-function stopAllPlayers() {
+function stopAllPlayers() { 
   $("#jplayer_sc").jPlayer('stop');
   yt_player_1.stopVideo();
 
@@ -156,8 +171,13 @@ function onYouTubeIframeAPIReady(){
 
 function onPlayerStateChange(state){
     switch(state.data){
+
+        case 0: //ended
+
+          nextSong();
         case 1: // playing
-          $( ".endTime" ).text(convertTime(yt_player_1.getDuration()));
+          currentPlaying.duration = convertTime(yt_player_1.getDuration());
+          $( ".endTime" ).text(currentPlaying.duration);
           setInterval("progressBar()",100);
           setInterval("songTimeYT()",1000);
 
@@ -170,13 +190,13 @@ function onPlayerStateChange(state){
 }
 
 function progressBar(){
-  if(currentPlaying === 'youtube') {
+  if(currentPlaying.type === 'youtube') {
     $( ".progress-bar" ).slider("value" ,yt_player_1.getCurrentTime()/yt_player_1.getDuration()*100);
   }
 }
 
 function songTimeYT(){
-  if(currentPlaying === 'youtube') {
+  if(currentPlaying.type === 'youtube') {
     $( ".startTime" ).text(convertTime(yt_player_1.getCurrentTime()));
   }
 }
@@ -191,7 +211,7 @@ function convertTime(seconds) {
     hours = mins / 60;
     mins = (hours / 60 % 1) * 60;
     secs = (mins / 60 % 1) * 60;
-    return Math.round(hour) + ':' + Math.round(mins) + ':' + Math.round(secs);
+    return Math.round(hours) + ':' + Math.round(mins) + ':' + Math.round(secs);
   }
 
   if (hours > 0 && hours < 10) { timeString += "0" + hours + ':'; }
@@ -219,11 +239,18 @@ function loadSoundcloud(id){
   $("#jplayer_sc").jPlayer('play');
 
   $("#jplayer_sc").bind($.jPlayer.event.timeupdate, function(event) {
-    duration = convertTime(event.jPlayer.status.duration);
+    currentPlaying.duration = convertTime(event.jPlayer.status.duration);
 
-    $( ".endTime" ).text(duration);
+    $( ".endTime" ).text(currentPlaying.duration);
   });
 }
+
+function nextSong(){
+
+  console.log('in next song' + currentPlaying.songId);
+  var currentId = '#song_' + currentPlaying.songId;
+  $(currentId + ' + li > a').trigger('click');
+} 
 
 function saveSong() {
   console.log('trying to add song...');

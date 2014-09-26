@@ -19,16 +19,6 @@
             <button type="submit">Logout</button>
         </form>
         <p>Welcome, {{ user.username }}. Thanks for logging in.</p>
-        <div>
-            <form class="song-upload">
-                <fieldset>
-                    <input type="text" class="song_url_input" value="" id="song_url" placeholder="Enter Song URL">
-                    <button type="button" class="save-button" id="save_song" onclick="saveSong()">Save Song</button>
-                </fieldset>
-            </form>
-        </div>
-        {% block content %}
-        {% endblock content %}
 
     {% else %}
 
@@ -36,7 +26,7 @@
             <button type="submit">Register</button>
         </form>
 
-        <form method="get" action="/accounts/login/?next=www.google.com">
+        <form method="get" action="/accounts/login/">
             <button type="submit">Login</button>
         </form>
         <li>
@@ -46,6 +36,7 @@
     {% endif %}
 
     {% block auth %}{% endblock auth %}
+    {% block content %}{% endblock content %}
 
 </div>
 
