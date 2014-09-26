@@ -2,10 +2,8 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib import auth
-from listeningto.models import Song
+from listeningto.models import Song, Playlist
 from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import render_to_response
-from django.template.context import RequestContext
 
 
 def add_song(request):
@@ -18,9 +16,11 @@ def add_song(request):
     stream_url = request.GET['stream_url']
     track_artwork_url = request.GET['track_artwork_url']
 
+    playlist = Playlist.objects.get(user=request.user)
+
     # add song url to table in db
     r = Song.objects.create(track_type=track_type, track_url=track_url, track_name=track_name,
-                            track_id=track_id, stream_url=stream_url, track_artwork_url=track_artwork_url)
+                            track_id=track_id, stream_url=stream_url, track_artwork_url=track_artwork_url, playlist=playlist)
     r.save()
 
     return HttpResponse(status=201)
@@ -50,15 +50,15 @@ def login_view(request):
 
 def logout_view(request):
     auth.logout(request)
-    # Redirect to a success page.
-    return HttpResponseRedirect("/listeningto/home/")
+    # Redirect to a login page.
+    return HttpResponseRedirect("/accounts/login/")
 
 
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            new_user = form.save()
+            form.save()
             username = request.POST.get('username', '')
             password = request.POST.get('password1', '')
             user = auth.authenticate(username=username, password=password)
@@ -73,7 +73,14 @@ def register(request):
 
 
 def home(request):
-    songs = Song.objects.all()
-    context = RequestContext(request, {'request': request,
-                                       'songs': songs})
-    return render(request, 'home.html', context_instance=context)
+    playlist, created = Playlist.objects.get_or_create(user=request.user)
+    songs = Song.objects.filter(playlist=playlist)
+
+    return render(request, 'home.html', {'songs': songs})
+
+
+def user_songs(request, username):
+    playlist = Playlist.objects.get(user__username=username)
+    songs = Song.objects.filter(playlist=playlist)
+
+    return render(request, 'playlist.html', {'songs': songs})
