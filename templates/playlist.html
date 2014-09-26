@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div id="jquery_jplayer_1" class="jp-jplayer">
+    <div id="jplayer_sc"></div>
+    <div id="yt_player_1"></div>
+</div>
+
+<div class="audio-player">
+    <div class='progress-bar'></div>
+    <div class='play-time'>
+        <span class="startTime">00:00</span>
+        <span class="endTime">00:00</span>
+    </div>
+    <div class="controls">
+        <span><a href="#" class="play">play</a></span>
+        <span><a href="#" class="pause">pause</a></span>
+        <span><a href="#" class="stop">stop</a></span>
+    </div>
+</div>
+
+<div class="user-songs">
+    <ol id="playlist">
+        {% for song in songs %}
+            <li id="song_{{ song.pk }}">
+                <a href="#"
+                   onClick=loadItem('{{ song.track_type }}','{{ song.track_id }}')>{{ song.track_name }}</a>
+            </li>
+        {% endfor %}
+    </ol>
+</div>
+
+{% endblock content %}
