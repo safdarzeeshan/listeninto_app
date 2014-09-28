@@ -1,28 +1,27 @@
+import json
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
-from listeningto.models import Song, Playlist
 from django.contrib.auth.forms import UserCreationForm
 
+from listeningto.models import Song, Playlist
 
-def add_song(request):
-    print "song about to be added"
 
-    track_type = request.GET['track_type']
-    track_url = request.GET['track_url']
-    track_name = request.GET['track_name']
-    track_id = request.GET['track_id']
-    stream_url = request.GET['stream_url']
-    track_artwork_url = request.GET['track_artwork_url']
+def save_song(request):
+    track_type = request.POST.get('track_type')
+    track_url = request.POST.get('track_url')
+    track_name = request.POST.get('track_name')
+    track_id = request.POST.get('track_id')
+    stream_url = request.POST.get('stream_url', 'None')
+    track_artwork_url = request.POST.get('track_artwork_url')
 
     playlist = Playlist.objects.get(user=request.user)
-
-    # add song url to table in db
     r = Song.objects.create(track_type=track_type, track_url=track_url, track_name=track_name,
                             track_id=track_id, stream_url=stream_url, track_artwork_url=track_artwork_url, playlist=playlist)
     r.save()
 
-    return HttpResponse(status=201)
+    return HttpResponse(json.dumps({'id': r.id}), status=201)
 
 
 def delete_song(request, pk):
