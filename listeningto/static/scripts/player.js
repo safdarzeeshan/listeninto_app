@@ -14,6 +14,9 @@ var progresspercentage = 0;
 
 $(document).ready(function(){
 
+    // empty error div
+    $('.error').html('');
+
     var player = $('#jplayer_sc').jPlayer({
         swfPath: "/static/jQuery.jPlayer.2.7.0/Jplayer.swf",
         supplied: "mp3",
@@ -245,8 +248,7 @@ function loadSoundcloud(id){
   });
 }
 
-function nextSong(){
-
+function nextSong() {
   console.log('in next song' + currentPlaying.songId);
   var currentId = '#song_' + currentPlaying.songId;
   $(currentId + ' + li > a').trigger('click');
@@ -254,11 +256,25 @@ function nextSong(){
 
 function saveSong() {
   console.log('trying to add song...');
+
+  $('.error').html('');
   var song_url = document.getElementById("song_url").value;
-  getSongInfo(song_url);
+
+  if (song_url.toLowerCase().indexOf("youtube") >= 0) {
+    getSongInfo(song_url, 'youtube');
+  }
+
+  else if (song_url.toLowerCase().indexOf("soundcloud") >= 0) {
+    getSongInfo(song_url, 'soundcloud');
+  }
+
+  else {
+    $('.error').text('Please a valid YouTube or SoundCloud song link.');
+    $('#song_url').val('');
+  }
 }
 
-function getSongInfo(song_url){
+function getSongInfo(song_url, type){
     var url = String(song_url);
     console.log('getting info...', song_url);
 

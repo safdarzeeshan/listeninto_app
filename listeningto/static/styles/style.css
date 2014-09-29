@@ -118,6 +118,13 @@ fieldset {
   font-size: 1em;
 }
 
+.error {
+  font-style: italic;
+  font-size: 1.2em;
+  color: #BB1010;
+  margin: 0.5em 1em;
+}
+
 .progress-bar{
 
      width: 100%;
