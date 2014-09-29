@@ -2,19 +2,33 @@
 
 {% block auth %}
 
+<div class="login-form">
+
+  <p>Hey, music lover. Please log in or register.</p>
+
   {% if form.errors %}
     <p class="error">Sorry, that's not a valid username or password</p>
   {% endif %}
 
-  <form action="" method="post">
+  <form action="/login/" method="post">
     {% csrf_token %}
     <label for="username">User name:</label>
     <input type="text" name="username" value="" id="username">
     <label for="password">Password:</label>
     <input type="password" name="password" value="" id="password">
 
-    <input type="submit" value="login" />
+    <input type="submit" value="Login" />
     <input type="hidden" name="next" value="{{ next|escape }}" />
   </form>
+
+</div>
+
+<form action="/register">
+    <button type="submit">Register</button>
+</form>
+
+<form action="{% url 'social:begin' 'facebook' %}">
+    <button type="submit">Login with Facebook</button>
+</form>
 
 {% endblock %}

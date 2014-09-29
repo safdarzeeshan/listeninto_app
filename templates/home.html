@@ -1,6 +1,15 @@
 
 {% extends 'playlist.html' %}
 
+{% if user.is_authenticated %}
+    <fieldset>
+        <form method="get" action="logout/">
+            <button type="submit">Logout</button>
+        </form>
+        <p>Welcome, {{ user.username }}. Thanks for logging in.</p>
+    </fieldset>
+{% endif %}
+
 
 {% block song_input %}
 
