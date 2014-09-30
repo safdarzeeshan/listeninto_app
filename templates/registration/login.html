@@ -1,20 +1,41 @@
 {% extends "base.html" %}
 
-{% block auth %}
+{% block content %}
 
-  {% if form.errors %}
-    <p class="error">Sorry, that's not a valid username or password</p>
-  {% endif %}
+<div class="auth">
 
-  <form action="" method="post">
-    {% csrf_token %}
-    <label for="username">User name:</label>
-    <input type="text" name="username" value="" id="username">
-    <label for="password">Password:</label>
-    <input type="password" name="password" value="" id="password">
+    <span class="lead">ListeningTo!</span>
+    <p>Please log in or register.</p>
 
-    <input type="submit" value="login" />
-    <input type="hidden" name="next" value="{{ next|escape }}" />
+  <div class="login-form">
+
+    {% if form.errors %}
+      <p class="error">Sorry, that's not a valid username or password</p>
+    {% endif %}
+
+    <form action="/login/" method="post">
+      {% csrf_token %}
+
+      <fieldset>
+        <input type="text" name="username" value="" id="username" placeholder="Username">
+      </fieldset>
+      <fieldset>
+        <input type="password" name="password" value="" id="password" placeholder="Password">
+      </fieldset>
+
+      <input class="button" type="submit" value="Login" />
+    </form>
+
+  </div>
+
+  <form action="/register">
+      <button class="button" type="submit">Register</button>
   </form>
+
+  <form action="{% url 'social:begin' 'facebook' %}">
+      <button class="button" type="submit">Login with Facebook</button>
+  </form>
+
+</div>
 
 {% endblock %}

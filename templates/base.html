@@ -14,28 +14,6 @@
 <body>
 <div class="container">
 
-    {% if user.is_authenticated %}
-        <form method="get" action="/accounts/logout/">
-            <button type="submit">Logout</button>
-        </form>
-        <p>Welcome, {{ user.username }}. Thanks for logging in.</p>
-
-    {% else %}
-
-        <form method="get" action="/accounts/register/">
-            <button type="submit">Register</button>
-        </form>
-
-        <form method="get" action="/accounts/login/">
-            <button type="submit">Login</button>
-        </form>
-        <li>
-            <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}">Login with Facebook</a>
-        </li>
-        <p>Welcome, new user. Please log in.</p>
-    {% endif %}
-
-    {% block auth %}{% endblock auth %}
     {% block content %}{% endblock content %}
 
 </div>

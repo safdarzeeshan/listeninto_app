@@ -1,12 +1,13 @@
 
 {% extends 'playlist.html' %}
 
-
 {% block song_input %}
 
 <div>
+    <div class="error">Only YouTube or SoundCloud links accepted.</div>
     <form class="song-upload">
         <fieldset>
+            {% csrf_token %}
             <input type="text" class="song_url_input" value="" id="song_url" placeholder="Enter Song URL">
             <button type="button" class="save-button" id="save_song" onclick="saveSong()">Save Song</button>
         </fieldset>

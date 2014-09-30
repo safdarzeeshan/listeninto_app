@@ -1,34 +1,32 @@
-from django.shortcuts import render, get_object_or_404
+import json
+
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from django.core.urlresolvers import reverse
 from django.contrib import auth
-from listeningto.models import Song, Playlist
 from django.contrib.auth.forms import UserCreationForm
 
+from listeningto.models import Song, Playlist
 
-def add_song(request):
-    print "song about to be added"
 
-    track_type = request.GET['track_type']
-    track_url = request.GET['track_url']
-    track_name = request.GET['track_name']
-    track_id = request.GET['track_id']
-    stream_url = request.GET['stream_url']
-    track_artwork_url = request.GET['track_artwork_url']
+def save_song(request):
+    track_type = request.POST.get('track_type')
+    track_url = request.POST.get('track_url')
+    track_name = request.POST.get('track_name')
+    track_id = request.POST.get('track_id')
+    stream_url = request.POST.get('stream_url', 'None')
+    track_artwork_url = request.POST.get('track_artwork_url')
 
     playlist = Playlist.objects.get(user=request.user)
-
-    # add song url to table in db
     r = Song.objects.create(track_type=track_type, track_url=track_url, track_name=track_name,
                             track_id=track_id, stream_url=stream_url, track_artwork_url=track_artwork_url, playlist=playlist)
     r.save()
 
-    return HttpResponse(status=201)
+    return HttpResponse(json.dumps({'id': r.id}), status=201)
 
 
 def delete_song(request, pk):
     get_object_or_404(Song, pk=pk).delete()
-    return HttpResponseRedirect(reverse('home'))
+    return redirect('home')
 
 
 def login_view(request):
@@ -40,7 +38,7 @@ def login_view(request):
             # Correct password, and the user is marked "active"
             auth.login(request, user)
             # Redirect to a success page.
-            return HttpResponseRedirect("/listeningto/home/")
+            return redirect("home")
         else:
             # Show an error page
             return HttpResponseRedirect("/account/invalid/")
@@ -51,7 +49,7 @@ def login_view(request):
 def logout_view(request):
     auth.logout(request)
     # Redirect to a login page.
-    return HttpResponseRedirect("/accounts/login/")
+    return redirect("login")
 
 
 def register(request):
@@ -64,7 +62,7 @@ def register(request):
             user = auth.authenticate(username=username, password=password)
             if user is not None and user.is_active:
                 auth.login(request, user)
-                return HttpResponseRedirect("/listeningto/home/")
+                return redirect("home")
     else:
         form = UserCreationForm()
     return render(request, "registration/register.html", {
@@ -73,6 +71,9 @@ def register(request):
 
 
 def home(request):
+    if not request.user.is_authenticated():
+        return redirect('login')
+
     playlist, created = Playlist.objects.get_or_create(user=request.user)
     songs = Song.objects.filter(playlist=playlist)
 
