@@ -85,3 +85,11 @@ def user_songs(request, username):
     songs = Song.objects.filter(playlist=playlist)
 
     return render(request, 'playlist.html', {'songs': songs})
+
+def search(request):
+
+    return render(request, 'search.html')
+
+def searchYt(request):
+
+    return render(request, 'searchyt.html')
