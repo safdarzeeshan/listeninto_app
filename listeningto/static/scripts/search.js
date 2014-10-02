@@ -41,10 +41,14 @@ function appendSC(tracks){
       for(var i in tracks) {
 
         var item = tracks[i];
+        // domEl = "<li id='song_"+item.id+"'><a href='#' onClick=loadItem('soundcloud','" + 
+        //           item.id+  "')>" + item.title + 
+        //           "</a><a href='#' onClick=getSongInfo('" + item.permalink_url + 
+        //           "','soundcloud') style='color:blue'>Add</a></li>";
         domEl = "<li id='song_"+item.id+"'><a href='#' onClick=loadItem('soundcloud','" + 
                   item.id+  "')>" + item.title + 
-                  "</a><a href='#' onClick=getSongInfo('" + item.permalink_url + 
-                  "','soundcloud') style='color:blue'>Add</a></li>";
+                  "</a><button onClick=getSongInfo('" + item.permalink_url + 
+                  "','soundcloud') style='color:grey'>Add</button></li>";
 
         $('#searchResults').append(domEl);
   }
@@ -56,9 +60,9 @@ function appendYT(tracks) {
 
         var item = tracks.items[i];
         domEl = "<li id='song_" + item.id.videoId+ "'><a href='#' onClick=loadItem('youtube','" + item.id.videoId + 
-          "')>" + item.snippet.title + 
-          "</a><a href='#' onClick=getSongInfo('https://www.youtube.com/watch?v=" + item.id.videoId + 
-          "','youtube') style='color:blue'>Add</a></li>";"</a></li>";
+                "')>" + item.snippet.title + 
+                "</a><button onClick=getSongInfo('https://www.youtube.com/watch?v=" + item.id.videoId + 
+                "','youtube') style='color:grey'>Add</button></li>"
 
         $('#searchResults').append(domEl);
       }         
