@@ -130,14 +130,16 @@ function setProgress(type, progress, ui) {
 };
 
 function loadItem(type, id) {
-  console.log($(this));
   // stop currently playing songs
   stopAllPlayers();
 
   // load new song
-
+  currentPlaying.trackName = $('#song_' + id)[0].innerText;
   currentPlaying.type = type;
   currentPlaying.songId = id;
+
+  //set track name
+  $( ".songName" ).text(currentPlaying.trackName);
 
   if(currentPlaying.type === 'youtube') {
     loadYoutube(id);

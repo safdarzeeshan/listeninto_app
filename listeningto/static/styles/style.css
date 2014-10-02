@@ -37,6 +37,10 @@ body {
   right: 0;
 }
 
+.play-time .songName {
+  position: absolute;
+}
+
 
 .audio-player p{
   position:relative;

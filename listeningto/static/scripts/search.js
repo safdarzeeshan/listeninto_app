@@ -41,10 +41,6 @@ function appendSC(tracks){
       for(var i in tracks) {
 
         var item = tracks[i];
-        // domEl = "<li id='song_"+item.id+"'><a href='#' onClick=loadItem('soundcloud','" + 
-        //           item.id+  "')>" + item.title + 
-        //           "</a><a href='#' onClick=getSongInfo('" + item.permalink_url + 
-        //           "','soundcloud') style='color:blue'>Add</a></li>";
         domEl = "<li id='song_"+item.id+"'><a href='#' onClick=loadItem('soundcloud','" + 
                   item.id+  "')>" + item.title + 
                   "</a><button onClick=getSongInfo('" + item.permalink_url + 
