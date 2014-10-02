@@ -1,56 +1,65 @@
-
-// //youtube
-// function googleApiClientReady(){
-//   gapi.client.setApiKey('AIzaSyA5Nd_AjsQiFTdpVHYFGdYf8gzwIVy-_RA');
-//   gapi.client.load('youtube', 'v3', function() {
-//   searchA();
-//   });
-// }
-
-// function searchA() {
-//   var results = gapi.client.youtube.search.list('id,snippet', {q: 'dogs', maxResults: 5});
-//   console.log('here');
-//   console.log(results)
-
-
-//   for(var i in results.items) {
-//     console.log('here also')
-//     var item = results.items[i];
-//     console.log('[%s] Title: %s', item.id.videoId, item.snippet.title);
-//   }
-// }
-
-
-//soundcloud
 $(document).ready(function(){
 
       SC.initialize({
         client_id: 'ad504f994ee6c4b53cfb47aec786f595'
       });
-
 })
 
-function search(){
+function googleApiClientReady(){
 
-      var search_query =  $('#query').val();
-      SC.get('/tracks', { q: search_query, limit: 10}, function(tracks) {
-      console.log(tracks[0]);
-   
-      append(tracks);
-
-      });
+      gapi.client.load('youtube', 'v3',onYouTubeApiLoad );      
 }
 
-function append(tracks){
-      
-        //append
-      var results = document.getElementById('searchResults');
+function onYouTubeApiLoad() {
 
-        for(var i in tracks) {
+      gapi.client.setApiKey('AIzaSyDScS0XbWgnTtadhknXXwv9eqmPu9JNsno');
+}
+
+function search(){
+      //clear search results
+      $('#searchResults').empty();
+
+      var search_query =  $('#query').val();
+      SC.get('/tracks', { q: search_query, limit: 5}, function(tracks) {
+   
+        appendSC(tracks);
+      });
+
+      var request = gapi.client.youtube.search.list({
+        part: 'snippet', 
+        type:'video', 
+        q: search_query, 
+        maxResults: 5});
+
+      request.execute(function(response) {
+        appendYT(response)  
+      });  
+}
+
+function appendSC(tracks){
+      
+      for(var i in tracks) {
 
         var item = tracks[i];
-        console.log(item.title)
-        results.appendChild(document.createElement('P'));
-        results.appendChild(document.createTextNode(item.title));
+        domEl = "<li id='song_"+item.id+"'><a href='#' onClick=loadItem('soundcloud','" + 
+                  item.id+  "')>" + item.title + 
+                  "</a><a href='#' onClick=getSongInfo('" + item.permalink_url + 
+                  "','soundcloud') style='color:blue'>Add</a></li>";
+
+        $('#searchResults').append(domEl);
   }
+}
+
+function appendYT(tracks) {
+
+      for(var i in tracks.items) {
+
+        var item = tracks.items[i];
+        domEl = "<li id='song_" + item.id.videoId+ "'><a href='#' onClick=loadItem('youtube','" + item.id.videoId + 
+          "')>" + item.snippet.title + 
+          "</a><a href='#' onClick=getSongInfo('https://www.youtube.com/watch?v=" + item.id.videoId + 
+          "','youtube') style='color:blue'>Add</a></li>";"</a></li>";
+
+        $('#searchResults').append(domEl);
+      }         
 }

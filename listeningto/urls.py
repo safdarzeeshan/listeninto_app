@@ -11,5 +11,4 @@ urlpatterns = [
     url(r'^deletesong/(?P<pk>\d+)/$', views.delete_song, name='delete_song'),
     url(r'^user/(?P<username>\w+)/$', views.user_songs, name='user_songs'),
     url(r'^search/$', views.search, name='search'),
-    url(r'^searchyt/$', views.searchYt, name='searchYt'),
 ]

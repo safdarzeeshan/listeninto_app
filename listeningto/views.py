@@ -77,7 +77,7 @@ def home(request):
     playlist, created = Playlist.objects.get_or_create(user=request.user)
     songs = Song.objects.filter(playlist=playlist)
 
-    return render(request, 'home.html', {'songs': songs})
+    return render(request, 'song_input.html', {'songs': songs})
 
 
 def user_songs(request, username):
@@ -89,7 +89,3 @@ def user_songs(request, username):
 def search(request):
 
     return render(request, 'search.html')
-
-def searchYt(request):
-
-    return render(request, 'searchyt.html')

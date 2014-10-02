@@ -7,9 +7,15 @@ body {
 }
 
 .user-songs {
-  margin: 0.5em 1em
+  margin: 0.5em 1em;
+  width:45%;
+  float: left;
 }
 
+.search-container{
+  width: 45%;
+  float:right;
+}
 .controls {
   font-size: 2em;
   margin: 0 5em;
