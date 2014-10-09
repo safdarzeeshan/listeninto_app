@@ -1,6 +1,6 @@
 import json
 
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.auth.forms import UserCreationForm
@@ -17,15 +17,25 @@ def save_song(request):
     track_artwork_url = request.POST.get('track_artwork_url')
 
     playlist = Playlist.objects.get(user=request.user)
-    r = Song.objects.create(track_type=track_type, track_url=track_url, track_name=track_name,
-                            track_id=track_id, stream_url=stream_url, track_artwork_url=track_artwork_url, playlist=playlist)
+    r, created = Song.objects.get_or_create(track_id=track_id)
+
+    if created:
+        r.track_type = track_type
+        r.track_url = track_url
+        r.track_name = track_name
+        r.stream_url = stream_url
+        r.track_artwork_url = track_artwork_url
+
+    r.playlists.add(playlist)
     r.save()
 
     return HttpResponse(json.dumps({'id': r.id}), status=201)
 
 
-def delete_song(request, pk):
-    get_object_or_404(Song, pk=pk).delete()
+def delete_song(request, track_id):
+    song = Song.objects.get(track_id=track_id)
+    playlist = Playlist.objects.get(user=request.user)
+    song.playlists.remove(playlist)
     return redirect('home')
 
 
@@ -75,16 +85,17 @@ def home(request):
         return redirect('login')
 
     playlist, created = Playlist.objects.get_or_create(user=request.user)
-    songs = Song.objects.filter(playlist=playlist)
+    songs = Song.objects.filter(playlists=playlist)
 
     return render(request, 'song_input.html', {'songs': songs})
 
 
 def user_songs(request, username):
     playlist = Playlist.objects.get(user__username=username)
-    songs = Song.objects.filter(playlist=playlist)
+    songs = Song.objects.filter(playlists=playlist)
 
     return render(request, 'playlist.html', {'songs': songs})
+
 
 def search(request):
 

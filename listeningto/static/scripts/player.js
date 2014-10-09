@@ -139,7 +139,7 @@ function loadItem(type, id) {
   currentPlaying.songId = id;
 
   //set track name
-  $( ".songName" ).text(currentPlaying.trackName);
+  $( ".song-name" ).text(currentPlaying.trackName);
 
   if(currentPlaying.type === 'youtube') {
     loadYoutube(id);
@@ -226,6 +226,16 @@ function convertTime(seconds) {
   timeString += (secs < 10) ? '0' + secs : secs
 
   return timeString
+}
+
+function deleteSong(id) {
+  var url = 'deletesong/' + id +'/';
+  var id = '#song_' + id;
+  var deletingSong = $.get(url);
+
+  deletingSong.done(function(data) {
+    $(id).remove();
+  });
 }
 
 function loadYoutube(id) {
