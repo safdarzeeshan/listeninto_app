@@ -22,6 +22,7 @@
     <div class='progress-bar'></div>
     <div class='play-time'>
         <span class="startTime">00:00</span>
+        <span class="songName"></span>
         <span class="endTime">00:00</span>
     </div>
     <div class="controls">
@@ -34,12 +35,14 @@
 <div class="user-songs">
     <ol id="playlist">
         {% for song in songs %}
-            <li id="song_{{ song.pk }}">
+            <li id="song_{{ song.track_id }}">
                 <a href="#"
-                   onClick=loadItem('{{ song.track_type }}','{{ song.track_id }}','{{ song.pk }}')>{{ song.track_name }}</a>
+                   onClick=loadItem('{{ song.track_type }}','{{ song.track_id }}')>{{ song.track_name }}</a>
             </li>
         {% endfor %}
     </ol>
 </div>
+
+{% include 'search.html' %}
 
 {% endblock content %}

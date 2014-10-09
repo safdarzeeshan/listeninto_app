@@ -129,15 +129,17 @@ function setProgress(type, progress, ui) {
   }
 };
 
-function loadItem(type, id, songId) {
-  console.log($(this));
+function loadItem(type, id) {
   // stop currently playing songs
   stopAllPlayers();
 
   // load new song
-
+  currentPlaying.trackName = $('#song_' + id)[0].innerText;
   currentPlaying.type = type;
-  currentPlaying.songId = parseInt(songId, 10);
+  currentPlaying.songId = id;
+
+  //set track name
+  $( ".songName" ).text(currentPlaying.trackName);
 
   if(currentPlaying.type === 'youtube') {
     loadYoutube(id);
@@ -269,7 +271,7 @@ function saveSong() {
   }
 
   else {
-    $('.error').text('Please a valid YouTube or SoundCloud song link.');
+    $('.error').text('Please enter a valid YouTube or SoundCloud song link.');
     $('#song_url').val('');
   }
 }
@@ -332,7 +334,7 @@ function saveSongToDb(trackInfo) {
   var savingSong = $.post('addsong/', trackInfo);
 
   savingSong.done(function(data) {
-    domEl = "<li><a href='#' onClick=loadItem('" + trackInfo.track_type + "','" + trackInfo.track_id + "','" + $.parseJSON(data).id + "')>" + trackInfo.track_name + "</a></li>";
+    domEl = "<li id='song_" + trackInfo.track_id+ "'><a href='#' onClick=loadItem('" + trackInfo.track_type + "','" + trackInfo.track_id + "')>" + trackInfo.track_name + "</a></li>";
     console.log(domEl);
     $('#playlist').append(domEl);
   });
