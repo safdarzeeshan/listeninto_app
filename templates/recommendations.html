@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+		
+{% if user.is_authenticated %}
+    <div class="user-welcome">
+        <span>Welcome, {{ user.username }}.</span>
+        <form method="get" action="logout/">
+            <button class="button" type="submit">Logout</button>
+        </form>
+    </div>
+{% endif %}
+
+<div class = 'recommendations'>
+	<ol class = 'recommendationList'>
+		{% for recommendation in recommendations %}
+        <li id="">
+            <a href="#">{{ recommendation.song.track_name }}</a>
+        </li>
+        {% endfor %}
+	</ol>
+
+</div>
+
+{% endblock content %}
