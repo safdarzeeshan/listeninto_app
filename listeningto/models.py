@@ -18,8 +18,13 @@ class Song(models.Model):
     track_id = models.CharField(max_length=500, blank=False)
     track_artwork_url = models.CharField(max_length=500, blank=False)
     track_type = models.CharField(max_length=500, blank=False)
-    playlist = models.ForeignKey(Playlist, null=True)
+    playlists = models.ManyToManyField(Playlist, blank=True)
+
+    def __str__(self):
+        return self.track_name
 
 
-def __str__(self):
-    return self.track_name
+class Recommendation(models.Model):
+    receipient = models.ForeignKey(User)
+    sender = models.ForeignKey(User, related_name='sent_recommendation')
+    song = models.ForeignKey(Song)

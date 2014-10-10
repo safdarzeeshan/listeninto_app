@@ -12,17 +12,17 @@
 {% endif %}
 
 {% block song_input %}{% endblock song_input %}
-
+<a href="/getrecommendations">Your Recommendations</a>
 <div id="jquery_jplayer_1" class="jp-jplayer">
     <div id="jplayer_sc"></div>
     <div id="yt_player_1"></div>
 </div>
 
 <div class="audio-player">
+    <div class="song-name"></div>
     <div class='progress-bar'></div>
     <div class='play-time'>
         <span class="startTime">00:00</span>
-        <span class="songName"></span>
         <span class="endTime">00:00</span>
     </div>
     <div class="controls">
@@ -38,9 +38,15 @@
             <li id="song_{{ song.track_id }}">
                 <a href="#"
                    onClick=loadItem('{{ song.track_type }}','{{ song.track_id }}')>{{ song.track_name }}</a>
+                <!-- <button id="delete-song" onclick="deleteSong( '{{ song.track_id }}' )">Delete</button> -->
+                <button id="recommend-song" onclick=recommendSong('{{ song.track_type }}','{{ song.track_id }}')>Recommend</button>
             </li>
         {% endfor %}
     </ol>
+    <fieldset id = 'recommend-to'>
+        <input id="receipient_username" value='' type="text" placeholder="Recommend to...." />
+        <button id="receipient-button" onclick="recommendTo()">></button>
+    </fieldset>
 </div>
 
 {% include 'search.html' %}

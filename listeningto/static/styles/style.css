@@ -21,6 +21,11 @@ body {
   margin: 0 5em;
 }
 
+.song-name {
+  padding: 0.7em;
+  text-align: center;
+}
+
 .audio-player {
   padding: 0 1em;
   width: 30em;

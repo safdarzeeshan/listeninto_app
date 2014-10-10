@@ -12,8 +12,13 @@ var currentPlaying = {
 
 var progresspercentage = 0;
 
+var recommend = {receipient : '',
+                 track_id : ''
+                }
+
 $(document).ready(function(){
 
+    $('#recommend-to').hide();
     // empty error div
     $('.error').html('');
 
@@ -126,7 +131,7 @@ function setProgress(type, progress, ui) {
 
   if(type === 'youtube') {
     yt_player_1.seekTo(progress.youtube,true);
-  }
+  }type
 };
 
 function loadItem(type, id) {
@@ -139,7 +144,7 @@ function loadItem(type, id) {
   currentPlaying.songId = id;
 
   //set track name
-  $( ".songName" ).text(currentPlaying.trackName);
+  $( ".song-name" ).text(currentPlaying.trackName);
 
   if(currentPlaying.type === 'youtube') {
     loadYoutube(id);
@@ -226,6 +231,16 @@ function convertTime(seconds) {
   timeString += (secs < 10) ? '0' + secs : secs
 
   return timeString
+}
+
+function deleteSong(id) {
+  var url = 'deletesong/' + id +'/';
+  var id = '#song_' + id;
+  var deletingSong = $.get(url);
+
+  deletingSong.done(function(data) {
+    $(id).remove();
+  });
 }
 
 function loadYoutube(id) {
@@ -357,6 +372,36 @@ function saveToDB(track_info) {
         console.log('new songs: ', response);
     });
 }
+
+function recommendSong(track_type, track_id){
+    
+    // var recommendInfo = {recepient_username: 'zeeshan1', track_id: 'pofv_Ee29Nw'}      
+    // var recomendingSong = $.post('/recommendsong/', recommendInfo);
+
+    // recomendingSong.done(function(data) {cosole.log('done');
+    // });
+    console.log('recommending')
+    $('#recommend-to').show();
+    recommend.track_id = track_id;
+
+    console.log(recommend.track_id) 
+}
+
+function recommendTo(){
+    recommend.receipient =  $('#receipient_username').val();
+    
+    console.log(recommend.receipient) 
+    console.log(recommend.track_id) 
+
+    $.ajax({url: "/recommendsong?receipient_username=" + recommend.receipient + "&track_id=" + recommend.track_id ,async:true}).done(function(response){
+      console.log('test: ', response);
+
+    $('#recommend-to').hide();  
+    $('#receipient_username').val('');
+    });
+}
+
+
 
 function getURLParameter(url,name) {
   return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(url)||[,""])[1].replace(/\+/g, '%20'))||null
