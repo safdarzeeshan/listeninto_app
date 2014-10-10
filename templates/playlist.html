@@ -39,9 +39,14 @@
                 <a href="#"
                    onClick=loadItem('{{ song.track_type }}','{{ song.track_id }}')>{{ song.track_name }}</a>
                 <!-- <button id="delete-song" onclick="deleteSong( '{{ song.track_id }}' )">Delete</button> -->
+                <button id="recommend-song" onclick="recommendSong( '{{ song.track_id }}' )">Recommend</button>
             </li>
         {% endfor %}
     </ol>
+    <fieldset id = 'recommend-to'>
+        <input id="receipient_username" value='' type="text" placeholder="Recommend to...." />
+        <button id="receipient-button" onclick="recommendTo()">></button>
+    </fieldset>
 </div>
 
 {% include 'search.html' %}
