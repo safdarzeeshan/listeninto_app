@@ -131,7 +131,7 @@ function setProgress(type, progress, ui) {
 
   if(type === 'youtube') {
     yt_player_1.seekTo(progress.youtube,true);
-  }
+  }type
 };
 
 function loadItem(type, id) {
@@ -373,7 +373,7 @@ function saveToDB(track_info) {
     });
 }
 
-function recommendSong(track_id){
+function recommendSong(track_type, track_id){
     
     // var recommendInfo = {recepient_username: 'zeeshan1', track_id: 'pofv_Ee29Nw'}      
     // var recomendingSong = $.post('/recommendsong/', recommendInfo);

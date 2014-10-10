@@ -12,7 +12,7 @@
 {% endif %}
 
 {% block song_input %}{% endblock song_input %}
-
+<a href="/getrecommendations">Your Recommendations</a>
 <div id="jquery_jplayer_1" class="jp-jplayer">
     <div id="jplayer_sc"></div>
     <div id="yt_player_1"></div>
@@ -39,7 +39,7 @@
                 <a href="#"
                    onClick=loadItem('{{ song.track_type }}','{{ song.track_id }}')>{{ song.track_name }}</a>
                 <!-- <button id="delete-song" onclick="deleteSong( '{{ song.track_id }}' )">Delete</button> -->
-                <button id="recommend-song" onclick="recommendSong( '{{ song.track_id }}' )">Recommend</button>
+                <button id="recommend-song" onclick=recommendSong('{{ song.track_type }}','{{ song.track_id }}')>Recommend</button>
             </li>
         {% endfor %}
     </ol>
