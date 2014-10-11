@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+		
+{% if user.is_authenticated %}
+    <div class="user-welcome">
+        <span>Welcome, {{ user.username }}.</span>
+        <form method="get" action="logout/">
+            <button class="button" type="submit">Logout</button>
+        </form>
+    </div>
+{% endif %}
+
+<div id="jquery_jplayer_1" class="jp-jplayer">
+    <div id="jplayer_sc"></div>
+    <div id="yt_player_1"></div>
+</div>
+
+<div class="audio-player">
+    <div class="song-name"></div>
+    <div class='progress-bar'></div>
+    <div class='play-time'>
+        <span class="startTime">00:00</span>
+        <span class="endTime">00:00</span>
+    </div>
+    <div class="controls">
+        <span><a href="#" class="play">play</a></span>
+        <span><a href="#" class="pause">pause</a></span>
+        <span><a href="#" class="stop">stop</a></span>
+    </div>
+</div>
+
+<div class = 'recommendations'>
+	<ol class = 'recommendationList'>
+		{% for recommendation in recommendations %}
+        <li id="song_{{ recommendation.song.track_id }}">
+            <a href="#" onClick=loadItem('{{ recommendation.song.track_type }}','{{ recommendation.song.track_id }}')>{{ recommendation.song.track_name }}</a>
+            <p>Recommended by {{ recommendation.sender.username }}</p>
+        </li>
+        {% endfor %}
+	</ol>
+
+</div>
+
+{% endblock content %}

@@ -7,12 +7,23 @@ body {
 }
 
 .user-songs {
-  margin: 0.5em 1em
+  margin: 0.5em 1em;
+  width:45%;
+  float: left;
 }
 
+.search-container{
+  width: 45%;
+  float:right;
+}
 .controls {
   font-size: 2em;
   margin: 0 5em;
+}
+
+.song-name {
+  padding: 0.7em;
+  text-align: center;
 }
 
 .audio-player {
@@ -29,6 +40,10 @@ body {
 .play-time .endTime {
   position: absolute;
   right: 0;
+}
+
+.play-time .songName {
+  position: absolute;
 }
 
 

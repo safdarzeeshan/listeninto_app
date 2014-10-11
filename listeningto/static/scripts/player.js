@@ -12,8 +12,13 @@ var currentPlaying = {
 
 var progresspercentage = 0;
 
+var recommend = {receipient : '',
+                 track_id : ''
+                }
+
 $(document).ready(function(){
 
+    $('#recommend-to').hide();
     // empty error div
     $('.error').html('');
 
@@ -126,18 +131,20 @@ function setProgress(type, progress, ui) {
 
   if(type === 'youtube') {
     yt_player_1.seekTo(progress.youtube,true);
-  }
+  }type
 };
 
-function loadItem(type, id, songId) {
-  console.log($(this));
+function loadItem(type, id) {
   // stop currently playing songs
   stopAllPlayers();
 
   // load new song
-
+  currentPlaying.trackName = $('#song_' + id)[0].innerText;
   currentPlaying.type = type;
-  currentPlaying.songId = parseInt(songId, 10);
+  currentPlaying.songId = id;
+
+  //set track name
+  $( ".song-name" ).text(currentPlaying.trackName);
 
   if(currentPlaying.type === 'youtube') {
     loadYoutube(id);
@@ -226,6 +233,16 @@ function convertTime(seconds) {
   return timeString
 }
 
+function deleteSong(id) {
+  var url = 'deletesong/' + id +'/';
+  var id = '#song_' + id;
+  var deletingSong = $.get(url);
+
+  deletingSong.done(function(data) {
+    $(id).remove();
+  });
+}
+
 function loadYoutube(id) {
   console.log('Youtube loading video...', id);
 
@@ -269,7 +286,7 @@ function saveSong() {
   }
 
   else {
-    $('.error').text('Please a valid YouTube or SoundCloud song link.');
+    $('.error').text('Please enter a valid YouTube or SoundCloud song link.');
     $('#song_url').val('');
   }
 }
@@ -332,7 +349,7 @@ function saveSongToDb(trackInfo) {
   var savingSong = $.post('addsong/', trackInfo);
 
   savingSong.done(function(data) {
-    domEl = "<li><a href='#' onClick=loadItem('" + trackInfo.track_type + "','" + trackInfo.track_id + "','" + $.parseJSON(data).id + "')>" + trackInfo.track_name + "</a></li>";
+    domEl = "<li id='song_" + trackInfo.track_id+ "'><a href='#' onClick=loadItem('" + trackInfo.track_type + "','" + trackInfo.track_id + "')>" + trackInfo.track_name + "</a></li>";
     console.log(domEl);
     $('#playlist').append(domEl);
   });
@@ -355,6 +372,36 @@ function saveToDB(track_info) {
         console.log('new songs: ', response);
     });
 }
+
+function recommendSong(track_type, track_id){
+    
+    // var recommendInfo = {recepient_username: 'zeeshan1', track_id: 'pofv_Ee29Nw'}      
+    // var recomendingSong = $.post('/recommendsong/', recommendInfo);
+
+    // recomendingSong.done(function(data) {cosole.log('done');
+    // });
+    console.log('recommending')
+    $('#recommend-to').show();
+    recommend.track_id = track_id;
+
+    console.log(recommend.track_id) 
+}
+
+function recommendTo(){
+    recommend.receipient =  $('#receipient_username').val();
+    
+    console.log(recommend.receipient) 
+    console.log(recommend.track_id) 
+
+    $.ajax({url: "/recommendsong?receipient_username=" + recommend.receipient + "&track_id=" + recommend.track_id ,async:true}).done(function(response){
+      console.log('test: ', response);
+
+    $('#recommend-to').hide();  
+    $('#receipient_username').val('');
+    });
+}
+
+
 
 function getURLParameter(url,name) {
   return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(url)||[,""])[1].replace(/\+/g, '%20'))||null
