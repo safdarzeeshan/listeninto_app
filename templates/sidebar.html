@@ -1,0 +1,12 @@
+<div class="user-welcome">
+    <span>Welcome, {{ user.username }}.</span>
+    <form method="get" action="/">
+        <button class="button" type="submit">Home</button>
+    </form>
+    <form method="get" action="/getrecommendations">
+        <button class="button" type="submit">Your Recommendations</button>
+    </form>
+    <form method="get" action="logout/">
+        <button class="button" type="submit">Logout</button>
+    </form>
+</div>

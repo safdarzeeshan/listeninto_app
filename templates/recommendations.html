@@ -1,14 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-		
+
 {% if user.is_authenticated %}
-    <div class="user-welcome">
-        <span>Welcome, {{ user.username }}.</span>
-        <form method="get" action="logout/">
-            <button class="button" type="submit">Logout</button>
-        </form>
-    </div>
+    {% include 'sidebar.html' %}
 {% endif %}
 
 <div id="jquery_jplayer_1" class="jp-jplayer">
