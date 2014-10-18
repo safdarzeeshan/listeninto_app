@@ -4,17 +4,26 @@ var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 var currentPlaying = {
-                      type : '',
-                      trackName:'',
-                      duration:'',
-                      songId:''
-                    };
+  type : '',
+  trackName:'',
+  duration:'',
+  songId:''
+};
 
 var progresspercentage = 0;
 
 var recommend = {receipient : '',
-                 track_id : ''
-                }
+ trackInfo: {
+    track_type: '',
+    track_url: '',
+    track_name: '',
+    track_id: '',
+    stream_url: '',
+    track_artwork_url: '',
+ } 
+}
+
+
 
 $(document).ready(function(){
 
@@ -386,9 +395,12 @@ function recommendSong(track_type, track_id){
 
     // recomendingSong.done(function(data) {cosole.log('done');
     // });
+
     console.log('recommending')
-    $('#recommend-to').show();
-    recommend.track_id = track_id;
+    // $('#recommend-to').show();
+
+    recommend.trackInfo.track_type = track_type;
+    recommend.trackInfo.track_id = track_id;
 
     console.log(recommend.track_id)
 }
@@ -397,17 +409,34 @@ function recommendTo(){
     recommend.receipient =  $('#receipient_username').val();
 
     console.log(recommend.receipient)
-    console.log(recommend.track_id)
 
-    $.ajax({url: "/recommendsong?receipient_username=" + recommend.receipient + "&track_id=" + recommend.track_id ,async:true}).done(function(response){
-      console.log('test: ', response);
-
+    $.ajax({url: "/recommendsong?receipient_username=" + recommend.receipient + 
+                  "&track_type=" + recommend.trackInfo.track_type +
+                  "&track_id=" + recommend.trackInfo.track_id+
+                  "&track_url=" + recommend.trackInfo.track_url + 
+                  "&track_name=" + recommend.trackInfo.track_name +
+                  "&stream_url=" + recommend.trackInfo.stream_url +
+                  "&track_artwork_url=" + recommend.trackInfo.track_artwork_url, async:true}).done(function(response){
+ 
     $('#recommend-to').hide();
     $('#receipient_username').val('');
     });
 }
 
+function saveAndRecommend(type, url,id,title,stream_url,artwork_url) {
 
+  console.log('here')
+  //var trackInfo = getSongInfo(url, type, false);
+
+  recommend.trackInfo.track_type = type;
+  recommend.trackInfo.track_url =  url;
+  recommend.trackInfo.track_name =  title;
+  recommend.trackInfo.track_id = id;
+  recommend.trackInfo.stream_url = stream_url;
+  recommend.trackInfo.track_artwork_url = artwork_url;
+  
+ 
+}
 
 function getURLParameter(url,name) {
   return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(url)||[,""])[1].replace(/\+/g, '%20'))||null

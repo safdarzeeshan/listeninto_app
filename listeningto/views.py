@@ -43,7 +43,6 @@ def recommend_song(request):
     track_type = request.GET.get('track_type')
     track_url = request.GET.get('track_url')
     track_name = request.GET.get('track_name')
-    track_id = request.GET.get('track_id')
     stream_url = request.GET.get('stream_url', 'None')
     track_artwork_url = request.GET.get('track_artwork_url')
     receipient_username = request.GET.get('receipient_username')
