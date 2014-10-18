@@ -278,11 +278,11 @@ function saveSong() {
   var song_url = document.getElementById("song_url").value;
 
   if (song_url.toLowerCase().indexOf("youtube") >= 0) {
-    getSongInfo(song_url, 'youtube');
+    getSongInfo(song_url, 'youtube', true);
   }
 
   else if (song_url.toLowerCase().indexOf("soundcloud") >= 0) {
-    getSongInfo(song_url, 'soundcloud');
+    getSongInfo(song_url, 'soundcloud', true);
   }
 
   else {
@@ -291,9 +291,10 @@ function saveSong() {
   }
 }
 
-function getSongInfo(song_url, type){
+function getSongInfo(song_url, type, save){
     var url = String(song_url);
     console.log('getting info...', song_url);
+    var trackInfo = {};
 
     //identify if youtube or soundcloud
     if(song_url.toLowerCase().indexOf("youtube")>=0){
@@ -302,17 +303,19 @@ function getSongInfo(song_url, type){
 
       $.getJSON('http://gdata.youtube.com/feeds/api/videos/'+id+'?v=2&alt=jsonc',function(data,status,xhr){
 
-        var trackInfo = {
+        trackInfo = {
           track_type: 'youtube',
           track_url: url,
           track_name: data.data.title,
           track_id: id,
           track_artwork_url: data.data.thumbnail.sqDefault,
-          csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"').val()
+          csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
         };
 
+        if (save) { saveSongToDb(trackInfo); }
         console.log(trackInfo);
-        saveSongToDb(trackInfo);
+
+        return trackInfo;
       });
 
 
@@ -325,18 +328,21 @@ function getSongInfo(song_url, type){
 
       SC.get('/resolve', {url: song_url}, function(track) {
 
-        var trackInfo = {
+        trackInfo = {
           track_type: 'soundcloud',
           track_url: track.permalink_url,
           track_name: track.title,
           track_id: track.id,
           stream_url: track.stream_url,
           track_artwork_url: track.artwork_url,
-          csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"').val()
+          csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
         };
 
+        if (save) { saveSongToDb(trackInfo); }
         console.log(trackInfo);
-        saveSongToDb(trackInfo);
+
+        return trackInfo;
+
       });
 
     }
@@ -374,8 +380,8 @@ function saveToDB(track_info) {
 }
 
 function recommendSong(track_type, track_id){
-    
-    // var recommendInfo = {recepient_username: 'zeeshan1', track_id: 'pofv_Ee29Nw'}      
+
+    // var recommendInfo = {recepient_username: 'zeeshan1', track_id: 'pofv_Ee29Nw'}
     // var recomendingSong = $.post('/recommendsong/', recommendInfo);
 
     // recomendingSong.done(function(data) {cosole.log('done');
@@ -384,19 +390,19 @@ function recommendSong(track_type, track_id){
     $('#recommend-to').show();
     recommend.track_id = track_id;
 
-    console.log(recommend.track_id) 
+    console.log(recommend.track_id)
 }
 
 function recommendTo(){
     recommend.receipient =  $('#receipient_username').val();
-    
-    console.log(recommend.receipient) 
-    console.log(recommend.track_id) 
+
+    console.log(recommend.receipient)
+    console.log(recommend.track_id)
 
     $.ajax({url: "/recommendsong?receipient_username=" + recommend.receipient + "&track_id=" + recommend.track_id ,async:true}).done(function(response){
       console.log('test: ', response);
 
-    $('#recommend-to').hide();  
+    $('#recommend-to').hide();
     $('#receipient_username').val('');
     });
 }
