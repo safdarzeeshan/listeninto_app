@@ -20,7 +20,8 @@ var recommend = {receipient : '',
     track_id: '',
     stream_url: '',
     track_artwork_url: '',
- } 
+ }
+
 }
 
 
@@ -410,14 +411,14 @@ function recommendTo(){
 
     console.log(recommend.receipient)
 
-    $.ajax({url: "/recommendsong?receipient_username=" + recommend.receipient + 
+    $.ajax({url: "/recommendsong?receipient_username=" + recommend.receipient +
                   "&track_type=" + recommend.trackInfo.track_type +
                   "&track_id=" + recommend.trackInfo.track_id+
-                  "&track_url=" + recommend.trackInfo.track_url + 
+                  "&track_url=" + recommend.trackInfo.track_url +
                   "&track_name=" + recommend.trackInfo.track_name +
                   "&stream_url=" + recommend.trackInfo.stream_url +
                   "&track_artwork_url=" + recommend.trackInfo.track_artwork_url, async:true}).done(function(response){
- 
+
     $('#recommend-to').hide();
     $('#receipient_username').val('');
     });
@@ -425,17 +426,16 @@ function recommendTo(){
 
 function saveAndRecommend(type, url,id,title,stream_url,artwork_url) {
 
-  console.log('here')
+  console.log('here', decodeURIComponent(title));
   //var trackInfo = getSongInfo(url, type, false);
 
   recommend.trackInfo.track_type = type;
   recommend.trackInfo.track_url =  url;
-  recommend.trackInfo.track_name =  title;
+  recommend.trackInfo.track_name =  decodeURIComponent(title);
   recommend.trackInfo.track_id = id;
   recommend.trackInfo.stream_url = stream_url;
   recommend.trackInfo.track_artwork_url = artwork_url;
-  
- 
+
 }
 
 function getURLParameter(url,name) {
