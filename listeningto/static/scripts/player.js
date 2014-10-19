@@ -149,7 +149,7 @@ function loadItem(type, id) {
   stopAllPlayers();
 
   // load new song
-  currentPlaying.trackName = $('#song_' + id)[0].innerText;
+  currentPlaying.trackName = $('#song_' + id)[0].children[0].innerText;
   currentPlaying.type = type;
   currentPlaying.songId = id;
 
