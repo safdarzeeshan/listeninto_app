@@ -1,5 +1,6 @@
 $(document).ready(function(){
       $('#close-search').hide();
+      
 
       SC.initialize({
         client_id: 'ad504f994ee6c4b53cfb47aec786f595'
@@ -16,13 +17,14 @@ function onYouTubeApiLoad() {
       gapi.client.setApiKey('AIzaSyDScS0XbWgnTtadhknXXwv9eqmPu9JNsno');
 }
 
-function search(){
+function search(search_query){
       //clear search results
+      // $('.user-songs').hide(); 
       $('#searchResults').empty();
       $('#searchResults').show();
       $('#close-search').show();
 
-      var search_query =  $('#query').val();
+      //var search_query =  $('#query').val();
       SC.get('/tracks', { q: search_query, limit: 5}, function(tracks) {
 
         appendSC(tracks);

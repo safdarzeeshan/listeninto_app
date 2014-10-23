@@ -25,10 +25,10 @@ var recommend = {receipient : '',
 }
 
 
-
 $(document).ready(function(){
 
-    $('#recommend-to').hide();
+    $('.recommend-to').hide();
+
     // empty error div
     $('.error').html('');
 
@@ -56,8 +56,10 @@ $(document).ready(function(){
 
 	//play
 	$('.play').click(function(){
+
     // if no object loaded, load first file
-    if(jQuery.isEmptyObject(currentPlaying)) {
+    if(currentPlaying.trackName === '') {
+
       $('#playlist li:first a').trigger('click');
     }
 
@@ -149,7 +151,7 @@ function loadItem(type, id) {
   stopAllPlayers();
 
   // load new song
-  currentPlaying.trackName = $('#song_' + id)[0].children[0].innerText;
+  currentPlaying.trackName = $('#song_' + id)[0].children[0].textContent;
   currentPlaying.type = type;
   currentPlaying.songId = id;
 
@@ -282,7 +284,7 @@ function nextSong() {
 }
 
 function saveSong() {
-  console.log('trying to add song...');
+  
 
   $('.error').html('');
   var song_url = document.getElementById("song_url").value;
@@ -295,9 +297,14 @@ function saveSong() {
     getSongInfo(song_url, 'soundcloud', true);
   }
 
+  // else {
+  //   $('.error').text('Please enter a valid YouTube or SoundCloud song link.');
+  //   $('#song_url').val('');
+  // }
   else {
-    $('.error').text('Please enter a valid YouTube or SoundCloud song link.');
-    $('#song_url').val('');
+    console.log('searching')
+    //search for song name
+    search(song_url);
   }
 }
 
@@ -396,17 +403,27 @@ function recommendSong(track_type, track_id){
 
     // recomendingSong.done(function(data) {cosole.log('done');
     // });
+    
+
 
     console.log('recommending')
-    // $('#recommend-to').show();
+
+     $.ajax({url: "/getusers", async:true}).done(function(response){
+            
+            var users = response.split(',');
+            $('#receipient_username').autocomplete({source:users,autoFocus:true});
+    });
+
+    $('.recommend-to').show();
+
 
     recommend.trackInfo.track_type = track_type;
     recommend.trackInfo.track_id = track_id;
 
-    console.log(recommend.track_id)
 }
 
 function recommendTo(){
+
     recommend.receipient =  $('#receipient_username').val();
 
     console.log(recommend.receipient)
@@ -419,7 +436,7 @@ function recommendTo(){
                   "&stream_url=" + recommend.trackInfo.stream_url +
                   "&track_artwork_url=" + recommend.trackInfo.track_artwork_url, async:true}).done(function(response){
 
-    $('#recommend-to').hide();
+    $('.recommend-to').hide();
     $('#receipient_username').val('');
     });
 }
@@ -436,6 +453,21 @@ function saveAndRecommend(type, url,id,title,stream_url,artwork_url) {
   recommend.trackInfo.stream_url = stream_url;
   recommend.trackInfo.track_artwork_url = artwork_url;
 
+  $('.recommend-to').show();
+
+}
+
+function recommendationPage(){
+  //Ajax call to recommend page
+  console.log('reco page')
+  $.ajax({url: "/getrecommendations/" , async:true}).done(function(response){
+    console.log('test');
+    $('.user-songs').hide(); 
+    $('#recos').html(response);
+    
+  }); 
+
+  console.log('here')
 }
 
 function getURLParameter(url,name) {

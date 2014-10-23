@@ -5,8 +5,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-
+from django.core.serializers.json import DjangoJSONEncoder
 from listeningto.models import Song, Playlist, Recommendation
+from django.shortcuts import render_to_response
 
 
 def save_song(request):
@@ -67,8 +68,13 @@ def recommend_song(request):
 
 
 def get_recommendations(request):
+    # recos = User.objects.get(id=request.user.id).recommendation_set.all()
+    # return render(request, 'recommendations.html', {'recommendations': recos})
+
     recos = User.objects.get(id=request.user.id).recommendation_set.all()
-    return render(request, 'recommendations.html', {'recommendations': recos})
+    if request.is_ajax:
+        print "reco"
+        return render_to_response('reco.html', {'recommendations': recos})
 
 
 def delete_song(request, track_id):
@@ -139,3 +145,16 @@ def user_songs(request, username):
 def search(request):
 
     return render(request, 'search.html')
+
+def get_users(request):
+    print 'in get users';
+
+    users = User.objects.all();
+
+    users_list =[];
+    for i in range(len(users)):
+
+        users_list.append(users[i].username)
+
+    # return render(request, {'users': users})
+    return HttpResponse( ','.join(users_list)  , status=201)
