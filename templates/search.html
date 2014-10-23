@@ -1,14 +1,7 @@
-{% block search_box %}
-
 <div class="search-container">
-	<fieldset>
-        <input id="query" value='' type="text" placeholder="Search for Song..." />
-        <button id="search-button" onclick="search()">Search</button>
-	</fieldset>
+    <button id="close-search" onclick="closeSearch()">X</button>
 	<div class='search'>
 		<ol id='searchResults'>			
 		</ol>
 	</div>
 </div>
-
-{% endblock %}

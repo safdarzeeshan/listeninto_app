@@ -5,12 +5,13 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-
+from django.core.serializers.json import DjangoJSONEncoder
 from listeningto.models import Song, Playlist, Recommendation
+from django.shortcuts import render_to_response
 
 
 def save_song(request):
-    print 'save song';
+    print 'save song'
     track_type = request.POST.get('track_type')
     track_url = request.POST.get('track_url')
     track_name = request.POST.get('track_name')
@@ -33,26 +34,47 @@ def save_song(request):
 
     return HttpResponse(json.dumps({'id': r.id}), status=201)
 
+
 def recommend_song(request):
 
     # track_id = request.POST.get('track_id')
     # recepient_username = request.POST.get('recepient_username')
 
     track_id = request.GET.get('track_id')
+    track_type = request.GET.get('track_type')
+    track_url = request.GET.get('track_url')
+    track_name = request.GET.get('track_name')
+    stream_url = request.GET.get('stream_url', 'None')
+    track_artwork_url = request.GET.get('track_artwork_url')
     receipient_username = request.GET.get('receipient_username')
 
-    song = Song.objects.get(track_id = track_id)
-    receipient = User.objects.get(username = receipient_username)
+    song, created = Song.objects.get_or_create(track_id=track_id)
+
+    if created:
+        song.track_type = track_type
+        song.track_url = track_url
+        song.track_name = track_name
+        song.stream_url = stream_url
+        song.track_artwork_url = track_artwork_url
+        song.save()
+
+    receipient = User.objects.get(username=receipient_username)
 
     #add to recomendation table
-    r = Recommendation.objects.create(receipient=receipient,sender=request.user,song=song)
+    r = Recommendation.objects.create(receipient=receipient, sender=request.user, song=song)
     r.save()
 
     return HttpResponse(status=201)
 
+
 def get_recommendations(request):
-    recos = User.objects.get(id = request.user.id).recommendation_set.all()
-    return render(request, 'recommendations.html', {'recommendations': recos})
+    # recos = User.objects.get(id=request.user.id).recommendation_set.all()
+    # return render(request, 'recommendations.html', {'recommendations': recos})
+
+    recos = User.objects.get(id=request.user.id).recommendation_set.all()
+    if request.is_ajax:
+        print "reco"
+        return render_to_response('reco.html', {'recommendations': recos})
 
 
 def delete_song(request, track_id):
@@ -123,3 +145,16 @@ def user_songs(request, username):
 def search(request):
 
     return render(request, 'search.html')
+
+def get_users(request):
+    print 'in get users';
+
+    users = User.objects.all();
+
+    users_list =[];
+    for i in range(len(users)):
+
+        users_list.append(users[i].username)
+
+    # return render(request, {'users': users})
+    return HttpResponse( ','.join(users_list)  , status=201)

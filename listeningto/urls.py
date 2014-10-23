@@ -12,5 +12,6 @@ urlpatterns = [
     url(r'^search/$', views.search, name='search'),
     url(r'^recommendsong/$', views.recommend_song, name='recommend_song'),
     url(r'^getrecommendations/$', views.get_recommendations, name='get_recommendations'),
+    url(r'^getusers/$', views.get_users, name='get_users'),
 ]
 

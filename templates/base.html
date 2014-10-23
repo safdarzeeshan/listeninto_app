@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title></title>
     <link rel="stylesheet" href="/static/styles/style.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script type="text/javascript"
             src="//cdnjs.cloudflare.com/ajax/libs/jplayer/2.7.1/jquery.jplayer/jquery.jplayer.min.js"></script>
@@ -15,6 +16,24 @@
 </head>
 <body>
 <div class="container">
+    <div id="jquery_jplayer_1" class="jp-jplayer">
+        <div id="jplayer_sc"></div>
+        <div id="yt_player_1"></div>
+    </div>
+
+    <div class="audio-player">
+        <div class="song-name"></div>
+        <div class='progress-bar'></div>
+        <div class='play-time'>
+            <span class="startTime">00:00</span>
+            <span class="endTime">00:00</span>
+        </div>
+        <div class="controls">
+            <span><a href="#" class="play">play</a></span>
+            <span><a href="#" class="pause">pause</a></span>
+            <span><a href="#" class="stop">stop</a></span>
+        </div>
+    </div>
 
     {% block content %}{% endblock content %}
 
