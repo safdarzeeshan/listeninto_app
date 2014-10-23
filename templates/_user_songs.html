@@ -1,0 +1,8 @@
+{% for song in songs %}
+    <li id="song_{{ song.track_id }}">
+        <a href="#"
+           onClick=loadItem('{{ song.track_type }}','{{ song.track_id }}')>{{ song.track_name }}</a>
+        <!-- <button id="delete-song" onclick="deleteSong( '{{ song.track_id }}' )">Delete</button> -->
+        <button id="recommend-song" onclick=recommendSong('{{ song.track_type }}','{{ song.track_id }}')>Recommend</button>
+    </li>
+{% endfor %}

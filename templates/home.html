@@ -6,7 +6,10 @@
     {% include 'sidebar.html' %}
 {% endif %}
 
-{% block song_input %}{% endblock song_input %}
+<fieldset class='recommend-to'>
+        <input id="receipient_username" type="text" placeholder="Recommend to...." />
+        <button id="receipient-button" onclick="recommendTo()">></button>
+</fieldset>
 
 <div class="user-songs">
     <ol id="playlist">
@@ -19,13 +22,6 @@
             </li>
         {% endfor %}
     </ol>
-    <fieldset class='recommend-to'>
-        <input id="receipient_username" type="text" placeholder="Recommend to...." />
-        <button id="receipient-button" onclick="recommendTo()">></button>
-    </fieldset>
 </div>
-<div id="recos"></div>
-
-{% include 'search.html' %}
 
 {% endblock content %}

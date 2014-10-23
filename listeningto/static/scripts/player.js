@@ -284,7 +284,7 @@ function nextSong() {
 }
 
 function saveSong() {
-  
+
 
   $('.error').html('');
   var song_url = document.getElementById("song_url").value;
@@ -403,13 +403,13 @@ function recommendSong(track_type, track_id){
 
     // recomendingSong.done(function(data) {cosole.log('done');
     // });
-    
+
 
 
     console.log('recommending')
 
      $.ajax({url: "/getusers", async:true}).done(function(response){
-            
+
             var users = response.split(',');
             $('#receipient_username').autocomplete({source:users,autoFocus:true});
     });
@@ -462,12 +462,17 @@ function recommendationPage(){
   console.log('reco page')
   $.ajax({url: "/getrecommendations/" , async:true}).done(function(response){
     console.log('test');
-    $('.user-songs').hide(); 
-    $('#recos').html(response);
-    
-  }); 
+    $('#playlist').html(response);
+
+  });
 
   console.log('here')
+}
+
+function getUserSongs() {
+  $.ajax({url: "/", async: true}).done(function(response) {
+    $('#playlist').html(response);
+  });
 }
 
 function getURLParameter(url,name) {

@@ -1,0 +1,6 @@
+{% for recommendation in recommendations %}
+    <li id="song_{{ recommendation.song.track_id }}">
+        <a href="#" onClick=loadItem('{{ recommendation.song.track_type }}','{{ recommendation.song.track_id }}')>{{ recommendation.song.track_name }}</a>
+        <p>Recommended by {{ recommendation.sender.username }}</p>
+    </li>
+{% endfor %}

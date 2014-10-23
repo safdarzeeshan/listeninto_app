@@ -1,9 +1,4 @@
-
-{% extends 'playlist.html' %}
-
-{% block song_input %}
-
-<div>
+<div class="search-box">
     <div class="error">Only YouTube or SoundCloud links accepted.</div>
     <form class="song-upload">
         <fieldset>
@@ -14,5 +9,10 @@
     </form>
 </div>
 
-{% endblock song_input %}
-
+<div class="search-container">
+    <button id="close-search" onclick="closeSearch()">X</button>
+    <div class='search'>
+        <ol id='searchResults'>
+        </ol>
+    </div>
+</div>
