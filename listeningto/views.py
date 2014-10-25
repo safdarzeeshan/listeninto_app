@@ -63,7 +63,7 @@ def recommend_song(request):
 
 def get_recommendations(request):
     recos = User.objects.get(id=request.user.id).recommendation_set.all()
-    if request.is_ajax:
+    if request.is_ajax():
         return render_to_response('_reco.html', {'recommendations': recos})
 
 
@@ -122,11 +122,12 @@ def home(request):
     playlist, created = Playlist.objects.get_or_create(user=request.user)
     songs = Song.objects.filter(playlists=playlist)
 
-    # if request.is_ajax:
-    #     print 'here'
-    #     template = '_user_songs.html'
-    # else:
-    template = 'home.html'
+    if request.is_ajax():
+        print 'ajax'
+        template = '_user_songs.html'
+    else:
+        print 'normal'
+        template = 'home.html'
 
     return render(request, template, {'songs': songs})
 

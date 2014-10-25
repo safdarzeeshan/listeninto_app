@@ -6,10 +6,13 @@
     {% include 'sidebar.html' %}
 {% endif %}
 
-<fieldset class='recommend-to'>
+
+<div id="overlay">
+     <div>
         <input id="receipient_username" type="text" placeholder="Recommend to...." />
         <button id="receipient-button" onclick="recommendTo()">></button>
-</fieldset>
+     </div>
+</div>
 
 <div class="user-songs">
     <ol id="playlist">
@@ -25,3 +28,4 @@
 </div>
 
 {% endblock content %}
+
