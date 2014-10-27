@@ -16,3 +16,6 @@ staticfiles
 
 #ignoring log files
 logfile
+
+# don't put in main.css
+main.css

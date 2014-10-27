@@ -31,21 +31,6 @@ body {
   width: 30em;
 }
 
-.play-time {
-  position: relative;
-  margin-top: 0.5em;
-  color: #393e62;
-}
-
-.play-time .endTime {
-  position: absolute;
-  right: 0;
-}
-
-.play-time .songName {
-  position: absolute;
-}
-
 
 .audio-player p{
   position:relative;
