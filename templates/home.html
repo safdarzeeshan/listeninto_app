@@ -9,6 +9,7 @@
 
 <div id="overlay">
      <div>
+        {% csrf_token %}
         <input id="receipient_username" type="text" placeholder="Recommend to...." />
         <button id="receipient-button" onclick="recommendTo()">></button>
      </div>

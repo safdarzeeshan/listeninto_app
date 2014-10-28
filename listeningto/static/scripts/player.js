@@ -443,19 +443,26 @@ function recommendTo(){
 
     recommend.receipient =  $('#receipient_username').val();
 
-    console.log(recommend.receipient)
+    console.log(recommend.receipient);
 
-    $.ajax({url: "/recommendsong?receipient_username=" + recommend.receipient +
-                  "&track_type=" + recommend.trackInfo.track_type +
-                  "&track_id=" + recommend.trackInfo.track_id+
-                  "&track_url=" + recommend.trackInfo.track_url +
-                  "&track_name=" + recommend.trackInfo.track_name +
-                  "&stream_url=" + recommend.trackInfo.stream_url +
-                  "&track_artwork_url=" + recommend.trackInfo.track_artwork_url, async:true}).done(function(response){
+    var recommendation = {
+      receipient_username: recommend.receipient,
+      track_type: recommend.trackInfo.track_type,
+      track_id: recommend.trackInfo.track_id,
+      track_url: recommend.trackInfo.track_url,
+      track_name: recommend.trackInfo.track_name,
+      stream_url: recommend.trackInfo.stream_url,
+      track_artwork_url: recommend.trackInfo.track_artwork_url,
+      csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
+    };
 
-    $("#overlay").css('visibility', 'hidden');
-    $('#receipient_username').val('');
-    });
+    $.post('/recommendsong/', recommendation)
+      .done(
+        function(response) {
+          $("#overlay").css('visibility', 'hidden');
+          $('#receipient_username').val('');
+        }
+      );
 }
 
 function saveAndRecommend(type, url,id,title,stream_url,artwork_url) {

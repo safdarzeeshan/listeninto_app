@@ -34,13 +34,13 @@ def save_song(request):
 
 
 def recommend_song(request):
-    track_id = request.GET.get('track_id')
-    track_type = request.GET.get('track_type')
-    track_url = request.GET.get('track_url')
-    track_name = request.GET.get('track_name')
-    stream_url = request.GET.get('stream_url', 'None')
-    track_artwork_url = request.GET.get('track_artwork_url')
-    receipient_username = request.GET.get('receipient_username')
+    track_id = request.POST.get('track_id')
+    track_type = request.POST.get('track_type')
+    track_url = request.POST.get('track_url')
+    track_name = request.POST.get('track_name')
+    stream_url = request.POST.get('stream_url', 'None')
+    track_artwork_url = request.POST.get('track_artwork_url')
+    receipient_username = request.POST.get('receipient_username')
 
     song, created = Song.objects.get_or_create(track_id=track_id)
 
