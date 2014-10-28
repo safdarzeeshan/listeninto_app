@@ -21,7 +21,7 @@ var recommend = {receipient : '',
     stream_url: '',
     track_artwork_url: '',
  }
-
+description:''
 }
 
 
@@ -396,32 +396,6 @@ function saveToDB(track_info) {
     });
 }
 
-function recommendSong1(track_type, track_id){
-
-    // var recommendInfo = {recepient_username: 'zeeshan1', track_id: 'pofv_Ee29Nw'}
-    // var recomendingSong = $.post('/recommendsong/', recommendInfo);
-
-    // recomendingSong.done(function(data) {cosole.log('done');
-    // });
-
-
-
-    console.log('recommending')
-
-     $.ajax({url: "/getusers", async:true}).done(function(response){
-
-            var users = response.split(',');
-            $('#receipient_username').autocomplete({source:users,autoFocus:true});
-    });
-
-    $('.recommend-to').show();
-
-
-    recommend.trackInfo.track_type = track_type;
-    recommend.trackInfo.track_id = track_id;
-
-}
-
 function recommendSong(track_type, track_id){
 
     console.log('recommending')
@@ -442,6 +416,7 @@ function recommendSong(track_type, track_id){
 function recommendTo(){
 
     recommend.receipient =  $('#receipient_username').val();
+    recommend.description = $('#recomendation_description').val();
 
     console.log(recommend.receipient);
 
@@ -477,7 +452,7 @@ function saveAndRecommend(type, url,id,title,stream_url,artwork_url) {
   recommend.trackInfo.stream_url = stream_url;
   recommend.trackInfo.track_artwork_url = artwork_url;
 
-  $('.recommend-to').show();
+  $("#overlay").css('visibility', 'visible');
 
 }
 
