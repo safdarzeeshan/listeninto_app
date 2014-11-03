@@ -1,18 +1,6 @@
 <div class="search-box">
     <div class="error">Only YouTube or SoundCloud links accepted.</div>
-    <form class="song-upload">
-        <fieldset>
             {% csrf_token %}
             <input type="text" class="song_url_input" value="" id="song_url" placeholder="Enter Song URL or Search for a Song">
-            <button type="button" class="save-button" id="save_song" onclick="saveSong()">Add / Search</button>
-        </fieldset>
-    </form>
-</div>
-
-<div class="search-container">
-    <button id="close-search" onclick="closeSearch()">X</button>
-    <div class='search'>
-        <ol id='searchResults'>
-        </ol>
-    </div>
+            <a href='#' class="search-button" onclick="saveSong()"><img class= 'search-song-img' src="static/images/search-icon.png"></a>
 </div>

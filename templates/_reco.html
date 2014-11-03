@@ -1,6 +1,16 @@
 {% for recommendation in recommendations %}
-    <li id="song_{{ recommendation.song.track_id }}">
+<li id="song_{{ recommendation.song.track_id }}">
+    <div class = 'song_name'>
         <a href="#" onClick=loadItem('{{ recommendation.song.track_type }}','{{ recommendation.song.track_id }}')>{{ recommendation.song.track_name }}</a>
         <p>Recommended by {{ recommendation.sender.username }}</p>
-    </li>
+    </div>
+    <div class = 'song_options'>
+        <!-- <button id="delete-song" onclick="deleteSong( '{{ song.track_id }}' )">Delete</button> -->
+        <a href='#' id="play-song" title = 'Play Song' onClick=loadItemonClick=loadItem('{{ recommendation.song.track_type }}','{{ recommendation.song.track_id }}')><img class= 'play-song-img' src="static/images/play.png">
+        </a>
+        <a href='#' id="recommend-song" title = 'Recommend Song' onclick=recommendSong('{{ recommendation.song.track_type }}','{{ recommendation.song.track_id }}')>	
+        	<img class= 'recommend-song-img' src="static/images/recommend.png">
+        </a>
+    </div>
+</li>
 {% endfor %}

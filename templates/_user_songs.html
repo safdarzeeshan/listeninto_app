@@ -1,8 +1,15 @@
 {% for song in songs %}
-    <li id="song_{{ song.track_id }}">
+<li id="song_{{ song.track_id }}">
+    <div class = 'song_name'>
         <a href="#"
-           onClick=loadItem('{{ song.track_type }}','{{ song.track_id }}')>{{ song.track_name }}</a>
+       onClick=loadItem('{{ song.track_type }}','{{ song.track_id }}')>{{ song.track_name }}</a>
+    </div>
+    <div class = 'song_options'>
         <!-- <button id="delete-song" onclick="deleteSong( '{{ song.track_id }}' )">Delete</button> -->
-        <button id="recommend-song" onclick=recommendSong('{{ song.track_type }}','{{ song.track_id }}')>Recommend</button>
-    </li>
+        <a href='#' id="play-song" title = 'Play Song' onClick=loadItem('{{ song.track_type }}','{{ song.track_id }}')><img class= 'play-song-img' src="static/images/play.png">
+        </a>
+        <a href='#' id="recommend-song" title = 'Recommend Song' onclick=recommendSong('{{ song.track_type }}','{{ song.track_id }}')><img class= 'recommend-song-img' src="static/images/recommend.png">
+        </a>
+    </div>
+</li>
 {% endfor %}

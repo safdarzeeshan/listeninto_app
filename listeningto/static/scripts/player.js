@@ -13,6 +13,7 @@ var currentPlaying = {
 var progresspercentage = 0;
 
 var recommend = {receipient : '',
+ description:'',
  trackInfo: {
     track_type: '',
     track_url: '',
@@ -21,7 +22,6 @@ var recommend = {receipient : '',
     stream_url: '',
     track_artwork_url: '',
  }
-description:''
 }
 
 
