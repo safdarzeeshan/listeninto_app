@@ -26,6 +26,8 @@ function search(search_query){
 
       $('#playlist').append(domElsearch);
 
+      searchUsers(search_query)
+
       SC.get('/tracks', { q: search_query, limit: 5}, function(tracks) {
 
         appendSC(tracks);
@@ -51,7 +53,7 @@ function appendSC(tracks){
         domEl = "<li id='song_"+item.id+"'><div class='song_name'><a href='#' onClick=loadItem('soundcloud','" +
                   item.id+  "')>" + item.title + "</a></div>" +
                   "<div class = 'song_options'>" + 
-                  "<a href='#' id='add-song' title = 'Add Song' onClick=getSongInfo('" + item.permalink_url +"','soundcloud','true')'>" + 
+                  "<a href='#' id='add-song' title = 'Add Song' onClick=getSongInfo('" + item.permalink_url +"','soundcloud','true')>" + 
                   "<img class= 'play-song-img' src='static/images/add.png'></a>" + 
                   "<a href='#' href='#' id='play-song' title = 'Play Song' onClick=loadItem('soundcloud','" + item.id+  "')>" + 
                   "<img class= 'play-song-img' src='static/images/play.png'></a>" + 
@@ -83,6 +85,23 @@ function appendYT(tracks) {
         $('#playlist').append(domEl);
       }
 }
+
+function searchUsers(users){
+
+    $.ajax({url: "/searchusers?userquery=" + users, async:true}).done(function(response){
+
+            var user = response;
+
+            domEl= "<li><a href='#' onClick=userPlaylist('"+ user +"')>" + user + "</a></li>";
+
+            console.log(domEl)
+
+            $('#playlist').append(domEl)
+
+    });
+}
+
+
 
 
 

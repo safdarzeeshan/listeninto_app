@@ -132,11 +132,21 @@ def home(request):
     return render(request, template, {'songs': songs})
 
 
-def user_songs(request, username):
-    playlist = Playlist.objects.get(user__username=username)
-    songs = Song.objects.filter(playlists=playlist)
+# def user_songs(request, username):
+#     playlist = Playlist.objects.get(user__username=username)
+#     songs = Song.objects.filter(playlists=playlist)
 
-    return render(request, 'home.html', {'songs': songs})
+#     return render(request, 'home.html', {'songs': songs})
+
+def user_songs(request):
+
+    user = request.GET.get('user')
+    playlist = Playlist.objects.get(user__username=user)
+    songs = Song.objects.filter(playlists=playlist)
+    
+    if request.is_ajax():
+        return render_to_response('_searched_user_songs.html', {'songs': songs ,  'user': user})
+
 
 
 def get_users(request):
@@ -150,3 +160,20 @@ def get_users(request):
 
     # return render(request, {'users': users})
     return HttpResponse(','.join(users_list), status=201)
+
+def search_users(request):
+   
+    print 'search users'
+    username = request.GET.get('userquery')
+
+    print username
+    
+    users = User.objects.filter(username=username)
+
+    users_list = []
+    for i in range(len(users)):
+
+        users_list.append(users[i].username)
+
+    return HttpResponse(','.join(users_list), status=201)
+
