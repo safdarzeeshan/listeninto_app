@@ -15,7 +15,7 @@
 <div id="overlay">
      <div>
         {% csrf_token %}
-        <h4 id= 'recommended_song'></h3>
+        <h3 id= 'recommended_song'></h3>
         <input id="receipient_username" type="text" placeholder="Recommend to...." />
         <input id="recomendation_description" type="text" placeholder="Description" />
         <button id="receipient-button" onclick="recommendTo()">></button>
@@ -31,7 +31,7 @@
                    onClick=loadItem('{{ song.track_type }}','{{ song.track_id }}')>{{ song.track_name }}</a>
                 </div>
                 <div class = 'song_options'>
-                    <a href='#' id="play-song" title = 'Play Song' onClick=loadItem('{{ song.track_type }}','{{ song.track_id }}')><i class="fa fa-play"></i>
+                <a href='#' class="play-song" title='Play Song' song-type='{{ song.track_type }}', song-id='{{ song.track_id }}'><i class="fa fa-play"></i></a>
                     <a href='#' id="recommend-song" title = 'Recommend Song' onclick=recommendSong('{{ song.track_type }}','{{ song.track_id }}','{{ song.track_name|urlencode }}')>
                         <i class="fa fa-share"></i>
                     </a>
