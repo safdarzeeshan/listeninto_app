@@ -246,12 +246,13 @@ function convertTime(seconds) {
 }
 
 function deleteSong(id) {
-  var url = 'deletesong/' + id +'/';
-  var id = '#song_' + id;
-  var deletingSong = $.get(url);
 
-  deletingSong.done(function(data) {
-    $(id).remove();
+  console.log('in delete')
+
+  $.ajax({url: "/deletesong?trackid=" + id, async:true}).done(function(response){
+
+      console.log("deleted" + id)
+      $('#song_' + id).remove();
   });
 }
 
