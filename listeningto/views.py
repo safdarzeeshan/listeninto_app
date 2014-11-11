@@ -67,11 +67,14 @@ def get_recommendations(request):
         return render_to_response('_reco.html', {'recommendations': recos})
 
 
-def delete_song(request, track_id):
+def delete_song(request):
+
+    track_id =  request.GET.get('trackid')
     song = Song.objects.get(track_id=track_id)
     playlist = Playlist.objects.get(user=request.user)
     song.playlists.remove(playlist)
-    return redirect('home')
+    
+    return HttpResponse(status=201)
 
 
 def login_view(request):

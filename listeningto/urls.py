@@ -7,7 +7,7 @@ from listeningto import views
 urlpatterns = [
     url(r'^$', views.home, name='home'),
     url(r'^addsong/$', views.save_song, name='save_song'),
-    url(r'^deletesong/(?P<track_id>\w+)/$', views.delete_song, name='delete_song'),
+    url(r'^deletesong/$', views.delete_song, name='delete_song'),
     # url(r'^user/(?P<username>\w+)/$', views.user_songs, name='user_songs'),
     url(r'^user/$', views.user_songs, name='user_songs'),
     url(r'^recommendsong/$', views.recommend_song, name='recommend_song'),

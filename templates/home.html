@@ -31,10 +31,8 @@
                    onClick=loadItem('{{ song.track_type }}','{{ song.track_id }}')>{{ song.track_name }}</a>
                 </div>
                 <div class = 'song_options'>
-                    <!-- <button id="delete-song" onclick="deleteSong( '{{ song.track_id }}' )">Delete</button> -->
-                    <a href='#' id="play-song" title = 'Play Song' onClick=loadItem('{{ song.track_type }}','{{ song.track_id }}')>
-                        <i class="fa fa-play"></i>
-                    </a>
+                    <a href='#' id="play-song" title = 'Play Song' onClick=loadItem('{{ song.track_type }}','{{ song.track_id }}')><i class="fa fa-play"></i>
+                    <a href='#' id="delete-song" onclick="deleteSong( '{{ song.track_id }}' )">X</a>
                     <a href='#' id="recommend-song" title = 'Recommend Song' onclick=recommendSong('{{ song.track_type }}','{{ song.track_id }}','{{ song.track_name|urlencode }}')>
                         <i class="fa fa-share"></i>
                     </a>
