@@ -5,11 +5,10 @@
         <p>Recommended by {{ recommendation.sender.username }}</p>
     </div>
     <div class = 'song_options'>
-        <!-- <button id="delete-song" onclick="deleteSong( '{{ song.track_id }}' )">Delete</button> -->
-        <a href='#' id="play-song" title = 'Play Song' onClick=loadItemonClick=loadItem('{{ recommendation.song.track_type }}','{{ recommendation.song.track_id }}')><img class= 'play-song-img' src="static/images/play.png">
+        <a href='#' id="play-song" title = 'Play Song' onClick=loadItemonClick=loadItem('{{ recommendation.song.track_type }}','{{ recommendation.song.track_id }}')><i class="fa fa-play"></i>
         </a>
-        <a href='#' id="recommend-song" title = 'Recommend Song' onclick=recommendSong('{{ recommendation.song.track_type }}','{{ recommendation.song.track_id }}')>	
-        	<img class= 'recommend-song-img' src="static/images/recommend.png">
+        <a href='#' id="recommend-song" title = 'Recommend Song' onclick=recommendSong('{{ recommendation.song.track_type }}','{{ recommendation.song.track_id }}')>
+        	<i class="fa fa-share"></i>
         </a>
     </div>
 </li>
