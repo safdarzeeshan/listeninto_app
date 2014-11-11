@@ -5,10 +5,20 @@
         <p>Recommended by {{ recommendation.sender.username }}</p>
     </div>
     <div class = 'song_options'>
+        {% if recos.played %}
+
         <a href='#' id="play-song" title = 'Play Song' onClick=loadItemonClick=loadItem('{{ recommendation.song.track_type }}','{{ recommendation.song.track_id }}')><i class="fa fa-play"></i>
         </a>
+
+        {% else %}
+
+         <a href='#' id="play-song" title = 'Play Song' onClick=loadItem('{{ recommendation.song.track_type }}','{{ recommendation.song.track_id }}')>OMG</a>
+
+        {% endif %}
+
         <a href='#' id="recommend-song" title = 'Recommend Song' onclick=recommendSong('{{ recommendation.song.track_type }}','{{ recommendation.song.track_id }}')>
-        	<i class="fa fa-share"></i>
+            <i class="fa fa-share"></i>
+
         </a>
     </div>
 </li>
