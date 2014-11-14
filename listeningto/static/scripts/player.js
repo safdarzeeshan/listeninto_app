@@ -170,10 +170,6 @@ function setProgress(type, progress, ui) {
   }type
 };
 
-function bullshit() {
-  console.log('such BS');
-}
-
 function loadItem(type, id) {
   // stop currently playing songs
   stopAllPlayers();
