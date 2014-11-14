@@ -29,6 +29,7 @@ class Recommendation(models.Model):
     sender = models.ForeignKey(User, related_name='sent_recommendation')
     song = models.ForeignKey(Song)
     description = models.CharField(max_length=500, blank=True)
+    played = models.BooleanField(default=False)
 
 class Comment(models.Model):
     message = models.CharField(max_length=500, null=False, blank=False)

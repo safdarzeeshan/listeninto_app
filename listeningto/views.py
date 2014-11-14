@@ -66,12 +66,40 @@ def get_recommendations(request):
     if request.is_ajax():
         return render_to_response('_reco.html', {'recommendations': recos})
 
+def check_if_reco_played(request):
 
-def delete_song(request, track_id):
+    track_id =  request.POST.get('track_id')
+
+    song = Song.objects.get(track_id=track_id)
+    reco = Recommendation.objects.get(receipient_id=request.user.id, song_id=song.id)
+
+    if (reco.played == False):
+        reco.played = True
+        reco.save()
+
+    return HttpResponse(reco.played, status=201)
+
+def any_new_recos(request):
+
+    new_recos = User.objects.get(id=request.user.id).recommendation_set.filter(played=True)
+
+    if(new_recos):
+        any_new_recos = True;
+
+    else:
+        any_new_recos = False;
+   
+    return HttpResponse(any_new_recos, status=201 )
+
+
+def delete_song(request):
+
+    track_id =  request.GET.get('trackid')
     song = Song.objects.get(track_id=track_id)
     playlist = Playlist.objects.get(user=request.user)
     song.playlists.remove(playlist)
-    return redirect('home')
+    
+    return HttpResponse(status=201)
 
 
 def login_view(request):
@@ -132,11 +160,14 @@ def home(request):
     return render(request, template, {'songs': songs})
 
 
-def user_songs(request, username):
-    playlist = Playlist.objects.get(user__username=username)
+def user_songs(request):
+
+    user = request.GET.get('user')
+    playlist = Playlist.objects.get(user__username=user)
     songs = Song.objects.filter(playlists=playlist)
 
-    return render(request, 'home.html', {'songs': songs})
+    if request.is_ajax():
+        return render_to_response('_searched_user_songs.html', {'songs': songs, 'user': user})
 
 
 def get_users(request):
@@ -149,4 +180,21 @@ def get_users(request):
         users_list.append(users[i].username)
 
     # return render(request, {'users': users})
+    return HttpResponse(','.join(users_list), status=201)
+
+
+def search_users(request):
+
+    print 'search users'
+    username = request.GET.get('userquery')
+
+    print username
+
+    users = User.objects.filter(username=username)
+
+    users_list = []
+    for i in range(len(users)):
+
+        users_list.append(users[i].username)
+
     return HttpResponse(','.join(users_list), status=201)
