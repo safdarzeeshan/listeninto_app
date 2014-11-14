@@ -67,11 +67,14 @@ def get_recommendations(request):
         return render_to_response('_reco.html', {'recommendations': recos})
 
 
-def delete_song(request, track_id):
+def delete_song(request):
+
+    track_id =  request.GET.get('trackid')
     song = Song.objects.get(track_id=track_id)
     playlist = Playlist.objects.get(user=request.user)
     song.playlists.remove(playlist)
-    return redirect('home')
+    
+    return HttpResponse(status=201)
 
 
 def login_view(request):
@@ -132,11 +135,14 @@ def home(request):
     return render(request, template, {'songs': songs})
 
 
-def user_songs(request, username):
-    playlist = Playlist.objects.get(user__username=username)
+def user_songs(request):
+
+    user = request.GET.get('user')
+    playlist = Playlist.objects.get(user__username=user)
     songs = Song.objects.filter(playlists=playlist)
 
-    return render(request, 'home.html', {'songs': songs})
+    if request.is_ajax():
+        return render_to_response('_searched_user_songs.html', {'songs': songs, 'user': user})
 
 
 def get_users(request):
@@ -149,4 +155,21 @@ def get_users(request):
         users_list.append(users[i].username)
 
     # return render(request, {'users': users})
+    return HttpResponse(','.join(users_list), status=201)
+
+
+def search_users(request):
+
+    print 'search users'
+    username = request.GET.get('userquery')
+
+    print username
+
+    users = User.objects.filter(username=username)
+
+    users_list = []
+    for i in range(len(users)):
+
+        users_list.append(users[i].username)
+
     return HttpResponse(','.join(users_list), status=201)
