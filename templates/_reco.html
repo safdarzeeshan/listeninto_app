@@ -1,5 +1,6 @@
 {% for recommendation in recommendations %}
 <li id="song_{{ recommendation.song.track_id }}">
+
     {% csrf_token %}
 
     {% if recommendation.played %}
@@ -24,5 +25,6 @@
             <i class="fa fa-share"></i>
         </a>
     </div>
+
 </li>
 {% endfor %}
