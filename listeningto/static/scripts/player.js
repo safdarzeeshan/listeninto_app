@@ -130,12 +130,32 @@ $(document).ready(function(){
         }
     });
 
-  $('.play-song').click(function(event) {
+  $(document).on('click', '.play-song',  function(event) {
     event.stopPropagation();
-    console.log('loading...');
     var type = $(this).attr('song-type');
     var id = $(this).attr('song-id');
     loadItem(type, id);
+  });
+
+  $(document).on('click', '.song_name', function(event) {
+    event.stopPropagation();
+    var type = $(this).attr('song-type');
+    var id = $(this).attr('song-id');
+    loadItem(type, id);
+  });
+
+  $(document).on('click', '.recommend-song', function(event) {
+    event.stopPropagation();
+    var type = $(this).attr('song-type');
+    var id = $(this).attr('song-id');
+    var name = $(this).attr('song-name');
+    recommendSong(type, id, name);
+  });
+
+  $(document).on('click', '.delete-song', function(event) {
+    event.stopPropagation();
+    var id = $(this).attr('song-id');
+    deleteSong(id);
   });
 
 });
