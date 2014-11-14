@@ -14,5 +14,7 @@ urlpatterns = [
     url(r'^getrecommendations/$', views.get_recommendations, name='get_recommendations'),
     url(r'^getusers/$', views.get_users, name='get_users'),
     url(r'^searchusers/$', views.search_users, name='search_users'),
+    url(r'^isrecoplayed/$', views.check_if_reco_played, name='check_if_reco_played'),
+    url(r'^anynewrecos/$', views.any_new_recos, name='any_new_recos'),
 ]
 

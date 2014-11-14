@@ -66,6 +66,31 @@ def get_recommendations(request):
     if request.is_ajax():
         return render_to_response('_reco.html', {'recommendations': recos})
 
+def check_if_reco_played(request):
+
+    track_id =  request.POST.get('track_id')
+
+    song = Song.objects.get(track_id=track_id)
+    reco = Recommendation.objects.get(receipient_id=request.user.id, song_id=song.id)
+
+    if (reco.played == False):
+        reco.played = True
+        reco.save()
+
+    return HttpResponse(reco.played, status=201)
+
+def any_new_recos(request):
+
+    new_recos = User.objects.get(id=request.user.id).recommendation_set.filter(played=True)
+
+    if(new_recos):
+        any_new_recos = True;
+
+    else:
+        any_new_recos = False;
+   
+    return HttpResponse(any_new_recos, status=201 )
+
 
 def delete_song(request):
 

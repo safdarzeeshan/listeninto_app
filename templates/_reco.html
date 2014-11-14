@@ -1,12 +1,30 @@
 {% for recommendation in recommendations %}
 <li id="song_{{ recommendation.song.track_id }}">
-    <span>
+
+    {% csrf_token %}
+
+    {% if recommendation.played %}
+
+    <div class = 'song_name'>
         <a href="#" onClick=loadItem('{{ recommendation.song.track_type }}','{{ recommendation.song.track_id }}')>{{ recommendation.song.track_name }}</a>
-        <span class="recommendation-info">Recommended by {{ recommendation.sender.username }}</span>
-    </span>
-    <span class='song_options'>
-        <a href='#' class="play-song" title='Play Song' song-type='{{ song.track_type }}', song-id='{{ song.track_id }}'><i class="fa fa-play"></i></a>
-        <a href='#' class="recommend-song" title='Recommend Song' song-type='{{ song.track_type }}' song-id='{{ song.track_id }}' song-name='{{ song.track_name }}'><i class="fa fa-share"></i></a>
-    </span>
+        <p>Recommended by {{ recommendation.sender.username }}</p>
+    </div>
+
+    {% else %}
+
+    <div class = 'song_name' style="background: grey">
+        <a href="#" onClick=loadItem('{{ recommendation.song.track_type }}','{{ recommendation.song.track_id }}')>{{ recommendation.song.track_name }}</a>
+        <p>Recommended by {{ recommendation.sender.username }}</p>
+    </div>
+
+    {% endif %}
+
+    <div class = 'song_options'>
+        <a href='#' id="play-song" title = 'Play Song' onclick=loadItemAndCheckIfPlayed('{{ recommendation.song.track_type }}','{{ recommendation.song.track_id }}')><i class="fa fa-play"></i></a>
+        <a href='#' id="recommend-song" title = 'Recommend Song' onclick=recommendSong('{{ recommendation.song.track_type }}','{{ recommendation.song.track_id }}')>
+            <i class="fa fa-share"></i>
+        </a>
+    </div>
+
 </li>
 {% endfor %}

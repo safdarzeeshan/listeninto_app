@@ -30,6 +30,8 @@ $(document).ready(function(){
 
     $('.recommend-to').hide();
 
+    checkIfNewRecosExist();
+
     // empty error div
     $('.error').html('');
 
@@ -267,17 +269,6 @@ function convertTime(seconds) {
   timeString += (secs < 10) ? '0' + secs : secs
 
   return timeString
-}
-
-function deleteSong(id) {
-
-  console.log('in delete')
-
-  $.ajax({url: "/deletesong?trackid=" + id, async:true}).done(function(response){
-
-      console.log("deleted" + id)
-      $('#song_' + id).remove();
-  });
 }
 
 function loadYoutube(id) {
@@ -551,6 +542,46 @@ function userPlaylist(user){
   $.ajax({url: "/user/?user=" + user, async: true}).done(function(response) {
     $('#playlist').html(response);
   })
+}
+
+function deleteSong(id) {
+
+  console.log('in delete')
+
+  $.ajax({url: "/deletesong?trackid=" + id, async:true}).done(function(response){
+
+      console.log("deleted" + id)
+      $('#song_' + id).remove();
+  });
+}
+
+function loadItemAndCheckIfPlayed(type, id){
+  console.log('in play and check')
+
+  loadItem(type, id);
+
+  var playing_reco_info = {track_id: id, csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()}
+
+  var checkIfPlayed = $.post('isrecoplayed/', playing_reco_info);
+
+  checkIfPlayed.done(function(response) {
+   
+    console.log("is reco played " + response)
+   
+  });
+}
+
+function checkIfNewRecosExist(){
+  $.ajax({url: "/anynewrecos", async:true}).done(function(response){
+
+    if (response){
+      console.log("we should change the border of the reco button")
+    }
+
+    else{
+      console.log("do nothing")
+    }
+  });
 }
 
 function getURLParameter(url,name) {
