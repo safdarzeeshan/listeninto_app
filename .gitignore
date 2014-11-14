@@ -19,3 +19,5 @@ logfile
 
 # don't put in main.css
 main.css
+
+.sass-cache/
