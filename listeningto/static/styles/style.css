@@ -2,12 +2,6 @@ fieldset {
   border: none;
 }
 
-.user-welcome {
-  float: right;
-  margin: 0.5em 1em;
-  text-align: center;
-}
-
 .user-welcome span {
   font-size: 1.5em;
 }

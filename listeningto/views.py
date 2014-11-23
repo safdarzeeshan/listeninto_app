@@ -41,6 +41,7 @@ def recommend_song(request):
     stream_url = request.POST.get('stream_url', 'None')
     track_artwork_url = request.POST.get('track_artwork_url')
     receipient_username = request.POST.get('receipient_username')
+    recommendation_descripton = request.POST.get('description')
 
     song, created = Song.objects.get_or_create(track_id=track_id)
 
@@ -55,7 +56,7 @@ def recommend_song(request):
     receipient = User.objects.get(username=receipient_username)
 
     #add to recomendation table
-    r = Recommendation.objects.create(receipient=receipient, sender=request.user, song=song)
+    r = Recommendation.objects.create(receipient=receipient, sender=request.user, song=song, description=recommendation_descripton)
     r.save()
 
     return HttpResponse(status=201)

@@ -1,7 +1,16 @@
 <div class='header'>
 	<img class= 'title-img' src="static/images/listeningto.png">
-	<div class="user-welcome">
-	    <span>{{ user.username }}</span>
-	    <a href='/logout' class="button">Logout</a>
-	</div>
+    <span>
+    <div class="user-welcome">
+        <span>{{ user.username }}</span>
+        <a href='/logout' class="button">Logout</a>
+    </div>
+</span>
+<span>
+    <div class="user-sidebar">        
+        <a href="#" class="button" onClick=getUserSongs()>Playlist</a>
+        <a href="#" class="button" onClick=recommendationPage()>Recommendations</a>
+    </div>
+</span>
+
 </div>

@@ -14,7 +14,7 @@ function googleApiClientReady(){
 
 function onYouTubeApiLoad() {
 
-      gapi.client.setApiKey('AIzaSyDScS0XbWgnTtadhknXXwv9eqmPu9JNsno');
+      gapi.client.setApiKey('AIzaSyDScS0XbWgnTtadhknXXwv9eqmPu9JNsno');                          
 }
 
 function search(search_query){
@@ -37,6 +37,7 @@ function search(search_query){
         q: search_query,
         maxResults: 5});
 
+
       request.execute(function(response) {
         appendYT(response)
       });
@@ -48,16 +49,16 @@ function appendSC(tracks){
 
         var item = tracks[i];
 
-        domEl = "<li id='song_"+item.id+"'><div class='song_name'><a href='#' onClick=loadItem('soundcloud','" +
-                  item.id+  "')>" + item.title + "</a></div>" +
-                  "<div class = 'song_options'>" +
-                  "<a href='#' id='add-song' title = 'Add Song' onClick=getSongInfo('" + item.permalink_url +"','soundcloud','true')>" +
-                  "<i class='fa fa-plus'></i></a>" +
-                  "<a href='#' href='#' id='play-song' title = 'Play Song' onClick=loadItem('soundcloud','" + item.id+  "')>" +
+        domEl = "<li id='song_"+item.id+"'>" +
+                  "<span class = 'song_options'>" +
+                  "<a href='#' class='play-song' title ='Play Song' song-type='soundcloud' song-id='" + item.id+ "' song-art = '" + item.artwork_url + "' recommendation = 'False' >" + 
                   "<i class='fa fa-play'></i></a>" +
                   "<a href='#' id='recommend-song' title = 'Recommend Song'  onClick=saveAndRecommend('soundcloud'" + ",'"+item.permalink_url +
                   "','"+item.id+"','"+ encodeURIComponent(item.title)+ "','"+ item.stream_url+"','" + item.artwork_url+"')>" +
-                  "<i class='fa fa-share'></i></a></div></li>";
+                  "<i class='fa fa-share'></i></a>" +
+                  "<a href='#' id='add-song' title = 'Add Song' onClick=getSongInfo('" + item.permalink_url +"','soundcloud','true')>" +
+                  "<i class='fa fa-plus'></i></a></span>" +
+                  "<span class='song_name' song-type='soundcloud' song-id='" + item.id+ "' song-art = '" + item.artwork_url + "' recommendation = 'False'><p>" + item.title + "</p></span></li>";
 
         $('#playlist').append(domEl);
   }
@@ -69,16 +70,17 @@ function appendYT(tracks) {
 
         var item = tracks.items[i];
 
-        domEl = "<li id='song_" + item.id.videoId+ "'><div class='song_name'><a href='#' onClick=loadItem('youtube','" + item.id.videoId +
-                "')>" + item.snippet.title + "</a></div>" +
-                "<div class = 'song_options'>" +
+        domEl = "<li id='song_" + item.id.videoId+ "'>" +
+                "<span class = 'song_options'>"  +
+                "<a href='#' class='play-song' title ='Play Song' song-type='youtube' song-id='" + item.id.videoId + "' song-art = '" + item.snippet.thumbnails.default.url + "' recommendation = 'False'>" +
+                "<i class='fa fa-play'></i></a>" +
+                "<a href='#' id='recommend-song' title = 'Recommend Song' onClick=saveAndRecommend('youtube'" + ","+"'https://www.youtube.com/watch?v="+ item.id.videoId +"','"+item.id.videoId+"','" + encodeURIComponent(item.snippet.title) + "','null','" +item.snippet.thumbnails.default.url  +"')>" +
+                "<i class='fa fa-share'></i></a>" +
                 "<a href='#' id='add-song' title = 'Add Song' onClick=getSongInfo('https://www.youtube.com/watch?v=" + item.id.videoId +
                 "','youtube','true')>" +
-                "<img class= 'play-song-img' src='static/images/add.png'></a>" +
-                "<a href='#' href='#' id='play-song' title = 'Play Song' onClick=loadItem('youtube','" + item.id.videoId +"')>" +
-                "<img class= 'play-song-img' src='static/images/play.png'></a>" +
-                "<a href='#' id='recommend-song' title = 'Recommend Song' onClick=saveAndRecommend('youtube'" + ","+"'https://www.youtube.com/watch?v="+ item.id.videoId +"','"+item.id.videoId+"','" + encodeURIComponent(item.snippet.title) + "','null','" +item.snippet.thumbnails.default.url  +"')>" +
-                "<img class= 'recommend-song-img' src='static/images/recommend.png'></a></div></li>";
+                "<i class='fa fa-plus'></i></a></span>" + 
+                "<span class='song_name' song-type='youtube' song-id='" + item.id.videoId +
+                "' song-art = '" + item.snippet.thumbnails.default.url + "' recommendation = 'False'><p>" + item.snippet.title + "</p></span></li>";
 
         $('#playlist').append(domEl);
       }
@@ -99,9 +101,3 @@ function searchUsers(users){
 
     });
 }
-
-
-
-
-
-

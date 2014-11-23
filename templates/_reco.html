@@ -3,28 +3,27 @@
 
     {% csrf_token %}
 
+    <span class = 'song_options'>
+        <a href='#' class="play-song" title = 'Play Song' song-type= '{{ recommendation.song.track_type }}' song-id='{{ recommendation.song.track_id }}' song-art = '{{ recommendation.song.track_artwork_url }}' recommendation = 'True'><i class="fa fa-play"></i></a>
+        <a href='#' class ="recommend-song" title = 'Recommend Song' song-type='{{ recommendation.song.track_type }}' song-id='{{ recommendation.song.track_id }}' song-name='{{ recommendation.song.track_name }}'>
+        <i class="fa fa-share"></i></a>
+        <a href='#' id='add-song' title = 'Add Song' onClick=getSongInfo('{{ recommendation.song.track_url }}','{{ recommendation.song.track_type }}','true')>
+        <i class='fa fa-plus'></i></a>
+    </span>
+
+    <span class = 'song_name' song-type= '{{ recommendation.song.track_type }}' song-id='{{ recommendation.song.track_id }}' song-art = '{{ recommendation.song.track_artwork_url }}' recommendation = 'True'><p>{{ recommendation.song.track_name }}</p>
+    <br class='recommended-by'><p>{{ recommendation.sender.username }} - {{ recommendation.description }}</p></br>
+    </span>
+
     {% if recommendation.played %}
 
-    <div class = 'song_name'>
-        <a href="#" onClick=loadItem('{{ recommendation.song.track_type }}','{{ recommendation.song.track_id }}')>{{ recommendation.song.track_name }}</a>
-        <p>Recommended by {{ recommendation.sender.username }}</p>
-    </div>
+    <div class='new-reco' hidden>NEW</div>
 
     {% else %}
 
-    <div class = 'song_name' style="background: grey">
-        <a href="#" onClick=loadItem('{{ recommendation.song.track_type }}','{{ recommendation.song.track_id }}')>{{ recommendation.song.track_name }}</a>
-        <p>Recommended by {{ recommendation.sender.username }}</p>
-    </div>
+    <div class='new-reco'>NEW</div>
 
     {% endif %}
 
-    <div class = 'song_options'>
-        <a href='#' id="play-song" title = 'Play Song' onclick=loadItemAndCheckIfPlayed('{{ recommendation.song.track_type }}','{{ recommendation.song.track_id }}')><i class="fa fa-play"></i></a>
-        <a href='#' id="recommend-song" title = 'Recommend Song' onclick=recommendSong('{{ recommendation.song.track_type }}','{{ recommendation.song.track_id }}')>
-            <i class="fa fa-share"></i>
-        </a>
-    </div>
-
 </li>
-{% endfor %}
+{% endfor %}         

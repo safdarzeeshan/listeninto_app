@@ -1,4 +1,4 @@
-var currentPlaying = {
+currentPlaying = {
   type : '',
   trackName:'',
   duration:'',
@@ -26,7 +26,8 @@ $(document).ready(function(){
   var firstScriptTag = document.getElementsByTagName('script')[0];
   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-  var yt_player_1;
+  //causing issues with play and pause in player
+  // var yt_player_1;
 
     $('.recommend-to').hide();
 
@@ -126,24 +127,50 @@ $(document).ready(function(){
           else {
             // Create a timeout to reset this slider to zero.
             setTimeout(function() {
-               $( ".progress" ).slider("value", 0);
+               $( ".progress").slider("value", 0);
               }, 0);
           }
         }
     });
 
   $(document).on('click', '.play-song',  function(event) {
+    console.log('trying to play song');
     event.stopPropagation();
     var type = $(this).attr('song-type');
     var id = $(this).attr('song-id');
-    loadItem(type, id);
+    var art = $(this).attr('song-art');
+    var recommendationBoolean = $(this).attr('recommendation');
+
+    $('.song-img').attr('src', art);
+    
+    if (recommendationBoolean === 'False'){
+      loadItem(type, id);
+    }
+
+    if (recommendationBoolean === 'True'){
+      loadItemAndCheckIfPlayed(type, id);
+    }
+    
   });
 
-  $(document).on('click', '.song_name', function(event) {
+  $(document).on('click', '.song_name',  function(event) {
+    console.log('trying to play song');
     event.stopPropagation();
     var type = $(this).attr('song-type');
     var id = $(this).attr('song-id');
-    loadItem(type, id);
+    var art = $(this).attr('song-art');
+    var recommendationBoolean = $(this).attr('recommendation');
+
+    $('.song-img').attr('src', art);
+    
+    if (recommendationBoolean === 'False'){
+      loadItem(type, id);
+    }
+
+    if (recommendationBoolean === 'True'){
+      loadItemAndCheckIfPlayed(type, id);
+    }
+    
   });
 
   $(document).on('click', '.recommend-song', function(event) {
@@ -159,6 +186,8 @@ $(document).ready(function(){
     var id = $(this).attr('song-id');
     deleteSong(id);
   });
+
+  //add onclick for add song and saveAndRecommend
 
 });
 
@@ -176,8 +205,10 @@ function loadItem(type, id) {
   // stop currently playing songs
   stopAllPlayers();
 
+  console.log(type + id);
+
   // load new song
-  currentPlaying.trackName = $('#song_' + id)[0].children[0].textContent;
+  currentPlaying.trackName = $('#song_' + id).find('.song_name')[0].children[0].textContent;
   currentPlaying.type = type;
   currentPlaying.songId = id;
 
@@ -249,6 +280,7 @@ function songTimeYT(){
   }
 }
 
+
 function convertTime(seconds) {
   var timeString = '';
   var hours = 0;
@@ -295,8 +327,7 @@ function loadSoundcloud(id){
 
 function nextSong() {
   console.log('in next song' + currentPlaying.songId);
-  var currentId = '#song_' + currentPlaying.songId;
-  $(currentId + ' + li > a').trigger('click');
+  $('#song_' + currentPlaying.songId).next().find('.song_name').trigger('click');
 }
 
 function saveSong() {
@@ -313,10 +344,6 @@ function saveSong() {
     getSongInfo(song_url, 'soundcloud', false);
   }
 
-  // else {
-  //   $('.error').text('Please enter a valid YouTube or SoundCloud song link.');
-  //   $('#song_url').val('');
-  // }
   else {
     console.log('searching')
     //search for song name
@@ -416,16 +443,16 @@ function displayInsertedUrl(trackInfo){
 
     console.log('type is youtube')
 
-    domEl = "<li id='song_" + trackInfo.track_id + "'><div class='song_name'><a href='#' onClick=loadItem('youtube','" + trackInfo.track_id +
-        "')>" + trackInfo.track_name + "</a></div>" +
-        "<div class = 'song_options'>" +
-        "<a href='#' id='add-song' title = 'Add Song' onClick=getSongInfo('https://www.youtube.com/watch?v=" + trackInfo.track_id +
-        "','youtube','true')>" +
-        "<i class='fa fa-plus'></i></a>" +
-        "<a href='#' href='#' id='play-song' title = 'Play Song' onClick=loadItem('youtube','" + trackInfo.track_id +"')>" +
+    domEl = "<li id='song_" + trackInfo.track_id + "'>" + 
+        "<span class = 'song_options'>" +
+        "<a href='#' href='#' class='play-song' title = 'Play Song' song-type='youtube' song-id='" + trackInfo.track_id +"')>" +
         "<i class='fa fa-play'></i></a>" +
-        "<a href='#' id='recommend-song' title = 'Recommend Song' onClick=saveAndRecommend('youtube'" + ","+"'https://www.youtube.com/watch?v="+ trackInfo.track_id +"','"+trackInfo.track_id+"','" + encodeURIComponent(trackInfo.track_title) + "','null','" +trackInfo.track_artwork_url  +"')>" +
-        "<i class='fa fa-share'></i></a></div></li>";
+        "<a href='#' class='recommend-song' title = 'Recommend Song' onClick=saveAndRecommend('youtube'" + ","+"'https://www.youtube.com/watch?v="+ trackInfo.track_id +"','"+trackInfo.track_id+"','" + encodeURIComponent(trackInfo.track_title) + "','null','" +trackInfo.track_artwork_url  +"')>" +
+        "<i class='fa fa-share'></i></a>" + 
+        "<a href='#' class='add-song' title = 'Add Song' onClick=getSongInfo('https://www.youtube.com/watch?v=" + trackInfo.track_id +
+        "','youtube','true')>" +
+        "<i class='fa fa-plus'></i></a></span>" +
+        "<span class='song_name' song-type='youtube' song-id='" + trackInfo.track_id + "'><p>" + trackInfo.track_name + "</p></span></li>";
 
     $('#playlist').append(domEl);
   }
@@ -433,16 +460,16 @@ function displayInsertedUrl(trackInfo){
   if(trackInfo.track_type === 'soundcloud'){
     console.log('type is soundcloud')
 
-    domEl = "<li id='song_"+trackInfo.track_id+"'><div class='song_name'><a href='#' onClick=loadItem('soundcloud','" +
-          trackInfo.track_id+  "')>" + trackInfo.track_name + "</a></div>" +
-          "<div class = 'song_options'>" +
-          "<a href='#' id='add-song' title = 'Add Song' onClick=getSongInfo('" + trackInfo.track_url +"','soundcloud','true')>" +
-          "<i class='fa fa-plus'></i></a>" +
-          "<a href='#' href='#' id='play-song' title = 'Play Song' onClick=loadItem('soundcloud','" + trackInfo.track_id+  "')>" +
+    domEl = "<li id='song_"+trackInfo.track_id+"'>" +
+          "<span class = 'song_options'>" +
+          "<a href='#' href='#' class='play-song' title = 'Play Song' song-type='soundcloud' song-id='" + trackInfo.track_id + "'>" +
           "<i class='fa fa-play'></i></a>" +
-          "<a href='#' id='recommend-song' title = 'Recommend Song'  onClick=saveAndRecommend('soundcloud'" + ",'"+ trackInfo.track_url +
+          "<a href='#' class='recommend-song' title = 'Recommend Song'  onClick=saveAndRecommend('soundcloud'" + ",'"+ trackInfo.track_url +
           "','"+trackInfo.track_id+"','"+ encodeURIComponent(trackInfo.track_name)+ "','"+ trackInfo.track_url +"','" + trackInfo.track_artwork_url +"')>" +
-          "<i class='fa fa-share'></i></a></div></li>";
+          "<i class='fa fa-share'></i></a>" + 
+          "<a href='#' class='add-song' title = 'Add Song' onClick=getSongInfo('" + trackInfo.track_url +"','soundcloud','true')>" +
+          "<i class='fa fa-plus'></i></a></span>" +
+          "<span class='song_name'  song-type='soundcloud' song-id='" + trackInfo.track_id + "'><p>" + trackInfo.track_name + "</p></span></li>";
 
     $('#playlist').append(domEl);
   }
@@ -481,6 +508,7 @@ function recommendTo(){
       track_name: recommend.trackInfo.track_name,
       stream_url: recommend.trackInfo.stream_url,
       track_artwork_url: recommend.trackInfo.track_artwork_url,
+      description: recommend.description,
       csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
     };
 
@@ -489,13 +517,12 @@ function recommendTo(){
         function(response) {
           $("#overlay").css('visibility', 'hidden');
           $('#receipient_username').val('');
+          $('#recomendation_description').val('');
         }
       );
 }
 
 function saveAndRecommend(type, url,id,title,stream_url,artwork_url) {
-
-  console.log('here', decodeURIComponent(title));
 
   recommend.trackInfo.track_type = type;
   recommend.trackInfo.track_url =  url;
@@ -511,6 +538,7 @@ function saveAndRecommend(type, url,id,title,stream_url,artwork_url) {
   });
 
   $("#overlay").css('visibility', 'visible');
+  console.log(recommend.trackInfo.track_name)
   $("#recommended_song").text(recommend.trackInfo.track_name)
 
 }
@@ -582,6 +610,12 @@ function checkIfNewRecosExist(){
       console.log("do nothing")
     }
   });
+}
+
+function closeModal(){
+    $("#overlay").css('visibility', 'hidden');
+    $('#receipient_username').val('');
+    $('#recomendation_description').val('');
 }
 
 function getURLParameter(url,name) {
