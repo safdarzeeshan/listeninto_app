@@ -5,88 +5,95 @@ $border-color: #C2C2C2
 .audio-player
 	margin-left: auto
 	margin-right: auto
-	padding: 0 1em
-	width: 30em
-	background-color: none
-	background-color: rgba(0,0,0,0.2)
+	width: 20em
+	height: 17em
 	border-radius: 25px
-
-	p
-		position: relative
-		display: inline
-
-	.controls
-		padding-left: 30px
-		padding-bottom: 10px
-		padding-top: 10px
-		width: 75%
-
-
-		.song-name
-			display: inline
-			text-align: center
-			padding: 0.7em
-
-		a
-			> i
-				font-size: 1.5em
-				color: #000
-
-			&:hover
-				> i
-					color: #fff
-
-
-
-	.player
-
-		padding-left: 30px
-		padding-right: 30px
-		padding-bottom: 5px
-		width: 75%
-
-		.play-time
-			position: relative
-			margin-top: 0.5em
-			color: #393e62
-
-			.endTime
-				position: absolute
-				right: 0
-
-			.songName
-				position: absolute
-
-		.controls
-			font-size: 2em
-			margin: 0 5em
+	background-color: whitesmoke
+	box-shadow: 10px 10px 10px rgba(0,0,0,.14),0 4px 8px rgba(0,0,0,.4)
 
 	.song-art
-		float: right	
+		position: relative
+		z-index: 50
+
 		.song-img
-			height: 4em
-			border-radius: 1em
-			padding-top: 0.5em
+			border-top-left-radius: 25px
+			border-top-right-radius: 25px
+			width: 20em			
 
-.progress-bar
+	.song-name
+		position: relative
+		z-index: 100
+		height: 3em
+		text-align: center
+		margin-top: -3.2em
+		color: white
+		font-weight: bold
+		background-color: rgba(0,0,0,.4)
 
-	width: 100%
-	height: 8px
-	display: block
-	background: $secondary-color
-	position: relative
-	bottom: 0px
-	cursor: pointer
-	border: none
-	border-radius: 4px
+	.progress-bar
+		width: 100%
+		height: 8px
+		display: block
+		background: $secondary-color
+		position: relative
+		bottom: 0px
+		cursor: pointer
+
+	.play-time
+		color: #393e62
+
+		.startTime
+			padding-left: 0.5em
+
+		.endTime
+			float: right
+			padding-right: 0.5em
+
+	.controls
+		margin-left: 33%
+		
+
+		div
+			width: 3em
+			height: 3em
+			border-radius: 50%
+			background-color: #5A958F
+			display: inline-block
+			position: relative
+			margin-right: 0.5em
+			
+			a
+				
+				> i
+					font-size: 1.5em
+					color: #D0D1D1
+
+				&:hover	> i
+					color: #EFEFEF
+
+
+
+					
+					
+					
+			#play-icon			
+				padding-left: 0.7em
+				padding-top: 0.5em
+
+			#pause-icon			
+				padding-left: 0.6em
+				padding-top: 0.5em
+
+			#stop-icon			
+				padding-left: 0.55em
+				padding-top: 0.5em
+
 
 
 .ui-slider-range
 	display: block
 	background: rgba(32,132,182,0.7)
 	height: 8px
-	border-radius: 4px
-
 
 .ui-slider-handle
 	position: absolute

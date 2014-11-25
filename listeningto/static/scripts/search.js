@@ -27,9 +27,9 @@ function search(search_query){
 
       searchUsers(search_query);
 
-      SC.get('/tracks', { q: search_query, limit: 5}, function(tracks) {
-        appendSC(tracks);
-      });
+      // SC.get('/tracks', { q: search_query, limit: 5}, function(tracks) {
+      //   appendSC(tracks);
+      // });
 
       var request = gapi.client.youtube.search.list({
         part: 'snippet',
@@ -72,7 +72,7 @@ function appendYT(tracks) {
 
         domEl = "<li id='song_" + item.id.videoId+ "'>" +
                 "<span class = 'song_options'>"  +
-                "<a href='#' class='play-song' title ='Play Song' song-type='youtube' song-id='" + item.id.videoId + "' song-art = '" + item.snippet.thumbnails.default.url + "' recommendation = 'False'>" +
+                "<a href='#' class='play-song' title ='Play Song' song-type='youtube' song-id='" + item.id.videoId + "' song-art = '" + item.snippet.thumbnails.medium.url + "' recommendation = 'False'>" +
                 "<i class='fa fa-play'></i></a>" +
                 "<a href='#' id='recommend-song' title = 'Recommend Song' onClick=saveAndRecommend('youtube'" + ","+"'https://www.youtube.com/watch?v="+ item.id.videoId +"','"+item.id.videoId+"','" + encodeURIComponent(item.snippet.title) + "','null','" +item.snippet.thumbnails.default.url  +"')>" +
                 "<i class='fa fa-share'></i></a>" +
@@ -80,7 +80,7 @@ function appendYT(tracks) {
                 "','youtube','true')>" +
                 "<i class='fa fa-plus'></i></a></span>" + 
                 "<span class='song_name' song-type='youtube' song-id='" + item.id.videoId +
-                "' song-art = '" + item.snippet.thumbnails.default.url + "' recommendation = 'False'><p>" + item.snippet.title + "</p></span></li>";
+                "' song-art = '" + item.snippet.thumbnails.medium.url + "' recommendation = 'False'><p>" + item.snippet.title + "</p></span></li>";
 
         $('#playlist').append(domEl);
       }
