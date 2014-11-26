@@ -363,12 +363,15 @@ function getSongInfo(song_url, type, save){
 
       $.getJSON('http://gdata.youtube.com/feeds/api/videos/'+id+'?v=2&alt=jsonc',function(data,status,xhr){
 
+        console.log("data")
+        console.log(data)
+
         trackInfo = {
           track_type: 'youtube',
           track_url: url,
           track_name: data.data.title,
           track_id: id,
-          track_artwork_url: data.data.thumbnail.sqDefault,
+          track_artwork_url: data.data.thumbnail.hqDefault,
           csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
         };
 
@@ -394,13 +397,26 @@ function getSongInfo(song_url, type, save){
 
       SC.get('/resolve', {url: song_url}, function(track) {
 
+
+        if (track.artwork_url !== null){
+
+            default_artwork_url = track.artwork_url
+            // //300 x 300 px art
+            artwork_url = default_artwork_url.replace("large","t300x300");
+        }
+        
+        else{
+            //default image
+            artwork_url = 'https://i.ytimg.com/vi/GtBaB85VQEw/hqdefault.jpg'
+        }  
+
         trackInfo = {
           track_type: 'soundcloud',
           track_url: track.permalink_url,
           track_name: track.title,
           track_id: track.id,
           stream_url: track.stream_url,
-          track_artwork_url: track.artwork_url,
+          track_artwork_url: artwork_url,
           csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
         };
 
@@ -445,14 +461,14 @@ function displayInsertedUrl(trackInfo){
 
     domEl = "<li id='song_" + trackInfo.track_id + "'>" + 
         "<span class = 'song_options'>" +
-        "<a href='#' href='#' class='play-song' title = 'Play Song' song-type='youtube' song-id='" + trackInfo.track_id +"')>" +
+        "<a href='#' href='#' class='play-song' title = 'Play Song' song-type='youtube' song-id='" + trackInfo.track_id +"' song-art = '" + trackInfo.track_artwork_url + "' recommendation = 'False'>" +
         "<i class='fa fa-play'></i></a>" +
         "<a href='#' class='recommend-song' title = 'Recommend Song' onClick=saveAndRecommend('youtube'" + ","+"'https://www.youtube.com/watch?v="+ trackInfo.track_id +"','"+trackInfo.track_id+"','" + encodeURIComponent(trackInfo.track_title) + "','null','" +trackInfo.track_artwork_url  +"')>" +
         "<i class='fa fa-share'></i></a>" + 
         "<a href='#' class='add-song' title = 'Add Song' onClick=getSongInfo('https://www.youtube.com/watch?v=" + trackInfo.track_id +
         "','youtube','true')>" +
         "<i class='fa fa-plus'></i></a></span>" +
-        "<span class='song_name' song-type='youtube' song-id='" + trackInfo.track_id + "'><p>" + trackInfo.track_name + "</p></span></li>";
+        "<span class='song_name' song-type='youtube' song-id='" + trackInfo.track_id + "' song-art = '" + trackInfo.track_artwork_url + "' recommendation = 'False'><p>" + trackInfo.track_name + "</p></span></li>";
 
     $('#playlist').append(domEl);
   }
@@ -462,14 +478,14 @@ function displayInsertedUrl(trackInfo){
 
     domEl = "<li id='song_"+trackInfo.track_id+"'>" +
           "<span class = 'song_options'>" +
-          "<a href='#' href='#' class='play-song' title = 'Play Song' song-type='soundcloud' song-id='" + trackInfo.track_id + "'>" +
+          "<a href='#' href='#' class='play-song' title = 'Play Song' song-type='soundcloud' song-id='" + trackInfo.track_id + "' song-art = '" + trackInfo.track_artwork_url + "' recommendation = 'False'>" +
           "<i class='fa fa-play'></i></a>" +
           "<a href='#' class='recommend-song' title = 'Recommend Song'  onClick=saveAndRecommend('soundcloud'" + ",'"+ trackInfo.track_url +
           "','"+trackInfo.track_id+"','"+ encodeURIComponent(trackInfo.track_name)+ "','"+ trackInfo.track_url +"','" + trackInfo.track_artwork_url +"')>" +
           "<i class='fa fa-share'></i></a>" + 
           "<a href='#' class='add-song' title = 'Add Song' onClick=getSongInfo('" + trackInfo.track_url +"','soundcloud','true')>" +
           "<i class='fa fa-plus'></i></a></span>" +
-          "<span class='song_name'  song-type='soundcloud' song-id='" + trackInfo.track_id + "'><p>" + trackInfo.track_name + "</p></span></li>";
+          "<span class='song_name'  song-type='soundcloud' song-id='" + trackInfo.track_id + "' song-art = '" + trackInfo.track_artwork_url + "'  recommendation = 'False'><p>" + trackInfo.track_name + "</p></span></li>";
 
     $('#playlist').append(domEl);
   }

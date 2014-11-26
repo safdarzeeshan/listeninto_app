@@ -10,22 +10,24 @@ $border-color: #C2C2C2
 	border-radius: 25px
 	background-color: whitesmoke
 	box-shadow: 10px 10px 10px rgba(0,0,0,.14),0 4px 8px rgba(0,0,0,.4)
+	overflow: hidden
 
 	.song-art
 		position: relative
 		z-index: 50
+		height: 11em
+		overflow: hidden
 
 		.song-img
-			border-top-left-radius: 25px
-			border-top-right-radius: 25px
-			width: 20em			
+			width: 100%		
+			margin-top: -2em
 
 	.song-name
 		position: relative
 		z-index: 100
 		height: 3em
 		text-align: center
-		margin-top: -3.2em
+		margin-top: -3em
 		color: white
 		font-weight: bold
 		background-color: rgba(0,0,0,.4)
@@ -71,15 +73,10 @@ $border-color: #C2C2C2
 				&:hover	> i
 					color: #EFEFEF
 
-
-
-					
-					
-					
 			#play-icon			
 				padding-left: 0.7em
 				padding-top: 0.5em
-
+		
 			#pause-icon			
 				padding-left: 0.6em
 				padding-top: 0.5em
