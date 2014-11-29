@@ -63,7 +63,7 @@ def recommend_song(request):
 
 
 def get_recommendations(request):
-    recos = User.objects.get(id=request.user.id).recommendation_set.all()
+    recos = User.objects.get(id=request.user.id).recommendation_set.all().order_by('-created_at')
     if request.is_ajax():
         return render_to_response('_reco.html', {'recommendations': recos})
 
