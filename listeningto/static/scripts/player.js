@@ -191,6 +191,11 @@ $(document).ready(function(){
     deleteSong(id);
   });
 
+  $(document).on('click', '#search', function(event) {
+
+    saveSong();
+  });
+
   //add onclick for add song and saveAndRecommend
 
 });

@@ -22,8 +22,16 @@ function search(search_query){
 
       $('#playlist').empty();
 
-      var domElSearch = "<h3 class='search-query'>Search Results for '" + search_query + "'</h3>";
+          
+      var domElsearch_buttons = "<div><span><a href='#' class='song-search' onClick='showSearchedSongs()'>Songs</a>" + 
+                                "<a href='#' class='user-search' onClick='showSearchedUsers()'>Users</a></div>";
+
+      var domElSearch = "<h3 class='searched-song' id='search-query'>Search Results for '" + search_query + "'</h3>";
+
+      $('#playlist').append(domElsearch_buttons);
+
       $('#playlist').append(domElSearch);
+
 
       searchUsers(search_query);
 
@@ -61,7 +69,7 @@ function appendSC(tracks){
             artwork_url = 'https://i.ytimg.com/vi/GtBaB85VQEw/hqdefault.jpg'
         }    
 
-        domEl = "<li id='song_"+item.id+"'>" +
+        domEl = "<li id='song_"+item.id+"' class='searched-song'>" +
                   "<span class = 'song_options'>" +
                   "<a href='#' class='play-song' title ='Play Song' song-type='soundcloud' song-id='" + item.id+ "' song-art = '" + artwork_url + "' recommendation = 'False' >" + 
                   "<i class='fa fa-play'></i></a>" +
@@ -82,7 +90,7 @@ function appendYT(tracks) {
 
         var item = tracks.items[i];
 
-        domEl = "<li id='song_" + item.id.videoId+ "'>" +
+        domEl = "<li id='song_" + item.id.videoId+ "' class='searched-song'>" +
                 "<span class = 'song_options'>"  +
                 "<a href='#' class='play-song' title ='Play Song' song-type='youtube' song-id='" + item.id.videoId + "' song-art = '" + item.snippet.thumbnails.high.url + "' recommendation = 'False'>" +
                 "<i class='fa fa-play'></i></a>" +
@@ -103,13 +111,33 @@ function searchUsers(users){
     $.ajax({url: "/searchusers?userquery=" + users, async:true}).done(function(response){
 
             var user = response;
-            domEl= "<li><a href='#' onClick=userPlaylist('"+ user +"')>" + user + "</a></li>";
+            domEl= "<li class='searched-user'><a href='#' onClick=userPlaylist('"+ user +"')>" + user + "</a></li>";
 
             if(response.length) {
-              var userSearch = "<h3 class='search-query'>Users matching '" + users + "'</h3><ul class='user-list'></ul>";
-              $('#playlist').prepend(userSearch);
+              var userSearch = "<h3 class='searched-user' id='search-query'>Users matching '" + users + "'</h3><ul class='user-list'></ul>";
+              $('#playlist').append(userSearch);
               $('.user-list').append(domEl);
+            }            
+
+            else{
+                var noSearchResult = "<h3 class='searched-user'>No users</h3>"
+                $('#playlist').append(noSearchResult);
             }
+            $('.searched-user').hide();
 
     });
+
+
+}
+
+function showSearchedSongs(){
+  $('.searched-user').hide();
+  $('.searched-song').show();
+
+}
+
+function showSearchedUsers(){
+  $('.searched-song').hide();
+  $('.searched-user').show();
+
 }
