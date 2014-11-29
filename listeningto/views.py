@@ -5,8 +5,10 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from listeningto.models import Song, Playlist, Recommendation
+from django.db.models import Q
 from django.shortcuts import render_to_response
+
+from listeningto.models import Song, Playlist, Recommendation
 
 
 def save_song(request):
@@ -67,39 +69,41 @@ def get_recommendations(request):
     if request.is_ajax():
         return render_to_response('_reco.html', {'recommendations': recos})
 
+
 def check_if_reco_played(request):
 
-    track_id =  request.POST.get('track_id')
+    track_id = request.POST.get('track_id')
 
     song = Song.objects.get(track_id=track_id)
     reco = Recommendation.objects.get(receipient_id=request.user.id, song_id=song.id)
 
-    if (reco.played == False):
+    if not reco.played:
         reco.played = True
         reco.save()
 
     return HttpResponse(reco.played, status=201)
+
 
 def any_new_recos(request):
 
     new_recos = User.objects.get(id=request.user.id).recommendation_set.filter(played=False)
 
     if(new_recos):
-        any_new_recos = True;
+        any_new_recos = True
 
     else:
-        any_new_recos = False;
-   
-    return HttpResponse(any_new_recos, status=201 )
+        any_new_recos = False
+
+    return HttpResponse(any_new_recos, status=201)
 
 
 def delete_song(request):
 
-    track_id =  request.GET.get('trackid')
+    track_id = request.GET.get('trackid')
     song = Song.objects.get(track_id=track_id)
     playlist = Playlist.objects.get(user=request.user)
     song.playlists.remove(playlist)
-    
+
     return HttpResponse(status=201)
 
 
@@ -187,11 +191,9 @@ def get_users(request):
 def search_users(request):
 
     print 'search users'
-    username = request.GET.get('userquery')
+    query = request.GET.get('userquery')
 
-    print username
-
-    users = User.objects.filter(username=username)
+    users = User.objects.filter(Q(username__icontains=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query))
 
     users_list = []
     for i in range(len(users)):
