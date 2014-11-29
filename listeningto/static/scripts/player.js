@@ -133,6 +133,10 @@ $(document).ready(function(){
         }
     });
 
+  // $(window).bind("load", function() {
+  //    checkIfNewRecosExist();
+  // });
+
   $(document).on('click', '.play-song',  function(event) {
     console.log('trying to play song');
     event.stopPropagation();
@@ -615,15 +619,17 @@ function loadItemAndCheckIfPlayed(type, id){
   });
 }
 
-function checkIfNewRecosExist(){
+function checkIfNewRecosExist(){  
   $.ajax({url: "/anynewrecos", async:true}).done(function(response){
-
-    if (response){
-      console.log("we should change the border of the reco button")
+    //fix this. check if new resos exist for this particular user
+    
+    if (response==='True'){
+      console.log(response)
+      $('.new-recommendation-indicator').css('visibility','visible');
     }
 
     else{
-      console.log("do nothing")
+      $('.new-recommendation-indicator').css('visibility','hidden');
     }
   });
 }

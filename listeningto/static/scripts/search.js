@@ -49,8 +49,6 @@ function appendSC(tracks){
 
         var item = tracks[i];
 
-        console.log(item.artwork_url);
-
         if (item.artwork_url !== null){
 
             default_artwork_url = item.artwork_url
@@ -83,8 +81,6 @@ function appendYT(tracks) {
       for(var i in tracks.items) {
 
         var item = tracks.items[i];
-
-        console.log(item)
 
         domEl = "<li id='song_" + item.id.videoId+ "'>" +
                 "<span class = 'song_options'>"  +

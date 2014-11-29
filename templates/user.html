@@ -1,16 +1,21 @@
 <div class='header'>
-	<img class= 'title-img' src="static/images/listeningto.png">
+    <img class= 'title-img' src="static/images/listeningto.png">
     <span>
-    <div class="user-welcome">
-        <span>{{ user.username }}</span>
-        <a href='/logout' class="button">Logout</a>
-    </div>
-</span>
-<span>
-    <div class="user-sidebar">        
-        <a href="#" class="button" onClick=getUserSongs()>Playlist</a>
-        <a href="#" class="button" onClick=recommendationPage()>Recommendations</a>
-    </div>
-</span>
+        <div class="user-welcome">
+            <span>{{ user.username }}</span>
+            <a href='/logout' class="button">Logout</a>
+        </div>
+    </span>
+    <span>
+        <div class="user-sidebar">
+            <div class= 'user-options'>
+                <a href="#" class="button" onClick=getUserSongs()>Playlist</a>
+            </div>            
+            <div class= 'user-options'>
+                <a href="#" class="button" onClick=recommendationPage()>Recommendations</a>
+                <div class = 'new-recommendation-indicator' style="visibility: hidden;">New</div>               
+            </div>
+        </div>
+    </span>
 
 </div>
