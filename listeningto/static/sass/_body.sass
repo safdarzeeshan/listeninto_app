@@ -1,7 +1,21 @@
-html
-    height: 100%
-
-body
+html, body
     margin: auto
     background-color: #D0D8D7
     font-family: 'Raleway', Helvetica, Droid Sans, sans-serif
+    height: 100%
+
+    .container
+        background-size: 100% auto
+        min-height: 100%
+
+    .audio-player
+        float: left
+        width: 25%
+
+    .user-songs
+        width: 33%
+        @extend %center-block
+
+    .feedbox
+        float: right
+        width: 25%
