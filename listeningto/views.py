@@ -82,7 +82,7 @@ def check_if_reco_played(request):
 
 def any_new_recos(request):
 
-    new_recos = User.objects.get(id=request.user.id).recommendation_set.filter(played=True)
+    new_recos = User.objects.get(id=request.user.id).recommendation_set.filter(played=False)
 
     if(new_recos):
         any_new_recos = True;
