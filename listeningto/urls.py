@@ -16,5 +16,5 @@ urlpatterns = [
     url(r'^searchusers/$', views.search_users, name='search_users'),
     url(r'^isrecoplayed/$', views.check_if_reco_played, name='check_if_reco_played'),
     url(r'^anynewrecos/$', views.any_new_recos, name='any_new_recos'),
+    url(r'^feed/$', views.activity_feed, name='activity_feed'),
 ]
-
