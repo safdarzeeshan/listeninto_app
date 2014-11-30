@@ -1,4 +1,5 @@
 import json
+from datetime import datetime, timedelta
 
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
@@ -192,8 +193,6 @@ def get_users(request):
 
 
 def search_users(request):
-
-    print 'search users'
     query = request.GET.get('userquery')
 
     users = User.objects.filter(Q(username__icontains=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query))
@@ -204,3 +203,25 @@ def search_users(request):
         users_list.append(users[i].username)
 
     return HttpResponse(','.join(users_list), status=201)
+
+
+def activity_feed(request):
+    feed = {'users': [], 'recommendations': []}
+    today = datetime.today()
+    yesterday = datetime.today() - timedelta(days=1)
+
+    new_users = User.objects.filter(date_joined__gte=yesterday, date_joined__lte=today)
+    new_recommendations = Recommendation.objects.filter(created_at__gte=yesterday, created_at__lte=today)
+    # new_songs = Song.objects.filter(created_at__gte=yesterday, created_at__lte=today)
+
+    for user in new_users:
+        new_user = {'username': user.username, 'name': '{} {}'.format(user.first_name, user.last_name)}
+        feed['users'].append(new_user)
+
+    for recommendation in new_recommendations:
+        new_reco = {'sender': recommendation.sender.username,
+                    'receipient': recommendation.receipient.username,
+                    'song': recommendation.song.track_name}
+        feed['recommendations'].append(new_reco)
+
+    return HttpResponse(json.dumps(feed), status=200)

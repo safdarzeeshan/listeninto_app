@@ -142,7 +142,7 @@ $(document).ready(function(){
     var recommendationBoolean = $(this).attr('recommendation');
 
     $('.song-img').attr('src', art);
-    
+
     if (recommendationBoolean === 'False'){
       loadItem(type, id);
     }
@@ -150,7 +150,7 @@ $(document).ready(function(){
     if (recommendationBoolean === 'True'){
       loadItemAndCheckIfPlayed(type, id);
     }
-    
+
   });
 
   $(document).on('click', '.song_name',  function(event) {
@@ -162,7 +162,7 @@ $(document).ready(function(){
     var recommendationBoolean = $(this).attr('recommendation');
 
     $('.song-img').attr('src', art);
-    
+
     if (recommendationBoolean === 'False'){
       loadItem(type, id);
     }
@@ -170,7 +170,7 @@ $(document).ready(function(){
     if (recommendationBoolean === 'True'){
       loadItemAndCheckIfPlayed(type, id);
     }
-    
+
   });
 
   $(document).on('click', '.recommend-song', function(event) {
@@ -193,6 +193,7 @@ $(document).ready(function(){
   });
 
   //add onclick for add song and saveAndRecommend
+  refreshFeed();
 
 });
 
@@ -409,11 +410,11 @@ function getSongInfo(song_url, type, save){
             // //300 x 300 px art
             artwork_url = default_artwork_url.replace("large","t300x300");
         }
-        
+
         else{
             //default image
             artwork_url = 'https://i.ytimg.com/vi/GtBaB85VQEw/hqdefault.jpg'
-        }  
+        }
 
         trackInfo = {
           track_type: 'soundcloud',
@@ -462,12 +463,12 @@ function displayInsertedUrl(trackInfo){
 
     console.log('type is youtube')
 
-    domEl = "<li id='song_" + trackInfo.track_id + "'>" + 
+    domEl = "<li id='song_" + trackInfo.track_id + "'>" +
         "<span class = 'song_options'>" +
         "<a href='#' href='#' class='play-song' title = 'Play Song' song-type='youtube' song-id='" + trackInfo.track_id +"' song-art = '" + trackInfo.track_artwork_url + "' recommendation = 'False'>" +
         "<i class='fa fa-play'></i></a>" +
         "<a href='#' class='recommend-song' title = 'Recommend Song' onClick=saveAndRecommend('youtube'" + ","+"'https://www.youtube.com/watch?v="+ trackInfo.track_id +"','"+trackInfo.track_id+"','" + encodeURIComponent(trackInfo.track_title) + "','null','" +trackInfo.track_artwork_url  +"')>" +
-        "<i class='fa fa-share'></i></a>" + 
+        "<i class='fa fa-share'></i></a>" +
         "<a href='#' class='add-song' title = 'Add Song' onClick=getSongInfo('https://www.youtube.com/watch?v=" + trackInfo.track_id +
         "','youtube','true')>" +
         "<i class='fa fa-plus'></i></a></span>" +
@@ -485,7 +486,7 @@ function displayInsertedUrl(trackInfo){
           "<i class='fa fa-play'></i></a>" +
           "<a href='#' class='recommend-song' title = 'Recommend Song'  onClick=saveAndRecommend('soundcloud'" + ",'"+ trackInfo.track_url +
           "','"+trackInfo.track_id+"','"+ encodeURIComponent(trackInfo.track_name)+ "','"+ trackInfo.track_url +"','" + trackInfo.track_artwork_url +"')>" +
-          "<i class='fa fa-share'></i></a>" + 
+          "<i class='fa fa-share'></i></a>" +
           "<a href='#' class='add-song' title = 'Add Song' onClick=getSongInfo('" + trackInfo.track_url +"','soundcloud','true')>" +
           "<i class='fa fa-plus'></i></a></span>" +
           "<span class='song_name'  song-type='soundcloud' song-id='" + trackInfo.track_id + "' song-art = '" + trackInfo.track_artwork_url + "'  recommendation = 'False'><p>" + trackInfo.track_name + "</p></span></li>";
@@ -563,48 +564,35 @@ function saveAndRecommend(type, url,id,title,stream_url,artwork_url) {
 }
 
 function recommendationPage(){
-  //Ajax call to recommend page
-  console.log('reco page')
   $.ajax({url: "/getrecommendations/" , async:true}).done(function(response){
     console.log('test');
     $('#playlist').html(response);
-
   });
 
-  console.log('here')
+  refreshFeed();
 }
 
 function getUserSongs() {
   $.ajax({url: "/", async: true}).done(function(response) {
     $('#playlist').html(response);
   });
+  refreshFeed();
 }
 
 function userPlaylist(user){
-
-  console.log('here')
-
-  console.log("user is " + user)
-
   $.ajax({url: "/user/?user=" + user, async: true}).done(function(response) {
     $('#playlist').html(response);
-  })
+  });
+  refreshFeed();
 }
 
 function deleteSong(id) {
-
-  console.log('in delete')
-
   $.ajax({url: "/deletesong?trackid=" + id, async:true}).done(function(response){
-
-      console.log("deleted" + id)
       $('#song_' + id).remove();
   });
 }
 
 function loadItemAndCheckIfPlayed(type, id){
-  console.log('in play and check')
-
   loadItem(type, id);
 
   var playing_reco_info = {track_id: id, csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()}
@@ -612,16 +600,16 @@ function loadItemAndCheckIfPlayed(type, id){
   var checkIfPlayed = $.post('isrecoplayed/', playing_reco_info);
 
   checkIfPlayed.done(function(response) {
-   
+
     console.log("is reco played " + response)
-   
+
   });
 }
 
-function checkIfNewRecosExist(){  
+function checkIfNewRecosExist(){
   $.ajax({url: "/anynewrecos", async:true}).done(function(response){
     //fix this. check if new resos exist for this particular user
-    
+
     if (response==='True'){
       console.log(response)
       $('.new-recommendation-indicator').css('visibility','visible');
@@ -641,5 +629,26 @@ function closeModal(){
 
 function getURLParameter(url,name) {
   return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(url)||[,""])[1].replace(/\+/g, '%20'))||null
+}
+
+function refreshFeed() {
+  $.ajax({url: "/feed", async:true}).done(function(response) {
+    var users = JSON.parse(response).users;
+    var recos = JSON.parse(response).recommendations;
+    $('ul.feed').html('');
+
+    _.each(_.map(users, function(user) {
+      return '<li class="feed-item">' + user.name + ' joined as ' + user.username + '!</li>';
+    }), function(el) {
+      $('ul.feed').append(el);
+    });
+
+    _.each(_.map(recos, function(reco) {
+      return '<li class="feed-item">' + reco.sender + ' recommended ' + reco.song + ' to ' + reco.receipient + '.</li>';
+    }), function(el) {
+      $('ul.feed').append(el);
+    });
+
+  });
 }
 
