@@ -20,6 +20,9 @@ def save_song(request):
     track_artwork_url = request.POST.get('track_artwork_url')
 
     playlist = Playlist.objects.get(user=request.user)
+
+    #print playlist.song[1].track_name
+
     r, created = Song.objects.get_or_create(track_id=track_id)
 
     if created:

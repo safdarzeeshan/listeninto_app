@@ -133,10 +133,6 @@ $(document).ready(function(){
         }
     });
 
-  // $(window).bind("load", function() {
-  //    checkIfNewRecosExist();
-  // });
-
   $(document).on('click', '.play-song',  function(event) {
     console.log('trying to play song');
     event.stopPropagation();
@@ -451,10 +447,8 @@ function saveSongToDb(trackInfo) {
 
   var savingSong = $.post('addsong/', trackInfo);
 
-  savingSong.done(function(data) {
-    // domEl = "<li id='song_" + trackInfo.track_id+ "'><a href='#' onClick=loadItem('" + trackInfo.track_type + "','" + trackInfo.track_id + "')>" + trackInfo.track_name + "</a></li>";
+  savingSong.done(function(data) {   
     console.log('saved song');
-    // $('#playlist').append(domEl);
   });
 }
 
