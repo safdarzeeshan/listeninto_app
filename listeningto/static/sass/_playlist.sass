@@ -6,6 +6,7 @@
 
 	ol
 		padding: 1em
+		padding-top: 1.5em
 		list-style: decimal-leading-zero inside
 		color: #000
 
@@ -31,23 +32,46 @@
 				float: left
 
 			.new-reco
-				float: left
-				border-radius: 10px
-				padding : 4px
+				float: right
+				border-radius: 5px
+				padding : 3px
 				border-style: solid
 				border-width: 1px
-				border-color: #A60000
+				border-color: darksalmon
+				font-size: 0.6em
+				margin-top: 0.5em
 
 			.song_name
-				width: 75%
+				width: 80%
 
-				color: #252626
+				color: black
 				text-decoration: none
+				line-height: 1em
+				overflow: hidden
+				text-overflow: ellipsis
+				white-space: nowrap
 
 				p
-					font-size: 0.9em
-					color: #595959
+					font-size: 1em
 					display: inline
+
+				.error-playlistmax	
+					background-color: #E6DA61
+					padding: 7px
+					border-radius: 5px
+					
+
+				.recommended-by
+					margin-top: 0.4em
+					font-size: 0.9em
+
+					p
+						color: grey
+
+					b
+						color: #3364AD
+
+
 
 			.song_options
 				margin-right: 1em

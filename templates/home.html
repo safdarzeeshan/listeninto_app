@@ -36,7 +36,7 @@
                         <i class="fa fa-times"></i>
                     </a>
                 </span>
-                <span class='song_name' song-type='{{ song.track_type }}' song-id='{{ song.track_id }}' song-art = '{{ song.track_artwork_url }}' recommendation = 'False'><p>{{ song.track_name }} </p></span>
+                <span class='song_name' title = '{{ song.track_name }}' song-type='{{ song.track_type }}' song-id='{{ song.track_id }}' song-art = '{{ song.track_artwork_url }}' recommendation = 'False'><p>{{ song.track_name }} </p></span>
             </li>
         {% endfor %}
     </ol>

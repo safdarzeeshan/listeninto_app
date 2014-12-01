@@ -13,7 +13,7 @@
         <a href='#' class="play-song" title='Play Song' song-type='{{ song.track_type }}', song-id='{{ song.track_id }}' song-art = '{{ song.track_artwork_url }}' recommendation = 'False'><i class="fa fa-play"></i></a>
         <a href='#' class="recommend-song" title='Recommend Song' song-type='{{ song.track_type }}' song-id='{{ song.track_id }}' song-name='{{ song.track_name }}'><i class="fa fa-share"></i></a>
     </span>
-    <span class='song_name' song-type='{{ song.track_type }}' song-id='{{ song.track_id }}' song-art = '{{ song.track_artwork_url }}' recommendation = 'False'><p>
+    <span class='song_name' title = '{{ song.track_name }}' song-type='{{ song.track_type }}' song-id='{{ song.track_id }}' song-art = '{{ song.track_artwork_url }}' recommendation = 'False'><p>
     {{ song.track_name }}</p></span>
 </li>
 {% endfor %}

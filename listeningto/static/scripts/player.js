@@ -451,6 +451,11 @@ function saveSongToDb(trackInfo) {
   savingSong.done(function(data) {   
     console.log('saved song');
   });
+
+  savingSong.fail(function(){
+    console.log('cannot add another song')
+    $('#song_' + trackInfo.track_id).children('.song_name').html("<p class='error-playlistmax'>Error: Your playlist is full. Please delete a song first</p>");
+  });
 }
 
 function displayInsertedUrl(trackInfo){
@@ -506,6 +511,7 @@ function recommendSong(track_type, track_id, track_name){
     });
 
     $("#overlay").css('visibility', 'visible');
+    // $('body').css('overflow', 'hidden');
 
     recommend.trackInfo.track_type = track_type;
     recommend.trackInfo.track_id = track_id;
@@ -538,6 +544,7 @@ function recommendTo(){
           $("#overlay").css('visibility', 'hidden');
           $('#receipient_username').val('');
           $('#recomendation_description').val('');
+          // $('body').css('overflow', 'auto');
         }
       );
 }
@@ -558,6 +565,8 @@ function saveAndRecommend(type, url,id,title,stream_url,artwork_url) {
   });
 
   $("#overlay").css('visibility', 'visible');
+  // $('body').css('overflow', 'hidden');
+
   console.log(recommend.trackInfo.track_name)
   $("#recommended_song").text(recommend.trackInfo.track_name)
 

@@ -21,22 +21,31 @@ def save_song(request):
     track_artwork_url = request.POST.get('track_artwork_url')
 
     playlist = Playlist.objects.get(user=request.user)
+    songs = Song.objects.filter(playlists=playlist)
 
-    #print playlist.song[1].track_name
+    playlist_size = len(songs);
 
-    r, created = Song.objects.get_or_create(track_id=track_id)
+    print playlist_size
 
-    if created:
-        r.track_type = track_type
-        r.track_url = track_url
-        r.track_name = track_name
-        r.stream_url = stream_url
-        r.track_artwork_url = track_artwork_url
+    if (playlist_size>= 10):
 
-    r.playlists.add(playlist)
-    r.save()
+        return HttpResponse(status=400)
 
-    return HttpResponse(json.dumps({'id': r.id}), status=201)
+    else:        
+
+        r, created = Song.objects.get_or_create(track_id=track_id)
+
+        if created:
+            r.track_type = track_type
+            r.track_url = track_url
+            r.track_name = track_name
+            r.stream_url = stream_url
+            r.track_artwork_url = track_artwork_url
+
+        r.playlists.add(playlist)
+        r.save()
+
+        return HttpResponse(json.dumps({'id': r.id}), status=201)
 
 
 def recommend_song(request):

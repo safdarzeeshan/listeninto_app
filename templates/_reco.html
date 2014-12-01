@@ -11,8 +11,8 @@
         <i class='fa fa-plus'></i></a>
     </span>
 
-    <span class = 'song_name' song-type= '{{ recommendation.song.track_type }}' song-id='{{ recommendation.song.track_id }}' song-art = '{{ recommendation.song.track_artwork_url }}' recommendation = 'True'><p>{{ recommendation.song.track_name }}</p>
-    <br class='recommended-by'><p>{{ recommendation.sender.username }} - {{ recommendation.description }}</p></br>
+    <span class = 'song_name' song-type= '{{ recommendation.song.track_type }}' song-id='{{ recommendation.song.track_id }}' song-art = '{{ recommendation.song.track_artwork_url }}' recommendation = 'True'><p title = '{{ recommendation.song.track_name }}'>{{ recommendation.song.track_name }}</p><br>
+    <div class='recommended-by'><p><b>{{ recommendation.sender.username }}</b> - {{ recommendation.description }}</p></div></br>
     </span>
 
     {% if recommendation.played %}
