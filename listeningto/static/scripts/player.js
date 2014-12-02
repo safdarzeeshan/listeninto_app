@@ -33,6 +33,8 @@ $(document).ready(function(){
 
     checkIfNewRecosExist();
 
+    $('#button-playlist').addClass('active');
+
     // empty error div
     $('.error').html('');
 
@@ -135,6 +137,8 @@ $(document).ready(function(){
 
   $(document).on('click', '.play-song',  function(event) {
     console.log('trying to play song');
+    $('.audio-player').addClass('active');
+
     event.stopPropagation();
     var type = $(this).attr('song-type');
     var id = $(this).attr('song-id');
@@ -337,6 +341,9 @@ function nextSong() {
 }
 
 function saveSong() {
+
+  $('#button-playlist').removeClass('active');
+  $('#button-recommendations').removeClass('active');
 
 
   $('.error').html('');
@@ -650,6 +657,8 @@ function refreshFeed() {
   $.ajax({url: "/feed", async:true}).done(function(response) {
     var users = JSON.parse(response).users;
     var recos = JSON.parse(response).recommendations;
+
+    console.log(recos)
     $('ul.feed').html('');
 
     _.each(_.map(users, function(user) {
@@ -659,7 +668,11 @@ function refreshFeed() {
     });
 
     _.each(_.map(recos, function(reco) {
-      return '<li class="feed-item">' + reco.sender + ' recommended ' + reco.song + ' to ' + reco.receipient + '.</li>';
+      return "<li class='feed-item'><a href='#' class='user' onClick=userPlaylist('"+ reco.sender +"')>"  + reco.sender +
+             "</a> recommended " + "<a href='#' class='play-song' title='" +reco.track_name + "' song-type='"+reco.track_type+
+             "' song-id='"+ reco.track_id+"' song-art = '"+reco.track_artwork_url+"' recommendation = 'False'>" + 
+             reco.track_name + "</a> to <a href='#' class='user' onClick=userPlaylist('"+ reco.receipient +"')>" + reco.receipient + "</a></li>";
+    
     }), function(el) {
       $('ul.feed').append(el);
     });

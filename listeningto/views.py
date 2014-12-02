@@ -230,7 +230,12 @@ def activity_feed(request):
     for recommendation in new_recommendations:
         new_reco = {'sender': recommendation.sender.username,
                     'receipient': recommendation.receipient.username,
-                    'song': recommendation.song.track_name}
+                    'track_name': recommendation.song.track_name,
+                    'track_id': recommendation.song.track_id,
+                    'track_type': recommendation.song.track_type,
+                    'track_artwork_url': recommendation.song.track_artwork_url
+                    }
+                    
         feed['recommendations'].append(new_reco)
 
     return HttpResponse(json.dumps(feed), status=200)

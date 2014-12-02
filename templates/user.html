@@ -1,12 +1,12 @@
 <div class='header'>
     <span>
         <div class="user-sidebar">
-            <div class= 'user-options' id='button-playlist'>
+            <div class= 'user-options' id='button-playlist' onClick=getUserSongs()>
                 <a href="#" class="button" onClick=getUserSongs()>Playlist</a>
             </div>            
-            <div class= 'user-options' id='button-recommendations'>
+            <div class= 'user-options' id='button-recommendations' onClick=recommendationPage()>
                 <a href="#" class="button" onClick=recommendationPage()>Recommendations</a>
-                <!-- <div class = 'new-recommendation-indicator' style="visibility: hidden;">New</div>                -->
+                <div class = 'new-recommendation-indicator' style="visibility: hidden;"><i class="fa fa-star"></i></div>                
             </div>
         </div>
     </span>

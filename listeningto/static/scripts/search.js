@@ -129,7 +129,6 @@ function searchUsers(users){
 
     });
 
-
 }
 
 function showSearchedSongs(){
