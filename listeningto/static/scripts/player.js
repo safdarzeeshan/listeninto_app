@@ -576,6 +576,9 @@ function recommendationPage(){
   $.ajax({url: "/getrecommendations/" , async:true}).done(function(response){
     console.log('test');
     $('#playlist').html(response);
+    // this is an awful way to do this... 
+    $('#button-playlist').removeClass('active');
+    $('#button-recommendations').addClass('active');
   });
 
   refreshFeed();
@@ -584,6 +587,9 @@ function recommendationPage(){
 function getUserSongs() {
   $.ajax({url: "/", async: true}).done(function(response) {
     $('#playlist').html(response);
+    // this is an awful way to do this... 
+    $('#button-playlist').addClass('active');
+    $('#button-recommendations').removeClass('active');
   });
   refreshFeed();
 }

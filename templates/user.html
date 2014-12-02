@@ -1,21 +1,27 @@
 <div class='header'>
-    <img class= 'title-img' src="static/images/listeningto.png">
-    <span>
-        <div class="user-welcome">
-            <span>{{ user.username }}</span>
-            <a href='/logout' class="button">Logout</a>
-        </div>
-    </span>
     <span>
         <div class="user-sidebar">
-            <div class= 'user-options'>
+            <div class= 'user-options' id='button-playlist'>
                 <a href="#" class="button" onClick=getUserSongs()>Playlist</a>
             </div>            
-            <div class= 'user-options'>
+            <div class= 'user-options' id='button-recommendations'>
                 <a href="#" class="button" onClick=recommendationPage()>Recommendations</a>
-                <div class = 'new-recommendation-indicator' style="visibility: hidden;">New</div>               
+                <!-- <div class = 'new-recommendation-indicator' style="visibility: hidden;">New</div>                -->
             </div>
         </div>
     </span>
+    <span>
+    <div class= 'title'>Stereogram</div>
+    </span>
+    <span>
+        <div class="user-welcome">
+            <div class='user-profile-picture'>                    
+                <img class= 'profile-picture' src="http://icons.iconarchive.com/icons/hopstarter/face-avatars/256/Male-Face-F2-icon.png">
+            </div>      
+            <div class='user-name'>{{ user.username }}</div>
+            <div class='logout'><a href='/logout' class="logout"><i class="fa fa-power-off"></i></a></div>
+        </div>
+    </span>
+
 
 </div>
