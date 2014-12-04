@@ -4,12 +4,51 @@ from datetime import datetime, timedelta
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
-from django.contrib.auth.forms import UserCreationForm
+#from django.contrib.auth.forms import UserCreationForm
+from forms import MyRegistrationForm
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.shortcuts import render_to_response
-
 from listeningto.models import Song, Playlist, Recommendation
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username', '')
+        password = request.POST.get('password', '')
+        user = auth.authenticate(username=username, password=password)
+        if user is not None and user.is_active:
+            # Correct password, and the user is marked "active"
+            auth.login(request, user)
+            # Redirect to a success page.
+            return redirect("home")
+        else:
+            # Show an error page
+            return HttpResponseRedirect("/account/invalid/")
+    else:
+        # form = MyRegistrationForm()
+        # return render(request, "registration/login.html", {
+        # 'form': form})
+        return render(request, "registration/login.html")
+
+def register(request):
+
+    if request.method == 'POST':
+        form = MyRegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = request.POST.get('username', '')
+            password = request.POST.get('password1', '')
+            user = auth.authenticate(username=username, password=password)
+            if user is not None and user.is_active:
+                auth.login(request, user)
+                return redirect("home")
+    else:
+        return render(request, "registration/login.html")
+
+def logout_view(request):
+    auth.logout(request)
+    # Redirect to a login page.
+    return redirect("login")
 
 
 def save_song(request):
@@ -24,8 +63,6 @@ def save_song(request):
     songs = Song.objects.filter(playlists=playlist)
 
     playlist_size = len(songs);
-
-    print playlist_size
 
     if (playlist_size>= 10):
 
@@ -120,45 +157,6 @@ def delete_song(request):
     return HttpResponse(status=201)
 
 
-def login_view(request):
-    if request.method == 'POST':
-        username = request.POST.get('username', '')
-        password = request.POST.get('password', '')
-        user = auth.authenticate(username=username, password=password)
-        if user is not None and user.is_active:
-            # Correct password, and the user is marked "active"
-            auth.login(request, user)
-            # Redirect to a success page.
-            return redirect("home")
-        else:
-            # Show an error page
-            return HttpResponseRedirect("/account/invalid/")
-    else:
-        return render(request, "registration/login.html")
-
-
-def logout_view(request):
-    auth.logout(request)
-    # Redirect to a login page.
-    return redirect("login")
-
-
-def register(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = request.POST.get('username', '')
-            password = request.POST.get('password1', '')
-            user = auth.authenticate(username=username, password=password)
-            if user is not None and user.is_active:
-                auth.login(request, user)
-                return redirect("home")
-    else:
-        form = UserCreationForm()
-    return render(request, "registration/register.html", {
-        'form': form,
-    })
 
 
 def home(request):

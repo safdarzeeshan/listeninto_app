@@ -29,7 +29,7 @@ $(document).ready(function(){
   //causing issues with play and pause in player
   // var yt_player_1;
 
-    $('.recommend-to').hide();
+    // $('.recommend-to').hide();
 
     checkIfNewRecosExist();
 
@@ -144,8 +144,11 @@ $(document).ready(function(){
     var id = $(this).attr('song-id');
     var art = $(this).attr('song-art');
     var recommendationBoolean = $(this).attr('recommendation');
+    var name = $(this).attr('song-name');
 
     $('.song-img').attr('src', art);
+    currentPlaying.trackName = name;
+
 
     if (recommendationBoolean === 'False'){
       loadItem(type, id);
@@ -164,8 +167,11 @@ $(document).ready(function(){
     var id = $(this).attr('song-id');
     var art = $(this).attr('song-art');
     var recommendationBoolean = $(this).attr('recommendation');
+    var name = $(this).attr('song-name');
 
     $('.song-img').attr('src', art);
+    currentPlaying.trackName = name;
+
 
     if (recommendationBoolean === 'False'){
       loadItem(type, id);
@@ -196,6 +202,11 @@ $(document).ready(function(){
     saveSong();
   });
 
+  $(document).on('click', '#register', function(event) {
+
+    saveSong();
+  })
+
   //add onclick for add song and saveAndRecommend
   refreshFeed();
 
@@ -218,7 +229,7 @@ function loadItem(type, id) {
   console.log(type + id);
 
   // load new song
-  currentPlaying.trackName = $('#song_' + id).find('.song_name')[0].children[0].textContent;
+  //currentPlaying.trackName = $('#song_' + id).find('.song_name')[0].children[0].textContent;
   currentPlaying.type = type;
   currentPlaying.songId = id;
 
@@ -658,18 +669,17 @@ function refreshFeed() {
     var users = JSON.parse(response).users;
     var recos = JSON.parse(response).recommendations;
 
-    console.log(recos)
     $('ul.feed').html('');
 
     _.each(_.map(users, function(user) {
-      return '<li class="feed-item">' + user.name + ' joined as ' + user.username + '!</li>';
+      return "<li class='feed-item'>" + user.name + " joined as <a href='#' class='user' onClick=userPlaylist('"+ user.username +"')>" + user.username + "!</li>";
     }), function(el) {
       $('ul.feed').append(el);
     });
 
     _.each(_.map(recos, function(reco) {
       return "<li class='feed-item'><a href='#' class='user' onClick=userPlaylist('"+ reco.sender +"')>"  + reco.sender +
-             "</a> recommended " + "<a href='#' class='play-song' title='" +reco.track_name + "' song-type='"+reco.track_type+
+             "</a> recommended " + "<a href='#' class='play-song' title='" +reco.track_name + "' song-name ='" + reco.track_name + "' song-type='"+reco.track_type+
              "' song-id='"+ reco.track_id+"' song-art = '"+reco.track_artwork_url+"' recommendation = 'False'>" + 
              reco.track_name + "</a> to <a href='#' class='user' onClick=userPlaylist('"+ reco.receipient +"')>" + reco.receipient + "</a></li>";
     
@@ -678,5 +688,13 @@ function refreshFeed() {
     });
 
   });
+}
+
+function showRegistrationForm(){
+
+  $('.form').hide();
+  document.getElementById("registration-form").reset();
+  $('#overlay-register').addClass('active');
+
 }
 
