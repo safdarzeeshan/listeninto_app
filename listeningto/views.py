@@ -25,9 +25,7 @@ def login_view(request):
             # Show an error page
             return HttpResponseRedirect("/account/invalid/")
     else:
-        # form = MyRegistrationForm()
-        # return render(request, "registration/login.html", {
-        # 'form': form})
+
         return render(request, "registration/login.html")
 
 def register(request):
@@ -178,8 +176,10 @@ def home(request):
 
 def user_songs(request):
 
-    user = request.GET.get('user')
-    playlist = Playlist.objects.get(user__username=user)
+    username = request.GET.get('user')
+    user =  User.objects.get(username=username)
+
+    playlist = Playlist.objects.get(user__username=username)
     songs = Song.objects.filter(playlists=playlist)
 
     if request.is_ajax():
@@ -202,14 +202,20 @@ def get_users(request):
 def search_users(request):
     query = request.GET.get('userquery')
 
+    users_list ={'users': []}
+
     users = User.objects.filter(Q(username__icontains=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query))
 
-    users_list = []
-    for i in range(len(users)):
+    for user in users:
 
-        users_list.append(users[i].username)
+        userinfo = {'username': user.username,
+                    'first_name': user.first_name,
+                    'last_name': user.last_name
+                    }
 
-    return HttpResponse(','.join(users_list), status=201)
+        users_list['users'].append(userinfo)
+
+    return HttpResponse(json.dumps(users_list), status=201)
 
 
 def activity_feed(request):

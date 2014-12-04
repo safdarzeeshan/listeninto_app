@@ -23,10 +23,10 @@ function search(search_query){
       $('#playlist').empty();
 
 
-      var domElsearch_buttons = "<div><span><a href='#' class='song-search' onClick='showSearchedSongs()'>Songs</a>" +
-                                "<a href='#' class='user-search' onClick='showSearchedUsers()'>Users</a></div>";
+      var domElsearch_buttons = "<div class = 'search-results' ><span><a href='#' class='search-results-button' id ='song-results' onClick='showSearchedSongs()'>Songs</a>" +
+                                "<a href='#' class='search-results-button' id='user-results' onClick='showSearchedUsers()'>Users</a></div>";
 
-      var domElSearch = "<h3 class='searched-song' id='search-query'>Search Results for '" + search_query + "'</h3>";
+      var domElSearch = "<h4 class='searched-song' id='search-query'>Search Results for '" + search_query + "'</h4>";
 
       $('#playlist').append(domElsearch_buttons);
 
@@ -49,6 +49,8 @@ function search(search_query){
       request.execute(function(response) {
         appendYT(response)
       });
+
+      $('#song-results').addClass('active');
 }
 
 function appendSC(tracks){
@@ -110,13 +112,15 @@ function searchUsers(users){
 
     $.ajax({url: "/searchusers?userquery=" + users, async:true}).done(function(response){
 
+            var users_list = JSON.parse(response).users;
+
             if(response.length) {
-              var userSearch = "<h3 class='searched-user' id='search-query'>Users matching '" + users + "'</h3>";
+              var userSearch = "<h4 class='searched-user' id='search-query'>Users matching '" + users + "'</h4>";
               $('#playlist').append(userSearch);
-              users = response.split(',');
-              _.each(users, function(user) {
-                var domEluser = "<li class='searched-user'><a href='#' onClick=userPlaylist('"+ user +"')>" +
-                user + "</a></li>";
+
+              _.each(users_list, function(user) {
+                var domEluser = "<li class='searched-user'><a href='#' onClick=userPlaylist('"+ user.username +"')>" +
+                user.first_name + " " + user.last_name+"</a></li>";
                 $('#playlist').append(domEluser);
               });
             }
@@ -132,12 +136,18 @@ function searchUsers(users){
 }
 
 function showSearchedSongs(){
+  $('#user-results').removeClass('active');
+  $('#song-results').addClass('active');
+
   $('.searched-user').hide();
   $('.searched-song').show();
 
 }
 
 function showSearchedUsers(){
+  $('#song-results').removeClass('active');
+  $('#user-results').addClass('active');
+
   $('.searched-song').hide();
   $('.searched-user').show();
 

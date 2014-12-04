@@ -528,8 +528,8 @@ function recommendSong(track_type, track_id, track_name){
             $('#receipient_username').autocomplete({source:users,autoFocus:true});
     });
 
+    $("html,body").css("overflow","hidden"); 
     $("#overlay").css('visibility', 'visible');
-    // $('body').css('overflow', 'hidden');
 
     recommend.trackInfo.track_type = track_type;
     recommend.trackInfo.track_id = track_id;
@@ -559,10 +559,11 @@ function recommendTo(){
     $.post('/recommendsong/', recommendation)
       .done(
         function(response) {
+
           $("#overlay").css('visibility', 'hidden');
           $('#receipient_username').val('');
           $('#recomendation_description').val('');
-          // $('body').css('overflow', 'auto');
+          $("html,body").css("overflow","auto"); 
         }
       );
 }
@@ -583,7 +584,7 @@ function saveAndRecommend(type, url,id,title,stream_url,artwork_url) {
   });
 
   $("#overlay").css('visibility', 'visible');
-  // $('body').css('overflow', 'hidden');
+ $("html,body").css("overflow","hidden"); 
 
   console.log(recommend.trackInfo.track_name)
   $("#recommended_song").text(recommend.trackInfo.track_name)
@@ -658,6 +659,7 @@ function closeModal(){
     $("#overlay").css('visibility', 'hidden');
     $('#receipient_username').val('');
     $('#recomendation_description').val('');
+    $("html,body").css("overflow","auto"); 
 }
 
 function getURLParameter(url,name) {
@@ -666,6 +668,7 @@ function getURLParameter(url,name) {
 
 function refreshFeed() {
   $.ajax({url: "/feed", async:true}).done(function(response) {
+
     var users = JSON.parse(response).users;
     var recos = JSON.parse(response).recommendations;
 
