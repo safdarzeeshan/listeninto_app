@@ -526,6 +526,7 @@ function recommendSong(track_type, track_id, track_name){
 
             var users = response.split(',');
             $('#receipient_username').autocomplete({source:users,autoFocus:true});
+            $('#receipient_username').autocomplete( "option", "appendTo", "#reco-modal" );
     });
 
     $("html,body").css("overflow","hidden"); 
@@ -581,6 +582,7 @@ function saveAndRecommend(type, url,id,title,stream_url,artwork_url) {
 
       var users = response.split(',');
       $('#receipient_username').autocomplete({source:users,autoFocus:true});
+      $('#receipient_username').autocomplete( "option", "appendTo", "#reco-modal" );
   });
 
   $("#overlay").css('visibility', 'visible');

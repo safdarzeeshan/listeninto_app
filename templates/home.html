@@ -14,11 +14,13 @@
 
 
 <div id="overlay">
-     <div>
+     <div id='reco-modal'>
         {% csrf_token %}
         <a href='#' class='close-modal' onclick="closeModal()"><i class="fa fa-close"></i></a>
         <h3 id= 'recommended_song'></h3>
-        <input id="receipient_username" type="text" placeholder="Recommend to...." autocomplete="on" />
+        
+            <input id="receipient_username" type="text" placeholder="Recommend to...."/>
+        
         <textarea id="recomendation_description" placeholder="Description"></textarea>
         <button id="receipient-button" onclick="recommendTo()">Recommend</button>
      </div>
