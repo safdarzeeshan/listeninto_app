@@ -29,8 +29,6 @@ $(document).ready(function(){
   //causing issues with play and pause in player
   // var yt_player_1;
 
-    // $('.recommend-to').hide();
-
     checkIfNewRecosExist();
 
     $('#button-playlist').addClass('active');
@@ -202,10 +200,14 @@ $(document).ready(function(){
     saveSong();
   });
 
-  $(document).on('click', '#register', function(event) {
+  // $(document).on('submit', '#search-form', function(event) {
+  //   event.preventDefault();
+  // });
 
-    saveSong();
-  })
+  // $(document).on('click', '#register', function(event) {
+
+  //   saveSong();
+  // });
 
   //add onclick for add song and saveAndRecommend
   refreshFeed();
@@ -688,7 +690,7 @@ function refreshFeed() {
 
     _.each(_.map(recos, function(reco) {
       return "<li class='feed-item'><a href='#' class='user' onClick=userPlaylist('"+ reco.sender +"')>"  + reco.sender +
-             "</a> recommended " + "<a href='#' class='play-song' title='" +reco.track_name + "' song-name ='" + reco.track_name + "' song-type='"+reco.track_type+
+             "</a> recommended " + "<a href='#' class='play-song' title='" +reco.track_name + "' song-name ='" + escape(reco.track_name) + "' song-type='"+reco.track_type+
              "' song-id='"+ reco.track_id+"' song-art = '"+reco.track_artwork_url+"' recommendation = 'False'>" + 
              reco.track_name + "</a> to <a href='#' class='user' onClick=userPlaylist('"+ reco.receipient +"')>" + reco.receipient + "</a></li>";
     
@@ -701,9 +703,11 @@ function refreshFeed() {
 
 function showRegistrationForm(){
 
-  $('.form').hide();
-  document.getElementById("registration-form").reset();
-  $('#overlay-register').addClass('active');
-
+  $.ajax({url: "/registrationForm/" , async:true}).done(function(response){
+    console.log('reg form');
+    $('.auth').html(response);
+    $('#overlay-register').addClass('active');
+    document.getElementById("registration-form").reset();
+  });
 }
 

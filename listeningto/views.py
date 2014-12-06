@@ -26,7 +26,7 @@ def login_view(request):
             return HttpResponseRedirect("/account/invalid/")
     else:
 
-        return render(request, "registration/login.html")
+        return render(request, "registration/login.html", {'show_login': True})
 
 def register(request):
 
@@ -40,8 +40,16 @@ def register(request):
             if user is not None and user.is_active:
                 auth.login(request, user)
                 return redirect("home")
+        else:
+            return render(request, "registration/_registration_form.html", {'form': form })        
+
     else:
         return render(request, "registration/login.html")
+
+def registration_form(request):
+
+    return render(request, "registration/_registration_form.html")
+
 
 def logout_view(request):
     auth.logout(request)
