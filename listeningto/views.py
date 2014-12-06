@@ -11,6 +11,7 @@ from django.db.models import Q
 from django.shortcuts import render_to_response
 from listeningto.models import Song, Playlist, Recommendation
 
+
 def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username', '')
@@ -28,6 +29,7 @@ def login_view(request):
 
         return render(request, "registration/login.html")
 
+
 def register(request):
 
     if request.method == 'POST':
@@ -42,6 +44,7 @@ def register(request):
                 return redirect("home")
     else:
         return render(request, "registration/login.html")
+
 
 def logout_view(request):
     auth.logout(request)
@@ -60,13 +63,13 @@ def save_song(request):
     playlist = Playlist.objects.get(user=request.user)
     songs = Song.objects.filter(playlists=playlist)
 
-    playlist_size = len(songs);
+    playlist_size = len(songs)
 
-    if (playlist_size>= 10):
+    if (playlist_size >= 10):
 
         return HttpResponse(status=400)
 
-    else:        
+    else:
 
         r, created = Song.objects.get_or_create(track_id=track_id)
 
@@ -155,8 +158,6 @@ def delete_song(request):
     return HttpResponse(status=201)
 
 
-
-
 def home(request):
     if not request.user.is_authenticated():
         return redirect('login')
@@ -177,7 +178,7 @@ def home(request):
 def user_songs(request):
 
     username = request.GET.get('user')
-    user =  User.objects.get(username=username)
+    user = User.objects.get(username=username)
 
     playlist = Playlist.objects.get(user__username=username)
     songs = Song.objects.filter(playlists=playlist)
@@ -202,7 +203,7 @@ def get_users(request):
 def search_users(request):
     query = request.GET.get('userquery')
 
-    users_list ={'users': []}
+    users_list = {'users': []}
 
     users = User.objects.filter(Q(username__icontains=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query))
 
@@ -223,8 +224,8 @@ def activity_feed(request):
     today = datetime.today()
     yesterday = datetime.today() - timedelta(days=1)
 
-    new_users = User.objects.filter(date_joined__gte=yesterday, date_joined__lte=today)
-    new_recommendations = Recommendation.objects.filter(created_at__gte=yesterday, created_at__lte=today)
+    new_users = User.objects.filter(date_joined__gte=yesterday, date_joined__lte=today).order_by('-date_joined')
+    new_recommendations = Recommendation.objects.filter(created_at__gte=yesterday, created_at__lte=today).order_by('-created_at')
     # new_songs = Song.objects.filter(created_at__gte=yesterday, created_at__lte=today)
 
     for user in new_users:
@@ -239,7 +240,7 @@ def activity_feed(request):
                     'track_type': recommendation.song.track_type,
                     'track_artwork_url': recommendation.song.track_artwork_url
                     }
-                    
+
         feed['recommendations'].append(new_reco)
 
     return HttpResponse(json.dumps(feed), status=200)
