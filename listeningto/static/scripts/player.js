@@ -29,9 +29,11 @@ $(document).ready(function(){
   //causing issues with play and pause in player
   // var yt_player_1;
 
-    $('.recommend-to').hide();
+    // $('.recommend-to').hide();
 
     checkIfNewRecosExist();
+
+    $('#button-playlist').addClass('active');
 
     // empty error div
     $('.error').html('');
@@ -135,13 +137,18 @@ $(document).ready(function(){
 
   $(document).on('click', '.play-song',  function(event) {
     console.log('trying to play song');
+    $('.audio-player').addClass('active');
+
     event.stopPropagation();
     var type = $(this).attr('song-type');
     var id = $(this).attr('song-id');
     var art = $(this).attr('song-art');
     var recommendationBoolean = $(this).attr('recommendation');
+    var name = $(this).attr('song-name');
 
     $('.song-img').attr('src', art);
+    currentPlaying.trackName = unescape(name);
+
 
     if (recommendationBoolean === 'False'){
       loadItem(type, id);
@@ -160,8 +167,11 @@ $(document).ready(function(){
     var id = $(this).attr('song-id');
     var art = $(this).attr('song-art');
     var recommendationBoolean = $(this).attr('recommendation');
+    var name = $(this).attr('song-name');
 
     $('.song-img').attr('src', art);
+    currentPlaying.trackName = unescape(name);
+
 
     if (recommendationBoolean === 'False'){
       loadItem(type, id);
@@ -192,6 +202,11 @@ $(document).ready(function(){
     saveSong();
   });
 
+  $(document).on('click', '#register', function(event) {
+
+    saveSong();
+  })
+
   //add onclick for add song and saveAndRecommend
   refreshFeed();
 
@@ -214,7 +229,7 @@ function loadItem(type, id) {
   console.log(type + id);
 
   // load new song
-  currentPlaying.trackName = $('#song_' + id).find('.song_name')[0].children[0].textContent;
+  //currentPlaying.trackName = $('#song_' + id).find('.song_name')[0].children[0].textContent;
   currentPlaying.type = type;
   currentPlaying.songId = id;
 
@@ -338,6 +353,9 @@ function nextSong() {
 
 function saveSong() {
 
+  $('#button-playlist').removeClass('active');
+  $('#button-recommendations').removeClass('active');
+
 
   $('.error').html('');
   var song_url = document.getElementById("song_url").value;
@@ -451,6 +469,11 @@ function saveSongToDb(trackInfo) {
   savingSong.done(function(data) {   
     console.log('saved song');
   });
+
+  savingSong.fail(function(){
+    console.log('cannot add another song')
+    $('#song_' + trackInfo.track_id).children('.song_name').html("<p class='error-playlistmax'>Error: Your playlist is full. Please delete a song first</p>");
+  });
 }
 
 function displayInsertedUrl(trackInfo){
@@ -503,8 +526,10 @@ function recommendSong(track_type, track_id, track_name){
 
             var users = response.split(',');
             $('#receipient_username').autocomplete({source:users,autoFocus:true});
+            $('#receipient_username').autocomplete( "option", "appendTo", "#reco-modal" );
     });
 
+    $("html,body").css("overflow","hidden"); 
     $("#overlay").css('visibility', 'visible');
 
     recommend.trackInfo.track_type = track_type;
@@ -535,29 +560,38 @@ function recommendTo(){
     $.post('/recommendsong/', recommendation)
       .done(
         function(response) {
+
           $("#overlay").css('visibility', 'hidden');
           $('#receipient_username').val('');
           $('#recomendation_description').val('');
+          $("html,body").css("overflow","auto"); 
         }
       );
 }
 
 function saveAndRecommend(type, url,id,title,stream_url,artwork_url) {
 
+  console.log(title)
+
   recommend.trackInfo.track_type = type;
   recommend.trackInfo.track_url =  url;
-  recommend.trackInfo.track_name =  decodeURIComponent(title);
+  recommend.trackInfo.track_name =  unescape(title);
   recommend.trackInfo.track_id = id;
   recommend.trackInfo.stream_url = stream_url;
   recommend.trackInfo.track_artwork_url = artwork_url;
+
+  console.log(recommend.trackInfo)
 
   $.ajax({url: "/getusers", async:true}).done(function(response){
 
       var users = response.split(',');
       $('#receipient_username').autocomplete({source:users,autoFocus:true});
+      $('#receipient_username').autocomplete( "option", "appendTo", "#reco-modal" );
   });
 
-  $("#overlay").css('visibility', 'visible');
+ $("#overlay").css('visibility', 'visible');
+ $("html,body").css("overflow","hidden"); 
+
   console.log(recommend.trackInfo.track_name)
   $("#recommended_song").text(recommend.trackInfo.track_name)
 
@@ -567,6 +601,9 @@ function recommendationPage(){
   $.ajax({url: "/getrecommendations/" , async:true}).done(function(response){
     console.log('test');
     $('#playlist').html(response);
+    // this is an awful way to do this... 
+    $('#button-playlist').removeClass('active');
+    $('#button-recommendations').addClass('active');
   });
 
   refreshFeed();
@@ -575,6 +612,9 @@ function recommendationPage(){
 function getUserSongs() {
   $.ajax({url: "/", async: true}).done(function(response) {
     $('#playlist').html(response);
+    // this is an awful way to do this... 
+    $('#button-playlist').addClass('active');
+    $('#button-recommendations').removeClass('active');
   });
   refreshFeed();
 }
@@ -625,6 +665,7 @@ function closeModal(){
     $("#overlay").css('visibility', 'hidden');
     $('#receipient_username').val('');
     $('#recomendation_description').val('');
+    $("html,body").css("overflow","auto"); 
 }
 
 function getURLParameter(url,name) {
@@ -633,22 +674,36 @@ function getURLParameter(url,name) {
 
 function refreshFeed() {
   $.ajax({url: "/feed", async:true}).done(function(response) {
+
     var users = JSON.parse(response).users;
     var recos = JSON.parse(response).recommendations;
+
     $('ul.feed').html('');
 
     _.each(_.map(users, function(user) {
-      return '<li class="feed-item">' + user.name + ' joined as ' + user.username + '!</li>';
+      return "<li class='feed-item'>" + user.name + " joined as <a href='#' class='user' onClick=userPlaylist('"+ user.username +"')>" + user.username + "!</li>";
     }), function(el) {
       $('ul.feed').append(el);
     });
 
     _.each(_.map(recos, function(reco) {
-      return '<li class="feed-item">' + reco.sender + ' recommended ' + reco.song + ' to ' + reco.receipient + '.</li>';
+      return "<li class='feed-item'><a href='#' class='user' onClick=userPlaylist('"+ reco.sender +"')>"  + reco.sender +
+             "</a> recommended " + "<a href='#' class='play-song' title='" +reco.track_name + "' song-name ='" + reco.track_name + "' song-type='"+reco.track_type+
+             "' song-id='"+ reco.track_id+"' song-art = '"+reco.track_artwork_url+"' recommendation = 'False'>" + 
+             reco.track_name + "</a> to <a href='#' class='user' onClick=userPlaylist('"+ reco.receipient +"')>" + reco.receipient + "</a></li>";
+    
     }), function(el) {
       $('ul.feed').append(el);
     });
 
   });
+}
+
+function showRegistrationForm(){
+
+  $('.form').hide();
+  document.getElementById("registration-form").reset();
+  $('#overlay-register').addClass('active');
+
 }
 

@@ -23,10 +23,10 @@ function search(search_query){
       $('#playlist').empty();
 
 
-      var domElsearch_buttons = "<div><span><a href='#' class='song-search' onClick='showSearchedSongs()'>Songs</a>" +
-                                "<a href='#' class='user-search' onClick='showSearchedUsers()'>Users</a></div>";
+      var domElsearch_buttons = "<div class = 'search-results' ><span><a href='#' class='search-results-button' id ='song-results' onClick='showSearchedSongs()'>Songs</a>" +
+                                "<a href='#' class='search-results-button' id='user-results' onClick='showSearchedUsers()'>Users</a></div>";
 
-      var domElSearch = "<h3 class='searched-song' id='search-query'>Search Results for '" + search_query + "'</h3>";
+      var domElSearch = "<h4 class='searched-song' id='search-query'>Search Results for '" + search_query + "'</h4>";
 
       $('#playlist').append(domElsearch_buttons);
 
@@ -49,6 +49,8 @@ function search(search_query){
       request.execute(function(response) {
         appendYT(response)
       });
+
+      $('#song-results').addClass('active');
 }
 
 function appendSC(tracks){
@@ -71,14 +73,14 @@ function appendSC(tracks){
 
         domEl = "<li id='song_"+item.id+"' class='searched-song'>" +
                   "<span class = 'song_options'>" +
-                  "<a href='#' class='play-song' title ='Play Song' song-type='soundcloud' song-id='" + item.id+ "' song-art = '" + artwork_url + "' recommendation = 'False' >" +
+                  "<a href='#' class='play-song' title ='Play Song' song-name='"+ escape(item.title) +"' song-type='soundcloud' song-id='" + item.id+ "' song-art = '" + artwork_url + "' recommendation = 'False' >" +
                   "<i class='fa fa-play'></i></a>" +
                   "<a href='#' id='recommend-song' title = 'Recommend Song'  onClick=saveAndRecommend('soundcloud'" + ",'"+item.permalink_url +
-                  "','"+item.id+"','"+ encodeURIComponent(item.title)+ "','"+ item.stream_url+"','" + artwork_url+"')>" +
+                  "','"+item.id+"','"+ escape(item.title)+ "','"+ item.stream_url+"','" + artwork_url+"')>" +
                   "<i class='fa fa-share'></i></a>" +
                   "<a href='#' id='add-song' title = 'Add Song' onClick=getSongInfo('" + item.permalink_url +"','soundcloud','true')>" +
                   "<i class='fa fa-plus'></i></a></span>" +
-                  "<span class='song_name' song-type='soundcloud' song-id='" + item.id+ "' song-art = '" + artwork_url + "' recommendation = 'False'><p>" + item.title + "</p></span></li>";
+                  "<span class='song_name' title='"+ unescape(item.title) +"' song-name='"+ escape(item.title) +"' song-type='soundcloud' song-id='" + item.id+ "' song-art = '" + artwork_url + "' recommendation = 'False'><p>" + item.title + "</p></span></li>";
 
         $('#playlist').append(domEl);
   }
@@ -89,16 +91,16 @@ function appendYT(tracks) {
   _.each(tracks.items, function(item) {
     domEl = "<li id='song_" + item.id.videoId+ "' class='searched-song'>" +
             "<span class = 'song_options'>"  +
-            "<a href='#' class='play-song' title ='Play Song' song-type='youtube' song-id='" + item.id.videoId +
+            "<a href='#' class='play-song' title ='Play Song' song-name='"+ escape(item.snippet.title) +"' song-type='youtube' song-id='" + item.id.videoId +
             "' song-art = '" + item.snippet.thumbnails.high.url + "' recommendation = 'False'>" +
             "<i class='fa fa-play'></i></a>" +
             "<a href='#' id='recommend-song' title = 'Recommend Song' onClick=saveAndRecommend('youtube'" +
             ","+"'https://www.youtube.com/watch?v="+ item.id.videoId +"','"+item.id.videoId+"','" +
-            encodeURIComponent(item.snippet.title) + "','null','" +item.snippet.thumbnails.high.url  +"')>" +
+            escape(item.snippet.title) + "','null','" +item.snippet.thumbnails.high.url  +"')>" +
             "<i class='fa fa-share'></i></a>" +
             "<a href='#' id='add-song' title = 'Add Song' onClick=getSongInfo('https://www.youtube.com/watch?v=" +
             item.id.videoId + "','youtube','true')>" + "<i class='fa fa-plus'></i></a></span>" +
-            "<span class='song_name' song-type='youtube' song-id='" + item.id.videoId +
+            "<span class='song_name' title='"+ item.snippet.title +"' song-name='"+ escape(item.snippet.title) +"' song-type='youtube' song-id='" + item.id.videoId +
             "' song-art = '" + item.snippet.thumbnails.high.url + "' recommendation = 'False'><p>" +
             item.snippet.title + "</p></span></li>";
 
@@ -110,13 +112,15 @@ function searchUsers(users){
 
     $.ajax({url: "/searchusers?userquery=" + users, async:true}).done(function(response){
 
+            var users_list = JSON.parse(response).users;
+
             if(response.length) {
-              var userSearch = "<h3 class='searched-user' id='search-query'>Users matching '" + users + "'</h3>";
+              var userSearch = "<h4 class='searched-user' id='search-query'>Users matching '" + users + "'</h4>";
               $('#playlist').append(userSearch);
-              users = response.split(',');
-              _.each(users, function(user) {
-                var domEluser = "<li class='searched-user'><a href='#' onClick=userPlaylist('"+ user +"')>" +
-                user + "</a></li>";
+
+              _.each(users_list, function(user) {
+                var domEluser = "<li class='searched-user'><a href='#' onClick=userPlaylist('"+ user.username +"')>" +
+                user.first_name + " " + user.last_name+"</a></li>";
                 $('#playlist').append(domEluser);
               });
             }
@@ -129,16 +133,21 @@ function searchUsers(users){
 
     });
 
-
 }
 
 function showSearchedSongs(){
+  $('#user-results').removeClass('active');
+  $('#song-results').addClass('active');
+
   $('.searched-user').hide();
   $('.searched-song').show();
 
 }
 
 function showSearchedUsers(){
+  $('#song-results').removeClass('active');
+  $('#user-results').addClass('active');
+
   $('.searched-song').hide();
   $('.searched-user').show();
 

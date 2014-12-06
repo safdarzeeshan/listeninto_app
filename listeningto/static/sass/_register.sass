@@ -1,0 +1,102 @@
+$button-color: rgb(142, 133, 197)
+
+span.lead 
+    font-size: 5em
+    text-shadow: 4px 6px 6px rgba(150, 154, 150, 1)
+
+.auth 
+    text-align: center
+    margin: 0
+    padding: 5em
+
+fieldset
+    border: none
+    margin-left: auto
+    margin-right: auto
+    margin: 0  
+    padding: 0
+
+input
+    font-size: 1em
+    margin-bottom: 5px
+    padding: 4px
+    border: solid 1px #85b1de 
+    width: 10em
+    background-color: rgba(255,255,255, 0.8)
+    border-radius: 5px
+
+.button-login 
+    color: $button-color
+    border-radius: 5px
+    padding: 5px
+    min-width: 10em
+    text-decoration: none
+    margin-bottom: 5px
+    outline: 0
+    box-shadow: none
+    border: solid
+    border-width: 1px
+    border-color: $button-color
+    background-color: rgba(255,255,255, 0)
+
+    &:hover
+        background-color: $button-color
+        color: whitesmoke
+
+.form
+    width: 12em
+    float: right
+    margin-right: 4em
+
+    .login-form
+        width: 12em
+        border-radius: 7px
+        padding-top: 1px
+        padding-bottom: 11px
+        background-color: rgba(255,255,255,0.7)
+        margin-bottom: 1em
+        margin-left: auto
+        margin-right: auto
+
+        &:hover
+            //background-color: rgba(255,255,255,1)
+
+    .sign-up
+        background-color: rgba(255,255,255,0.7)
+        width: 12em
+        border-radius: 7px
+        padding: 0
+        height: 4em
+
+        p
+            margin: 0
+            padding-top: 5px
+            margin-bottom: 10px
+
+        &:hover
+            //background-color: rgba(255,255,255,1)
+
+#overlay-register
+    visibility: hidden
+    opacity: 0
+    transition: visibility 0s linear 0.5s,opacity 0.5s linear
+    float: right
+    background-color: rgba(255,255,255,0.6)
+    width: 15em
+    border-radius: 7px
+    padding-top: 1px
+    padding-bottom: 11px
+    margin-right: 4em
+
+    input
+        width: 13em
+        padding: 6px
+
+    button
+        margin-top: 5px
+
+    &.active
+        visibility: visible
+        opacity: 1
+        transition-delay: 0s
+        display: block

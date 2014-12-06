@@ -1,8 +1,6 @@
-
-
 <div class ='searched-user-songs'>    
     <span>
-        <h3 >{{ user }}</h3>
+        <h3 >{{ user.first_name }} {{ user.last_name }}</h3>
     </span>
 </div>
 
@@ -10,10 +8,14 @@
 <li id="song_{{ song.track_id }}">
 
     <span class='song_options'>
-        <a href='#' class="play-song" title='Play Song' song-type='{{ song.track_type }}', song-id='{{ song.track_id }}' song-art = '{{ song.track_artwork_url }}' recommendation = 'False'><i class="fa fa-play"></i></a>
+        <a href='#' class="play-song" title='Play Song' song-name = '{{ song.track_name }}' song-type='{{ song.track_type }}', song-id='{{ song.track_id }}' song-art = '{{ song.track_artwork_url }}' recommendation = 'False'><i class="fa fa-play"></i></a>
         <a href='#' class="recommend-song" title='Recommend Song' song-type='{{ song.track_type }}' song-id='{{ song.track_id }}' song-name='{{ song.track_name }}'><i class="fa fa-share"></i></a>
+        <a href='#' id="add-song" title='Add Song' onClick=getSongInfo('{{ song.track_url }}','{{ song.track_id }}','{{ song.track_type }}','False')><i class="fa fa-plus"></i></a>
     </span>
-    <span class='song_name' song-type='{{ song.track_type }}' song-id='{{ song.track_id }}' song-art = '{{ song.track_artwork_url }}' recommendation = 'False'><p>
+    <span class='song_name' title = '{{ song.track_name }}' song-name = '{{ song.track_name }}' song-type='{{ song.track_type }}' song-id='{{ song.track_id }}' song-art = '{{ song.track_artwork_url }}' recommendation = 'False'><p>
     {{ song.track_name }}</p></span>
 </li>
+{% empty %}
+<p class= 'message'>This user hasn't added any songs. Give them some time and check again :)</p>
+
 {% endfor %}

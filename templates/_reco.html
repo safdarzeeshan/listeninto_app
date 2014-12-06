@@ -4,15 +4,15 @@
     {% csrf_token %}
 
     <span class = 'song_options'>
-        <a href='#' class="play-song" title = 'Play Song' song-type= '{{ recommendation.song.track_type }}' song-id='{{ recommendation.song.track_id }}' song-art = '{{ recommendation.song.track_artwork_url }}' recommendation = 'True'><i class="fa fa-play"></i></a>
+        <a href='#' class="play-song" title = 'Play Song' song-name = '{{ recommendation.song.track_name }}' song-type= '{{ recommendation.song.track_type }}' song-id='{{ recommendation.song.track_id }}' song-art = '{{ recommendation.song.track_artwork_url }}' recommendation = 'True'><i class="fa fa-play"></i></a>
         <a href='#' class ="recommend-song" title = 'Recommend Song' song-type='{{ recommendation.song.track_type }}' song-id='{{ recommendation.song.track_id }}' song-name='{{ recommendation.song.track_name }}'>
         <i class="fa fa-share"></i></a>
         <a href='#' id='add-song' title = 'Add Song' onClick=getSongInfo('{{ recommendation.song.track_url }}','{{ recommendation.song.track_type }}','true')>
         <i class='fa fa-plus'></i></a>
     </span>
 
-    <span class = 'song_name' song-type= '{{ recommendation.song.track_type }}' song-id='{{ recommendation.song.track_id }}' song-art = '{{ recommendation.song.track_artwork_url }}' recommendation = 'True'><p>{{ recommendation.song.track_name }}</p>
-    <br class='recommended-by'><p>{{ recommendation.sender.username }} - {{ recommendation.description }}</p></br>
+    <span class = 'song_name' song-name = '{{ recommendation.song.track_name }}' song-type= '{{ recommendation.song.track_type }}' song-id='{{ recommendation.song.track_id }}' song-art = '{{ recommendation.song.track_artwork_url }}' recommendation = 'True'><p title = '{{ recommendation.song.track_name }}'>{{ recommendation.song.track_name }}</p><br>
+    <div class='recommended-by'><p><b>{{ recommendation.sender.username }}</b> - <p class='reco-description'>{{ recommendation.description }}</p></p></div></br>
     </span>
 
     {% if recommendation.played %}

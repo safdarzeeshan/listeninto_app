@@ -2,12 +2,13 @@
 
 {% block content %}
 
+<!-- <span class="lead">Stereogram!</span> -->
+
 <div class="auth">
 
-    <span class="lead">ListeningTo!</span>
-    <p>Please log in or register.</p>
-
+<div class= 'form'>
   <div class="login-form">
+    <p>Please Log in or Sign Up.</p>
 
     {% if form.errors %}
       <p class="error">Sorry, that's not a valid username or password</p>
@@ -23,19 +24,46 @@
         <input type="password" name="password" value="" id="password" placeholder="Password">
       </fieldset>
 
-      <input class="button" type="submit" value="Login" />
+      <button class="button-login" type="submit" value="Login">Login</button>
     </form>
-
+    <form action="{% url 'social:begin' 'facebook' %}">
+        <button class="button-login" type="submit"><i class="fa fa-facebook"></i>acebook Login</button>
+    </form>
+  </div>
+  
+  <div class='sign-up'>
+    <p><b>New to Stereogram?</b></p>
+    <a href='#' class="button-login" onClick= 'showRegistrationForm()'>Sign Up</a>
   </div>
 
-  <form action="/register">
-      <button class="button" type="submit">Register</button>
-  </form>
+</div>
 
-  <form action="{% url 'social:begin' 'facebook' %}">
-      <button class="button" type="submit">Login with Facebook</button>
-  </form>
-
+  <div id="overlay-register">
+    <p>Register on Stereogram!</p>
+    <form id = 'registration-form' action="/register/" method="post">
+        {% csrf_token %}
+        <!-- {{ form.as_p }} -->
+      <fieldset>
+        <input id="id_username" maxlength="30" name="username" type="text" placeholder="Username">
+      </fieldset>
+      <fieldset>
+         <input id="id_email" name="email" type="email" placeholder="Email"> 
+      </fieldset>
+      <fieldset>
+         <input id="id_first_name" name="first_name" type="text" placeholder="First Name">
+      </fieldset>
+      <fieldset>
+         <input id="id_last_name" name="last_name" type="text" placeholder="Last Name">
+      </fieldset>
+      <fieldset>
+          <input id="id_password1" name="password1" type="password" placeholder="Password">
+      </fieldset>
+      <fieldset>
+          <input id="id_password2" name="password2" type="password" placeholder="Confirm Password">
+      </fieldset>
+      <button class="button-login" type="submit" value="Create the account">Register</button>
+    </form>
+  </div>
 </div>
 
 {% endblock %}

@@ -4,12 +4,49 @@ from datetime import datetime, timedelta
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
-from django.contrib.auth.forms import UserCreationForm
+#from django.contrib.auth.forms import UserCreationForm
+from forms import MyRegistrationForm
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.shortcuts import render_to_response
-
 from listeningto.models import Song, Playlist, Recommendation
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username', '')
+        password = request.POST.get('password', '')
+        user = auth.authenticate(username=username, password=password)
+        if user is not None and user.is_active:
+            # Correct password, and the user is marked "active"
+            auth.login(request, user)
+            # Redirect to a success page.
+            return redirect("home")
+        else:
+            # Show an error page
+            return HttpResponseRedirect("/account/invalid/")
+    else:
+
+        return render(request, "registration/login.html")
+
+def register(request):
+
+    if request.method == 'POST':
+        form = MyRegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = request.POST.get('username', '')
+            password = request.POST.get('password1', '')
+            user = auth.authenticate(username=username, password=password)
+            if user is not None and user.is_active:
+                auth.login(request, user)
+                return redirect("home")
+    else:
+        return render(request, "registration/login.html")
+
+def logout_view(request):
+    auth.logout(request)
+    # Redirect to a login page.
+    return redirect("login")
 
 
 def save_song(request):
@@ -21,22 +58,29 @@ def save_song(request):
     track_artwork_url = request.POST.get('track_artwork_url')
 
     playlist = Playlist.objects.get(user=request.user)
+    songs = Song.objects.filter(playlists=playlist)
 
-    #print playlist.song[1].track_name
+    playlist_size = len(songs);
 
-    r, created = Song.objects.get_or_create(track_id=track_id)
+    if (playlist_size>= 10):
 
-    if created:
-        r.track_type = track_type
-        r.track_url = track_url
-        r.track_name = track_name
-        r.stream_url = stream_url
-        r.track_artwork_url = track_artwork_url
+        return HttpResponse(status=400)
 
-    r.playlists.add(playlist)
-    r.save()
+    else:        
 
-    return HttpResponse(json.dumps({'id': r.id}), status=201)
+        r, created = Song.objects.get_or_create(track_id=track_id)
+
+        if created:
+            r.track_type = track_type
+            r.track_url = track_url
+            r.track_name = track_name
+            r.stream_url = stream_url
+            r.track_artwork_url = track_artwork_url
+
+        r.playlists.add(playlist)
+        r.save()
+
+        return HttpResponse(json.dumps({'id': r.id}), status=201)
 
 
 def recommend_song(request):
@@ -111,45 +155,6 @@ def delete_song(request):
     return HttpResponse(status=201)
 
 
-def login_view(request):
-    if request.method == 'POST':
-        username = request.POST.get('username', '')
-        password = request.POST.get('password', '')
-        user = auth.authenticate(username=username, password=password)
-        if user is not None and user.is_active:
-            # Correct password, and the user is marked "active"
-            auth.login(request, user)
-            # Redirect to a success page.
-            return redirect("home")
-        else:
-            # Show an error page
-            return HttpResponseRedirect("/account/invalid/")
-    else:
-        return render(request, "registration/login.html")
-
-
-def logout_view(request):
-    auth.logout(request)
-    # Redirect to a login page.
-    return redirect("login")
-
-
-def register(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = request.POST.get('username', '')
-            password = request.POST.get('password1', '')
-            user = auth.authenticate(username=username, password=password)
-            if user is not None and user.is_active:
-                auth.login(request, user)
-                return redirect("home")
-    else:
-        form = UserCreationForm()
-    return render(request, "registration/register.html", {
-        'form': form,
-    })
 
 
 def home(request):
@@ -171,8 +176,10 @@ def home(request):
 
 def user_songs(request):
 
-    user = request.GET.get('user')
-    playlist = Playlist.objects.get(user__username=user)
+    username = request.GET.get('user')
+    user =  User.objects.get(username=username)
+
+    playlist = Playlist.objects.get(user__username=username)
     songs = Song.objects.filter(playlists=playlist)
 
     if request.is_ajax():
@@ -195,14 +202,20 @@ def get_users(request):
 def search_users(request):
     query = request.GET.get('userquery')
 
+    users_list ={'users': []}
+
     users = User.objects.filter(Q(username__icontains=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query))
 
-    users_list = []
-    for i in range(len(users)):
+    for user in users:
 
-        users_list.append(users[i].username)
+        userinfo = {'username': user.username,
+                    'first_name': user.first_name,
+                    'last_name': user.last_name
+                    }
 
-    return HttpResponse(','.join(users_list), status=201)
+        users_list['users'].append(userinfo)
+
+    return HttpResponse(json.dumps(users_list), status=201)
 
 
 def activity_feed(request):
@@ -221,7 +234,12 @@ def activity_feed(request):
     for recommendation in new_recommendations:
         new_reco = {'sender': recommendation.sender.username,
                     'receipient': recommendation.receipient.username,
-                    'song': recommendation.song.track_name}
+                    'track_name': recommendation.song.track_name,
+                    'track_id': recommendation.song.track_id,
+                    'track_type': recommendation.song.track_type,
+                    'track_artwork_url': recommendation.song.track_artwork_url
+                    }
+                    
         feed['recommendations'].append(new_reco)
 
     return HttpResponse(json.dumps(feed), status=200)
