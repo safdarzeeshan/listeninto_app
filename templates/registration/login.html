@@ -2,16 +2,17 @@
 
 {% block content %}
 
-<!-- <span class="lead">Stereogram!</span> -->
-
 <div class="auth">
 <div class= 'form'>
   <div class="login-form">
     <p>Please Log in or Sign Up.</p>
-
-    {% if form.errors %}
-      <p class="error">Sorry, that's not a valid username or password</p>
-    {% endif %}
+      <div class="error_msg">
+        {% if errors %}
+          {% for error in errors %}
+            <p>{{ error }}</p>
+          {% endfor %}
+        {% endif %}
+      </div>
 
     <form action="/login/" method="post">
       {% csrf_token %}
@@ -29,7 +30,7 @@
         <button class="button-login" type="submit"><i class="fa fa-facebook"></i>acebook Login</button>
     </form>
   </div>
-  
+
   <div class='sign-up'>
     <p><b>New to Stereogram?</b></p>
     <a href='#' class="button-login" onClick= 'showRegistrationForm()'>Sign Up</a>
