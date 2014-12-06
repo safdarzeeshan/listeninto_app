@@ -147,7 +147,7 @@ $(document).ready(function(){
     var name = $(this).attr('song-name');
 
     $('.song-img').attr('src', art);
-    currentPlaying.trackName = name;
+    currentPlaying.trackName = unescape(name);
 
 
     if (recommendationBoolean === 'False'){
@@ -170,7 +170,7 @@ $(document).ready(function(){
     var name = $(this).attr('song-name');
 
     $('.song-img').attr('src', art);
-    currentPlaying.trackName = name;
+    currentPlaying.trackName = unescape(name);
 
 
     if (recommendationBoolean === 'False'){
@@ -571,12 +571,16 @@ function recommendTo(){
 
 function saveAndRecommend(type, url,id,title,stream_url,artwork_url) {
 
+  console.log(title)
+
   recommend.trackInfo.track_type = type;
   recommend.trackInfo.track_url =  url;
-  recommend.trackInfo.track_name =  decodeURIComponent(title);
+  recommend.trackInfo.track_name =  unescape(title);
   recommend.trackInfo.track_id = id;
   recommend.trackInfo.stream_url = stream_url;
   recommend.trackInfo.track_artwork_url = artwork_url;
+
+  console.log(recommend.trackInfo)
 
   $.ajax({url: "/getusers", async:true}).done(function(response){
 
@@ -585,7 +589,7 @@ function saveAndRecommend(type, url,id,title,stream_url,artwork_url) {
       $('#receipient_username').autocomplete( "option", "appendTo", "#reco-modal" );
   });
 
-  $("#overlay").css('visibility', 'visible');
+ $("#overlay").css('visibility', 'visible');
  $("html,body").css("overflow","hidden"); 
 
   console.log(recommend.trackInfo.track_name)
