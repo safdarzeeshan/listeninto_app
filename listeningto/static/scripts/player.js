@@ -542,8 +542,6 @@ function recommendTo(){
     recommend.receipient =  $('#receipient_username').val();
     recommend.description = $('#recomendation_description').val();
 
-    console.log(recommend.receipient);
-
     var recommendation = {
       receipient_username: recommend.receipient,
       track_type: recommend.trackInfo.track_type,
@@ -559,11 +557,11 @@ function recommendTo(){
     $.post('/recommendsong/', recommendation)
       .done(
         function(response) {
-
           $("#overlay").css('visibility', 'hidden');
           $('#receipient_username').val('');
           $('#recomendation_description').val('');
           $("html,body").css("overflow","auto");
+          refreshFeed();
         }
       );
 }
@@ -676,6 +674,10 @@ function refreshFeed() {
 
     var users = JSON.parse(response).users;
     var recos = JSON.parse(response).recommendations;
+
+    if(!users.length && !recos.length) {
+      $('.feedbox').hide();
+    }
 
     $('ul.feed').html('');
 
