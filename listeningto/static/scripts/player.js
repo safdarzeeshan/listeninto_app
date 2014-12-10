@@ -64,7 +64,7 @@ $(document).ready(function(){
     // if no object loaded, load first file
     if(currentPlaying.trackName === '') {
 
-      $('#playlist li:first a').trigger('click');
+      $('#playlist li:first span:first a:first') .trigger('click');
     }
 
 		if(currentPlaying.type === 'youtube') {
@@ -346,8 +346,16 @@ function loadSoundcloud(id){
 }
 
 function nextSong() {
-  console.log('in next song' + currentPlaying.songId);
-  $('#song_' + currentPlaying.songId).next().find('.song_name').trigger('click');
+  
+  var nextSong = $('#song_' + currentPlaying.songId).next();
+
+  if (nextSong.length === 0)  {
+      $('#playlist li:first span:first a:first') .trigger('click');
+  }
+
+  else  {
+      nextSong.find('.song_name').trigger('click');
+  }
 }
 
 function saveSong() {
