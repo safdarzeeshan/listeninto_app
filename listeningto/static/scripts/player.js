@@ -202,10 +202,14 @@ $(document).ready(function(){
     saveSong();
   });
 
-  $(document).on('click', '#register', function(event) {
+  $(document).on('submit', '#search-form', function(event) {
 
-    saveSong();
-  })
+    event.preventDefault();
+  });
+  // $(document).on('click', '#register', function(event) {
+
+  //   saveSong();
+  // })
 
   //add onclick for add song and saveAndRecommend
   refreshFeed();
