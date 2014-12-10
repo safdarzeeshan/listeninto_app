@@ -200,14 +200,11 @@ $(document).ready(function(){
     saveSong();
   });
 
-  // $(document).on('submit', '#search-form', function(event) {
-  //   event.preventDefault();
-  // });
 
-  // $(document).on('click', '#register', function(event) {
+  $(document).on('submit', '#search-form', function(event) {
 
-  //   saveSong();
-  // });
+    event.preventDefault();
+  });
 
   //add onclick for add song and saveAndRecommend
   refreshFeed();
