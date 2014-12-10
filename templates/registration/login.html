@@ -2,16 +2,22 @@
 
 {% block content %}
 
-<div id = 'home-container'>
-<div class="auth">
 
+<div id = 'home-container'>
+
+<div class="auth">
 <div class= 'form'>
   <div class="login-form">
-    <p>Log in or Sign Up.</p>
 
-    {% if form.errors %}
-      <p class="error">Sorry, that's not a valid username or password</p>
-    {% endif %}
+    <p>Please Log in or Sign Up.</p>
+      <div class="error_msg">
+        {% if errors %}
+          {% for error in errors %}
+            <p>{{ error }}</p>
+          {% endfor %}
+        {% endif %}
+      </div>
+
 
     <form action="/login/" method="post">
       {% csrf_token %}
@@ -29,43 +35,12 @@
         <button class="button-login" type="submit"><i class="fa fa-facebook"></i>acebook Login</button>
     </form>
   </div>
-  
+
   <div class='sign-up'>
     <p><b>New to Stereogram?</b></p>
     <a href='#' class="button-login" onClick= 'showRegistrationForm()'>Sign Up</a>
   </div>
 
 </div>
-
-  <div id="overlay-register">
-    <p>Register on Stereogram!</p>
-    <form id = 'registration-form' action="/register/" method="post">
-        {% csrf_token %}
-        <!-- {{ form.as_p }} -->
-      <fieldset>
-        <input id="id_username" maxlength="30" name="username" type="text" placeholder="Username">
-      </fieldset>
-      <fieldset>
-         <input id="id_email" name="email" type="email" placeholder="Email"> 
-      </fieldset>
-      <fieldset>
-         <input id="id_first_name" name="first_name" type="text" placeholder="First Name">
-      </fieldset>
-      <fieldset>
-         <input id="id_last_name" name="last_name" type="text" placeholder="Last Name">
-      </fieldset>
-      <fieldset>
-          <input id="id_password1" name="password1" type="password" placeholder="Password">
-      </fieldset>
-      <fieldset>
-          <input id="id_password2" name="password2" type="password" placeholder="Confirm Password">
-      </fieldset>
-      <button class="button-login" type="submit" value="Create the account">Register</button>
-    </form>
-  </div>
-</div>
-<!-- <div id='blurb'>Listen,  Discover  and  Share  your  favourite  music  with  your  favourite  people</div> -->
-</div>
-
 
 {% endblock %}

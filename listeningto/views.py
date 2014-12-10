@@ -2,9 +2,9 @@ import json
 from datetime import datetime, timedelta
 
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.contrib import auth
-#from django.contrib.auth.forms import UserCreationForm
+
 from forms import MyRegistrationForm
 from django.contrib.auth.models import User
 from django.db.models import Q
@@ -14,24 +14,25 @@ from listeningto.models import Song, Playlist, Recommendation
 
 def login_view(request):
     if request.method == 'POST':
+        # form = AuthenticationForm(request.POST)
         username = request.POST.get('username', '')
         password = request.POST.get('password', '')
         user = auth.authenticate(username=username, password=password)
         if user is not None and user.is_active:
+        # if form.is_valid:
             # Correct password, and the user is marked "active"
             auth.login(request, user)
             # Redirect to a success page.
             return redirect("home")
         else:
             # Show an error page
-            return HttpResponseRedirect("/account/invalid/")
+            return render(request, "registration/login.html", {'errors': ['Invalid username or password']})
     else:
-
-        return render(request, "registration/login.html")
+        # form = AuthenticationForm()
+        return render(request, "registration/login.html", {'errors': []})
 
 
 def register(request):
-
     if request.method == 'POST':
         form = MyRegistrationForm(request.POST)
         if form.is_valid():
@@ -42,8 +43,17 @@ def register(request):
             if user is not None and user.is_active:
                 auth.login(request, user)
                 return redirect("home")
+        else:
+            return render(request, "registration/_registration_form.html", {'form': form})
+
     else:
         return render(request, "registration/login.html")
+
+
+def registration_form(request):
+    form = MyRegistrationForm()
+
+    return render(request, "registration/_registration_form.html", {'form': form})
 
 
 def logout_view(request):

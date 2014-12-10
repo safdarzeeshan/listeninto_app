@@ -55,22 +55,22 @@ ROOT_URLCONF = 'listeningto_app.urls'
 WSGI_APPLICATION = 'listeningto_app.wsgi.application'
 
 TEMPLATE_CONTEXT_PROCESSORS = (
-   'django.contrib.auth.context_processors.auth',
-   'django.core.context_processors.debug',
-   'django.core.context_processors.i18n',
-   'django.core.context_processors.media',
-   'django.core.context_processors.static',
-   'django.core.context_processors.tz',
-   'django.contrib.messages.context_processors.messages',
-   'social.apps.django_app.context_processors.backends',
-   'social.apps.django_app.context_processors.login_redirect',
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'django.core.context_processors.tz',
+    'django.contrib.messages.context_processors.messages',
+    'social.apps.django_app.context_processors.backends',
+    'social.apps.django_app.context_processors.login_redirect',
 )
 
 AUTHENTICATION_BACKENDS = (
-   'social.backends.facebook.FacebookOAuth2',
-   'social.backends.google.GoogleOAuth2',
-   'social.backends.twitter.TwitterOAuth',
-   'django.contrib.auth.backends.ModelBackend',
+    'social.backends.facebook.FacebookOAuth2',
+    'social.backends.google.GoogleOAuth2',
+    'social.backends.twitter.TwitterOAuth',
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 # Database
@@ -86,12 +86,6 @@ DATABASES = {
         'PORT': '5432',
     }
 }
-
-# Parse database configuration from $DATABASE_URL
-if "DATABASE_URL" in os.environ:
-    import dj_database_url
-
-    DATABASES['default'] = dj_database_url.config()
 
 # Parse database configuration from $DATABASE_URL
 if os.environ.has_key("DATABASE_URL"):
@@ -133,6 +127,9 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Allow all host headers
 ALLOWED_HOSTS = ['*']
+
+######### SOCIAL AUTH SETTINGS ########
 SOCIAL_AUTH_FACEBOOK_KEY = '359368234221361'
 SOCIAL_AUTH_FACEBOOK_SECRET = '4c553bde38a80c865b937440d2c56a87'
+SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
 LOGIN_REDIRECT_URL = '/'
