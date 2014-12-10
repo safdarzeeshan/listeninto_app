@@ -4,43 +4,43 @@
 
 
 <div id = 'home-container'>
+  <div class="auth">
+    <div class= 'form'>
+      <div class="login-form">
 
-<div class="auth">
-<div class= 'form'>
-  <div class="login-form">
+        <p>Please Log in or Sign Up.</p>
+          <div class="error_msg">
+            {% if errors %}
+              {% for error in errors %}
+                <p>{{ error }}</p>
+              {% endfor %}
+            {% endif %}
+          </div>
 
-    <p>Please Log in or Sign Up.</p>
-      <div class="error_msg">
-        {% if errors %}
-          {% for error in errors %}
-            <p>{{ error }}</p>
-          {% endfor %}
-        {% endif %}
+
+        <form action="/login/" method="post">
+          {% csrf_token %}
+
+          <fieldset>
+            <input type="text" name="username" value="" id="username" placeholder="Username">
+          </fieldset>
+          <fieldset>
+            <input type="password" name="password" value="" id="password" placeholder="Password">
+          </fieldset>
+
+          <button class="button-login" type="submit" value="Login">Login</button>
+        </form>
+        <form action="{% url 'social:begin' 'facebook' %}">
+            <button class="button-login" type="submit"><i class="fa fa-facebook"></i>acebook Login</button>
+        </form>
       </div>
 
-
-    <form action="/login/" method="post">
-      {% csrf_token %}
-
-      <fieldset>
-        <input type="text" name="username" value="" id="username" placeholder="Username">
-      </fieldset>
-      <fieldset>
-        <input type="password" name="password" value="" id="password" placeholder="Password">
-      </fieldset>
-
-      <button class="button-login" type="submit" value="Login">Login</button>
-    </form>
-    <form action="{% url 'social:begin' 'facebook' %}">
-        <button class="button-login" type="submit"><i class="fa fa-facebook"></i>acebook Login</button>
-    </form>
+      <div class='sign-up'>
+        <p><b>New to Stereogram?</b></p>
+        <a href='#' class="button-login" onClick= 'showRegistrationForm()'>Sign Up</a>
+      </div>
+    </div>
   </div>
-
-  <div class='sign-up'>
-    <p><b>New to Stereogram?</b></p>
-    <a href='#' class="button-login" onClick= 'showRegistrationForm()'>Sign Up</a>
-  </div>
-
 </div>
 
 {% endblock %}

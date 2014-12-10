@@ -134,7 +134,6 @@ $(document).ready(function(){
     });
 
   $(document).on('click', '.play-song',  function(event) {
-    console.log('trying to play song');
     $('.audio-player').addClass('active');
 
     event.stopPropagation();
@@ -159,7 +158,6 @@ $(document).ready(function(){
   });
 
   $(document).on('click', '.song_name',  function(event) {
-    console.log('trying to play song');
     event.stopPropagation();
     var type = $(this).attr('song-type');
     var id = $(this).attr('song-id');
@@ -224,8 +222,6 @@ function setProgress(type, progress, ui) {
 function loadItem(type, id) {
   // stop currently playing songs
   stopAllPlayers();
-
-  console.log(type + id);
 
   // load new song
   //currentPlaying.trackName = $('#song_' + id).find('.song_name')[0].children[0].textContent;
@@ -324,7 +320,6 @@ function convertTime(seconds) {
 }
 
 function loadYoutube(id) {
-  console.log('Youtube loading video...', id);
 
   yt_player_1.loadVideoById(id);
 
@@ -334,7 +329,6 @@ function loadYoutube(id) {
 
 function loadSoundcloud(id){
 
-  console.log('Sound cloud setting up');
   $("#jplayer_sc").jPlayer("setMedia", {mp3: "http://api.soundcloud.com/tracks/" +  id + "/stream?client_id=ad504f994ee6c4b53cfb47aec786f595"});
   $("#jplayer_sc").jPlayer('play');
 
@@ -346,7 +340,7 @@ function loadSoundcloud(id){
 }
 
 function nextSong() {
-  
+
   var nextSong = $('#song_' + currentPlaying.songId).next();
 
   if (nextSong.length === 0)  {
@@ -376,7 +370,6 @@ function saveSong() {
   }
 
   else {
-    console.log('searching')
     //search for song name
     search(song_url);
   }
@@ -384,7 +377,6 @@ function saveSong() {
 
 function getSongInfo(song_url, type, save){
     var url = String(song_url);
-    console.log('getting info...', song_url);
     var trackInfo = {};
 
     //identify if youtube or soundcloud
@@ -393,10 +385,6 @@ function getSongInfo(song_url, type, save){
       var id = getURLParameter(url, 'v' )
 
       $.getJSON('http://gdata.youtube.com/feeds/api/videos/'+id+'?v=2&alt=jsonc',function(data,status,xhr){
-
-        console.log("data")
-        console.log(data)
-
         trackInfo = {
           track_type: 'youtube',
           track_url: url,
@@ -411,7 +399,6 @@ function getSongInfo(song_url, type, save){
            }
 
         else{
-              console.log('here for youtube')
               displayInsertedUrl(trackInfo);
 
         }
@@ -423,8 +410,6 @@ function getSongInfo(song_url, type, save){
 
     if(song_url.toLowerCase().indexOf("soundcloud")>=0){
       //get soundcloud song info and add to db
-
-      console.log("saving as soundcloud")
 
       SC.get('/resolve', {url: song_url}, function(track) {
 
@@ -454,8 +439,7 @@ function getSongInfo(song_url, type, save){
         if (save) { saveSongToDb(trackInfo); }
 
 
-        else{
-              console.log('here for sc')
+        else {
               displayInsertedUrl(trackInfo);
 
         }
@@ -468,30 +452,22 @@ function getSongInfo(song_url, type, save){
 }
 
 function saveSongToDb(trackInfo) {
-  console.log('saving...', trackInfo);
   $('#song_url').val('');
 
   var savingSong = $.post('addsong/', trackInfo);
 
   savingSong.done(function(data) {
-    console.log('saved song');
   });
 
   savingSong.fail(function(){
-    console.log('cannot add another song')
     $('#song_' + trackInfo.track_id).children('.song_name').html("<p class='error-playlistmax'>Error: Your playlist is full. Please delete a song first</p>");
   });
 }
 
 function displayInsertedUrl(trackInfo){
-
-  console.log(trackInfo)
-
   $('#playlist').empty();
 
   if(trackInfo.track_type === 'youtube'){
-
-    console.log('type is youtube')
 
     domEl = "<li id='song_" + trackInfo.track_id + "'>" +
         "<span class = 'song_options'>" +
@@ -508,7 +484,6 @@ function displayInsertedUrl(trackInfo){
   }
 
   if(trackInfo.track_type === 'soundcloud'){
-    console.log('type is soundcloud')
 
     domEl = "<li id='song_"+trackInfo.track_id+"'>" +
           "<span class = 'song_options'>" +
@@ -526,8 +501,6 @@ function displayInsertedUrl(trackInfo){
 }
 
 function recommendSong(track_type, track_id, track_name){
-
-    console.log('recommending')
 
      $.ajax({url: "/getusers", async:true}).done(function(response){
 
@@ -576,16 +549,12 @@ function recommendTo(){
 
 function saveAndRecommend(type, url,id,title,stream_url,artwork_url) {
 
-  console.log(title)
-
   recommend.trackInfo.track_type = type;
   recommend.trackInfo.track_url =  url;
   recommend.trackInfo.track_name =  unescape(title);
   recommend.trackInfo.track_id = id;
   recommend.trackInfo.stream_url = stream_url;
   recommend.trackInfo.track_artwork_url = artwork_url;
-
-  console.log(recommend.trackInfo)
 
   $.ajax({url: "/getusers", async:true}).done(function(response){
 
@@ -597,14 +566,12 @@ function saveAndRecommend(type, url,id,title,stream_url,artwork_url) {
  $("#overlay").css('visibility', 'visible');
  $("html,body").css("overflow","hidden");
 
-  console.log(recommend.trackInfo.track_name)
   $("#recommended_song").text(recommend.trackInfo.track_name)
 
 }
 
 function recommendationPage(){
   $.ajax({url: "/getrecommendations/" , async:true}).done(function(response){
-    console.log('test');
     $('#playlist').html(response);
     // this is an awful way to do this...
     $('#button-playlist').removeClass('active');
@@ -646,8 +613,6 @@ function loadItemAndCheckIfPlayed(type, id){
 
   checkIfPlayed.done(function(response) {
 
-    console.log("is reco played " + response)
-
   });
 }
 
@@ -656,7 +621,7 @@ function checkIfNewRecosExist(){
     //fix this. check if new resos exist for this particular user
 
     if (response==='True'){
-      console.log(response)
+
       $('.new-recommendation-indicator').css('visibility','visible');
     }
 
@@ -709,12 +674,9 @@ function refreshFeed() {
 }
 
 function showRegistrationForm(){
-
   $.ajax({url: "/registrationForm/" , async:true}).done(function(response){
-    console.log('reg form');
     $('.container').html(response);
     $('#overlay-register').addClass('active');
-    document.getElementById("registration-form").reset();
   });
 }
 
