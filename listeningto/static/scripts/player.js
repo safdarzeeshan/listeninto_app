@@ -504,13 +504,30 @@ function recommendSong(track_type, track_id, track_name){
 
      $.ajax({url: "/getusers", async:true}).done(function(response){
 
-            var users = response.split(',');
-            $('#receipient_username').autocomplete({source:users,autoFocus:true});
-            $('#receipient_username').autocomplete( "option", "appendTo", "#reco-modal" );
+      //this change was made to incorporate first name and last name instead of username
+          var users = [];   
+          var usersJSON = JSON.parse(response).users;
+
+          _.each(_.map(usersJSON, function(user) {
+
+              return user
+
+          }), function(user_info) {
+                  users.push(user_info)            
+              }           
+          )
+
+          $('.receipient_username').autocomplete({
+            source:users,
+            autoFocus:true,
+          });
+
+          $('.receipient_username').autocomplete( "option", "appendTo", "#reco-modal" );
     });
 
     $("html,body").css("overflow","hidden");
-    $("#overlay").css('visibility', 'visible');
+    // $("#overlay").css('visibility', 'visible');addClass('active');
+    $("#overlay").addClass('active');
 
     recommend.trackInfo.track_type = track_type;
     recommend.trackInfo.track_id = track_id;
@@ -520,7 +537,7 @@ function recommendSong(track_type, track_id, track_name){
 
 function recommendTo(){
 
-    recommend.receipient =  $('#receipient_username').val();
+    recommend.receipient =  $('.receipient_username').val();
     recommend.description = $('#recomendation_description').val();
 
     var recommendation = {
@@ -538,8 +555,9 @@ function recommendTo(){
     $.post('/recommendsong/', recommendation)
       .done(
         function(response) {
-          $("#overlay").css('visibility', 'hidden');
-          $('#receipient_username').val('');
+          // $("#overlay").css('visibility', 'hidden');
+          $("#overlay").removeClass('active');
+          $('.receipient_username').val('');
           $('#recomendation_description').val('');
           $("html,body").css("overflow","auto");
           refreshFeed();
@@ -558,12 +576,28 @@ function saveAndRecommend(type, url,id,title,stream_url,artwork_url) {
 
   $.ajax({url: "/getusers", async:true}).done(function(response){
 
-      var users = response.split(',');
-      $('#receipient_username').autocomplete({source:users,autoFocus:true});
-      $('#receipient_username').autocomplete( "option", "appendTo", "#reco-modal" );
+          var users = [];   
+          var usersJSON = JSON.parse(response).users;
+
+          _.each(_.map(usersJSON, function(user) {
+
+              return user
+
+          }), function(user_info) {
+                  users.push(user_info)            
+              }           
+          )
+
+          $('.receipient_username').autocomplete({
+            source:users,
+            autoFocus:true,
+          });
+
+          $('.receipient_username').autocomplete( "option", "appendTo", "#reco-modal" );
   });
 
- $("#overlay").css('visibility', 'visible');
+ // $("#overlay").css('visibility', 'visible');
+ $("#overlay").addClass('active');
  $("html,body").css("overflow","hidden");
 
   $("#recommended_song").text(recommend.trackInfo.track_name)
@@ -632,8 +666,9 @@ function checkIfNewRecosExist(){
 }
 
 function closeModal(){
-    $("#overlay").css('visibility', 'hidden');
-    $('#receipient_username').val('');
+    // $("#overlay").css('visibility', 'hidden');
+    $("#overlay").removeClass('active');
+    $('.receipient_username').val('');
     $('#recomendation_description').val('');
     $("html,body").css("overflow","auto");
 }
@@ -675,8 +710,8 @@ function refreshFeed() {
 
 function showRegistrationForm(){
   $.ajax({url: "/registrationForm/" , async:true}).done(function(response){
-    $('.container').html(response);
-    $('#overlay-register').addClass('active');
+
+    $('.auth').html(response);
   });
 }
 

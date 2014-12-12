@@ -1,4 +1,10 @@
-<div id="overlay-register" class="{% if form.errors %}active{% endif %}">
+  {% extends "base.html" %}
+
+  {% block content %}
+
+<div id = 'home-container'>
+  <div class="auth">
+    <div id="overlay-register" class="{% if form.errors %}active{% endif %}">
       <p>Register on Stereogram!</p>
       <div class="error_msg">
         {% if form.errors %}
@@ -28,7 +34,7 @@
            <input id="id_first_name" name="first_name" type="text" placeholder="First Name" required>
         </fieldset>
         <fieldset>
-           <input id="id_last_name" name="last_name" type="text" placeholder="Last Name">
+           <input id="id_last_name" name="last_name" type="text" placeholder="Last Name" required>
         </fieldset>
         <fieldset>
             <input id="id_password1" name="password1" type="password" placeholder="Password" required>
@@ -41,3 +47,4 @@
     </div>
   </div>
 </div>
+  {% endblock content %}

@@ -44,7 +44,7 @@ def register(request):
                 auth.login(request, user)
                 return redirect("home")
         else:
-            return render(request, "registration/_registration_form.html", {'form': form})
+            return render(request, "registration/register.html", {'form': form})
 
     else:
         return render(request, "registration/login.html")
@@ -199,15 +199,24 @@ def user_songs(request):
 
 def get_users(request):
 
-    users = User.objects.all()
+    users = User.objects.all();
 
-    users_list = []
-    for i in range(len(users)):
+    users_list = {'users': []}
+    # for i in range(len(users)):
 
-        users_list.append(users[i].username)
+    #     users_list.append(users[i].username)
 
-    # return render(request, {'users': users})
-    return HttpResponse(','.join(users_list), status=201)
+    # return HttpResponse(','.join(users_list), status=201)
+
+    for user in users:
+
+        userinfo = {'label': user.first_name + ' ' + user.last_name + ' (' + user.username + ')',
+                    'value': user.username
+                    }
+
+        users_list['users'].append(userinfo)
+
+    return HttpResponse(json.dumps(users_list), status=201)
 
 
 def search_users(request):

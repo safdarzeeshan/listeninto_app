@@ -17,10 +17,10 @@
      <div id='reco-modal'>
         {% csrf_token %}
         <a href='#' class='close-modal' onclick="closeModal()"><i class="fa fa-close"></i></a>
-        <p id= 'recommended_song'></p>
-        
-            <input id="receipient_username" type="text" placeholder="Recommend to...."/>
-        
+        <div>
+            <p id= 'recommended_song'></p>
+        </div>
+        <input class="receipient_username" type="text" placeholder="Recommend to...."/>
         <textarea id="recomendation_description" placeholder="Description"></textarea>
         <a href='#' id="receipient-button" onclick="recommendTo()">Recommend</a>
      </div>

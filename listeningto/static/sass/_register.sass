@@ -67,7 +67,7 @@ input
 .form
     width: 12em
     float: right
-    margin-right: 4em
+    
 
     &.hidden
         display: none    
@@ -102,9 +102,9 @@ input
             //background-color: rgba(255,255,255,1)
 
 #overlay-register
-    visibility: hidden
-    opacity: 0
-    transition: visibility 0s linear 0.5s,opacity 0.5s linear
+    visibility: visible
+    opacity: 1
+    // transition: visibility 0s linear 0.5s,opacity 0.5s linear
     float: right
     background-color: rgba(255,255,255,0.6)
     width: 15em
@@ -120,8 +120,12 @@ input
     button
         margin-top: 5px
 
-    &.active
-        visibility: visible
-        opacity: 1
-        transition-delay: 0s
-        display: block
+    // &.active
+    //     visibility: visible
+    //     opacity: 1
+    //     transition-delay: 0s
+    //     display: block
+
+.error_msg
+    color: rgb(213, 53, 53)
+    padding-bottom: 3px
