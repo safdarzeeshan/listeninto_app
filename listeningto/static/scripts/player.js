@@ -296,26 +296,19 @@ function songTimeYT(){
   }
 }
 
+function convertTime(totalSec) {
 
-function convertTime(seconds) {
   var timeString = '';
-  var hours = 0;
-  var mins = Math.round(seconds / 60);
-  var secs = Math.round((seconds / 60 % 1) * 60);
 
-  if (mins > 60) {
-    console.log('min > 60')
-    hours = mins / 60;
-    mins = (hours / 60 % 1) * 60;
-    secs = (mins / 60 % 1) * 60;
-    return Math.round(hours) + ':' + Math.round(mins) + ':' + Math.round(secs);
-  }
+  var hours = parseInt( totalSec / 3600 ) % 24;
+  var minutes = parseInt( totalSec / 60 ) % 60;
+  var seconds = Math.round(totalSec % 60);
 
-  if (hours > 0 && hours < 10) { timeString += "0" + hours + ':'; }
-  if (hours >= 10) { timeString += hours + ':'; }
+  if (hours > 0 && hours < 10) { timeString += hours + ':'; }
+  if (hours >= 10) { timeString += "0" + hours + ':'; }
 
-  timeString += (mins < 10) ? '0' + mins + ':' : mins + ':'
-  timeString += (secs < 10) ? '0' + secs : secs
+  timeString += (minutes < 10) ? '0' + minutes + ':' : minutes + ':'
+  timeString += (seconds < 10) ? '0' + seconds : seconds
 
   return timeString
 }
