@@ -1,24 +1,38 @@
-var tag = document.createElement('script');
-tag.src = 'https://www.youtube.com/iframe_api';
-var firstScriptTag = document.getElementsByTagName('script')[0];
-firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-var currentPlaying = {
-                      type : '',
-                      trackName:'',
-                      duration:'',
-                      songId:''
-                    };
+currentPlaying = {
+  type : '',
+  trackName:'',
+  duration:'',
+  songId:''
+};
 
 var progresspercentage = 0;
 
 var recommend = {receipient : '',
-                 track_id : ''
-                }
+ description:'',
+ trackInfo: {
+    track_type: '',
+    track_url: '',
+    track_name: '',
+    track_id: '',
+    stream_url: '',
+    track_artwork_url: '',
+ }
+}
+
 
 $(document).ready(function(){
+  var tag = document.createElement('script');
+  tag.src = 'https://www.youtube.com/iframe_api';
+  var firstScriptTag = document.getElementsByTagName('script')[0];
+  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-    $('#recommend-to').hide();
+  //causing issues with play and pause in player
+  // var yt_player_1;
+
+    checkIfNewRecosExist();
+
+    $('#button-playlist').addClass('active');
+
     // empty error div
     $('.error').html('');
 
@@ -38,17 +52,19 @@ $(document).ready(function(){
 
     // Initialize SoundCloud API
 
-    SC.initialize({
-        client_id: 'ad504f994ee6c4b53cfb47aec786f595'
-      });
+  SC.initialize({
+      client_id: 'ad504f994ee6c4b53cfb47aec786f595'
+    });
 
   $('.pause').hide();
 
 	//play
 	$('.play').click(function(){
+
     // if no object loaded, load first file
-    if(jQuery.isEmptyObject(currentPlaying)) {
-      $('#playlist li:first a').trigger('click');
+    if(currentPlaying.trackName === '') {
+
+      $('#playlist li:first span:first a:first') .trigger('click');
     }
 
 		if(currentPlaying.type === 'youtube') {
@@ -63,12 +79,7 @@ $(document).ready(function(){
     $('.play').show();
     $('.pause').hide();
 
-    if(currentPlaying.type === 'youtube') {
-      yt_player_1.stopVideo();
-    }
-    else {
-      $("#jplayer_sc").jPlayer("stop");
-    }
+    stopAllPlayers();
 	})
 
   $('.pause').click(function() {
@@ -82,7 +93,6 @@ $(document).ready(function(){
     $('.pause').hide();
     $('.play').show();
   });
-
 
   //autopplay for next song - soundcloud song ended event
   $("#jplayer_sc").bind($.jPlayer.event.ended, function(event) {
@@ -117,11 +127,86 @@ $(document).ready(function(){
           else {
             // Create a timeout to reset this slider to zero.
             setTimeout(function() {
-               $( ".progress" ).slider("value", 0);
+               $( ".progress").slider("value", 0);
               }, 0);
           }
         }
     });
+
+  $(document).on('click', '.play-song',  function(event) {
+    $('.audio-player').addClass('active');
+
+    event.stopPropagation();
+    var type = $(this).attr('song-type');
+    var id = $(this).attr('song-id');
+    var art = $(this).attr('song-art');
+    var recommendationBoolean = $(this).attr('recommendation');
+    var name = $(this).attr('song-name');
+
+    $('.song-img').attr('src', art);
+    currentPlaying.trackName = unescape(name);
+
+
+    if (recommendationBoolean === 'False'){
+      loadItem(type, id);
+    }
+
+    if (recommendationBoolean === 'True'){
+      loadItemAndCheckIfPlayed(type, id);
+    }
+
+  });
+
+  $(document).on('click', '.song_name',  function(event) {
+    event.stopPropagation();
+    var type = $(this).attr('song-type');
+    var id = $(this).attr('song-id');
+    var art = $(this).attr('song-art');
+    var recommendationBoolean = $(this).attr('recommendation');
+    var name = $(this).attr('song-name');
+
+    $('.song-img').attr('src', art);
+    currentPlaying.trackName = unescape(name);
+
+
+    if (recommendationBoolean === 'False'){
+      loadItem(type, id);
+    }
+
+    if (recommendationBoolean === 'True'){
+      loadItemAndCheckIfPlayed(type, id);
+    }
+
+  });
+
+  $(document).on('click', '.recommend-song', function(event) {
+    event.stopPropagation();
+    var type = $(this).attr('song-type');
+    var id = $(this).attr('song-id');
+    var name = $(this).attr('song-name');
+    recommendSong(type, id, name);
+  });
+
+  $(document).on('click', '.delete-song', function(event) {
+    event.stopPropagation();
+    var id = $(this).attr('song-id');
+    deleteSong(id);
+  });
+
+  $(document).on('click', '#search', function(event) {
+
+    saveSong();
+  });
+
+
+  $(document).on('submit', '#search-form', function(event) {
+
+    event.preventDefault();
+  });
+
+  //add onclick for add song and saveAndRecommend
+  refreshFeed();
+
 });
 
 function setProgress(type, progress, ui) {
@@ -139,7 +224,7 @@ function loadItem(type, id) {
   stopAllPlayers();
 
   // load new song
-  currentPlaying.trackName = $('#song_' + id)[0].innerText;
+  //currentPlaying.trackName = $('#song_' + id).find('.song_name')[0].children[0].textContent;
   currentPlaying.type = type;
   currentPlaying.songId = id;
 
@@ -211,40 +296,24 @@ function songTimeYT(){
   }
 }
 
-function convertTime(seconds) {
+function convertTime(totalSec) {
+
   var timeString = '';
-  var hours = 0;
-  var mins = Math.round(seconds / 60);
-  var secs = Math.round((seconds / 60 % 1) * 60);
 
-  if (mins > 60) {
-    hours = mins / 60;
-    mins = (hours / 60 % 1) * 60;
-    secs = (mins / 60 % 1) * 60;
-    return Math.round(hours) + ':' + Math.round(mins) + ':' + Math.round(secs);
-  }
+  var hours = parseInt( totalSec / 3600 ) % 24;
+  var minutes = parseInt( totalSec / 60 ) % 60;
+  var seconds = Math.round(totalSec % 60);
 
-  if (hours > 0 && hours < 10) { timeString += "0" + hours + ':'; }
-  if (hours >= 10) { timeString += hours + ':'; }
+  if (hours > 0 && hours < 10) { timeString += hours + ':'; }
+  if (hours >= 10) { timeString += "0" + hours + ':'; }
 
-  timeString += (mins < 10) ? '0' + mins + ':' : mins + ':'
-  timeString += (secs < 10) ? '0' + secs : secs
+  timeString += (minutes < 10) ? '0' + minutes + ':' : minutes + ':'
+  timeString += (seconds < 10) ? '0' + seconds : seconds
 
   return timeString
 }
 
-function deleteSong(id) {
-  var url = 'deletesong/' + id +'/';
-  var id = '#song_' + id;
-  var deletingSong = $.get(url);
-
-  deletingSong.done(function(data) {
-    $(id).remove();
-  });
-}
-
 function loadYoutube(id) {
-  console.log('Youtube loading video...', id);
 
   yt_player_1.loadVideoById(id);
 
@@ -254,7 +323,6 @@ function loadYoutube(id) {
 
 function loadSoundcloud(id){
 
-  console.log('Sound cloud setting up');
   $("#jplayer_sc").jPlayer("setMedia", {mp3: "http://api.soundcloud.com/tracks/" +  id + "/stream?client_id=ad504f994ee6c4b53cfb47aec786f595"});
   $("#jplayer_sc").jPlayer('play');
 
@@ -266,34 +334,44 @@ function loadSoundcloud(id){
 }
 
 function nextSong() {
-  console.log('in next song' + currentPlaying.songId);
-  var currentId = '#song_' + currentPlaying.songId;
-  $(currentId + ' + li > a').trigger('click');
+
+  var nextSong = $('#song_' + currentPlaying.songId).next();
+
+  if (nextSong.length === 0)  {
+      $('#playlist li:first span:first a:first') .trigger('click');
+  }
+
+  else  {
+      nextSong.find('.song_name').trigger('click');
+  }
 }
 
 function saveSong() {
-  console.log('trying to add song...');
+
+  $('#button-playlist').removeClass('active');
+  $('#button-recommendations').removeClass('active');
+
 
   $('.error').html('');
   var song_url = document.getElementById("song_url").value;
 
   if (song_url.toLowerCase().indexOf("youtube") >= 0) {
-    getSongInfo(song_url, 'youtube');
+    getSongInfo(song_url, 'youtube', false);
   }
 
   else if (song_url.toLowerCase().indexOf("soundcloud") >= 0) {
-    getSongInfo(song_url, 'soundcloud');
+    getSongInfo(song_url, 'soundcloud', false);
   }
 
   else {
-    $('.error').text('Please enter a valid YouTube or SoundCloud song link.');
-    $('#song_url').val('');
+    //search for song name
+    search(song_url);
   }
 }
 
-function getSongInfo(song_url, type){
+function getSongInfo(song_url, type, save){
     var url = String(song_url);
-    console.log('getting info...', song_url);
+    var trackInfo = {};
 
     //identify if youtube or soundcloud
     if(song_url.toLowerCase().indexOf("youtube")>=0){
@@ -301,18 +379,24 @@ function getSongInfo(song_url, type){
       var id = getURLParameter(url, 'v' )
 
       $.getJSON('http://gdata.youtube.com/feeds/api/videos/'+id+'?v=2&alt=jsonc',function(data,status,xhr){
-
-        var trackInfo = {
+        trackInfo = {
           track_type: 'youtube',
           track_url: url,
           track_name: data.data.title,
           track_id: id,
-          track_artwork_url: data.data.thumbnail.sqDefault,
-          csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"').val()
+          track_artwork_url: data.data.thumbnail.hqDefault,
+          csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
         };
 
-        console.log(trackInfo);
-        saveSongToDb(trackInfo);
+        if (save) {
+                  saveSongToDb(trackInfo);
+           }
+
+        else{
+              displayInsertedUrl(trackInfo);
+
+        }
+        // return trackInfo;
       });
 
 
@@ -321,89 +405,307 @@ function getSongInfo(song_url, type){
     if(song_url.toLowerCase().indexOf("soundcloud")>=0){
       //get soundcloud song info and add to db
 
-      console.log("saving as soundcloud")
-
       SC.get('/resolve', {url: song_url}, function(track) {
 
-        var trackInfo = {
+
+        if (track.artwork_url !== null){
+
+            default_artwork_url = track.artwork_url
+            // //300 x 300 px art
+            artwork_url = default_artwork_url.replace("large","t300x300");
+        }
+
+        else{
+            //default image
+            artwork_url = 'https://i.ytimg.com/vi/GtBaB85VQEw/hqdefault.jpg'
+        }
+
+        trackInfo = {
           track_type: 'soundcloud',
           track_url: track.permalink_url,
           track_name: track.title,
           track_id: track.id,
           stream_url: track.stream_url,
-          track_artwork_url: track.artwork_url,
-          csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"').val()
+          track_artwork_url: artwork_url,
+          csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
         };
 
-        console.log(trackInfo);
-        saveSongToDb(trackInfo);
+        if (save) { saveSongToDb(trackInfo); }
+
+
+        else {
+              displayInsertedUrl(trackInfo);
+
+        }
+
+        // return trackInfo;
+
       });
 
     }
 }
 
 function saveSongToDb(trackInfo) {
-  console.log('saving...', trackInfo);
   $('#song_url').val('');
 
   var savingSong = $.post('addsong/', trackInfo);
 
   savingSong.done(function(data) {
-    domEl = "<li id='song_" + trackInfo.track_id+ "'><a href='#' onClick=loadItem('" + trackInfo.track_type + "','" + trackInfo.track_id + "')>" + trackInfo.track_name + "</a></li>";
-    console.log(domEl);
-    $('#playlist').append(domEl);
+  });
+
+  savingSong.fail(function(){
+    $('#song_' + trackInfo.track_id).children('.song_name').html("<p class='error-playlistmax'>Error: Your playlist is full. Please delete a song first</p>");
   });
 }
 
-function saveToDB(track_info) {
-    console.log('saving...', track_info);
+function displayInsertedUrl(trackInfo){
+  $('#playlist').empty();
 
-    $('#song_url').val('');
+  if(trackInfo.track_type === 'youtube'){
 
-    var savingSong = $.post('/addsong', trackInfo);
+    domEl = "<li id='song_" + trackInfo.track_id + "'>" +
+        "<span class = 'song_options'>" +
+        "<a href='#' href='#' class='play-song' title = 'Play Song' song-type='youtube' song-id='" + trackInfo.track_id +"' song-art = '" + trackInfo.track_artwork_url + "' recommendation = 'False'>" +
+        "<i class='fa fa-play'></i></a>" +
+        "<a href='#' class='recommend-song' title = 'Recommend Song' onClick=saveAndRecommend('youtube'" + ","+"'https://www.youtube.com/watch?v="+ trackInfo.track_id +"','"+trackInfo.track_id+"','" + encodeURIComponent(trackInfo.track_title) + "','null','" +trackInfo.track_artwork_url  +"')>" +
+        "<i class='fa fa-share'></i></a>" +
+        "<a href='#' class='add-song' title = 'Add Song' onClick=getSongInfo('https://www.youtube.com/watch?v=" + trackInfo.track_id +
+        "','youtube','true')>" +
+        "<i class='fa fa-plus'></i></a></span>" +
+        "<span class='song_name' song-type='youtube' song-id='" + trackInfo.track_id + "' song-art = '" + trackInfo.track_artwork_url + "' recommendation = 'False'><p>" + trackInfo.track_name + "</p></span></li>";
 
-    savingSong.done(function(data) {
-      console.log(data);
-      domEl = "<li ><a href='#' onClick=loadItem('soundcloud','" + track.id + "')>" + track.title + "</a></li>"
-      $('#playlist').append(domEl);
-    });
+    $('#playlist').append(domEl);
+  }
 
-    $.ajax({url: "/listeningto/addsong?" + track_info ,async:true}).done(function(response){
-        console.log('new songs: ', response);
-    });
+  if(trackInfo.track_type === 'soundcloud'){
+
+    domEl = "<li id='song_"+trackInfo.track_id+"'>" +
+          "<span class = 'song_options'>" +
+          "<a href='#' href='#' class='play-song' title = 'Play Song' song-type='soundcloud' song-id='" + trackInfo.track_id + "' song-art = '" + trackInfo.track_artwork_url + "' recommendation = 'False'>" +
+          "<i class='fa fa-play'></i></a>" +
+          "<a href='#' class='recommend-song' title = 'Recommend Song'  onClick=saveAndRecommend('soundcloud'" + ",'"+ trackInfo.track_url +
+          "','"+trackInfo.track_id+"','"+ encodeURIComponent(trackInfo.track_name)+ "','"+ trackInfo.track_url +"','" + trackInfo.track_artwork_url +"')>" +
+          "<i class='fa fa-share'></i></a>" +
+          "<a href='#' class='add-song' title = 'Add Song' onClick=getSongInfo('" + trackInfo.track_url +"','soundcloud','true')>" +
+          "<i class='fa fa-plus'></i></a></span>" +
+          "<span class='song_name'  song-type='soundcloud' song-id='" + trackInfo.track_id + "' song-art = '" + trackInfo.track_artwork_url + "'  recommendation = 'False'><p>" + trackInfo.track_name + "</p></span></li>";
+
+    $('#playlist').append(domEl);
+  }
 }
 
-function recommendSong(track_type, track_id){
-    
-    // var recommendInfo = {recepient_username: 'zeeshan1', track_id: 'pofv_Ee29Nw'}      
-    // var recomendingSong = $.post('/recommendsong/', recommendInfo);
+function recommendSong(track_type, track_id, track_name){
 
-    // recomendingSong.done(function(data) {cosole.log('done');
-    // });
-    console.log('recommending')
-    $('#recommend-to').show();
-    recommend.track_id = track_id;
+     $.ajax({url: "/getusers", async:true}).done(function(response){
 
-    console.log(recommend.track_id) 
+      //this change was made to incorporate first name and last name instead of username
+          var users = [];   
+          var usersJSON = JSON.parse(response).users;
+
+          _.each(_.map(usersJSON, function(user) {
+
+              return user
+
+          }), function(user_info) {
+                  users.push(user_info)            
+              }           
+          )
+
+          $('.receipient_username').autocomplete({
+            source:users,
+            autoFocus:true,
+          });
+
+          $('.receipient_username').autocomplete( "option", "appendTo", "#reco-modal" );
+    });
+
+    $("html,body").css("overflow","hidden");
+    // $("#overlay").css('visibility', 'visible');addClass('active');
+    $("#overlay").addClass('active');
+
+    recommend.trackInfo.track_type = track_type;
+    recommend.trackInfo.track_id = track_id;
+    $("#recommended_song").text(decodeURIComponent(track_name))
+
 }
 
 function recommendTo(){
-    recommend.receipient =  $('#receipient_username').val();
-    
-    console.log(recommend.receipient) 
-    console.log(recommend.track_id) 
 
-    $.ajax({url: "/recommendsong?receipient_username=" + recommend.receipient + "&track_id=" + recommend.track_id ,async:true}).done(function(response){
-      console.log('test: ', response);
+    recommend.receipient =  $('.receipient_username').val();
+    recommend.description = $('#recomendation_description').val();
 
-    $('#recommend-to').hide();  
-    $('#receipient_username').val('');
-    });
+    var recommendation = {
+      receipient_username: recommend.receipient,
+      track_type: recommend.trackInfo.track_type,
+      track_id: recommend.trackInfo.track_id,
+      track_url: recommend.trackInfo.track_url,
+      track_name: recommend.trackInfo.track_name,
+      stream_url: recommend.trackInfo.stream_url,
+      track_artwork_url: recommend.trackInfo.track_artwork_url,
+      description: recommend.description,
+      csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
+    };
+
+    $.post('/recommendsong/', recommendation)
+      .done(
+        function(response) {
+          // $("#overlay").css('visibility', 'hidden');
+          $("#overlay").removeClass('active');
+          $('.receipient_username').val('');
+          $('#recomendation_description').val('');
+          $("html,body").css("overflow","auto");
+          refreshFeed();
+        }
+      );
 }
 
+function saveAndRecommend(type, url,id,title,stream_url,artwork_url) {
 
+  recommend.trackInfo.track_type = type;
+  recommend.trackInfo.track_url =  url;
+  recommend.trackInfo.track_name =  unescape(title);
+  recommend.trackInfo.track_id = id;
+  recommend.trackInfo.stream_url = stream_url;
+  recommend.trackInfo.track_artwork_url = artwork_url;
+
+  $.ajax({url: "/getusers", async:true}).done(function(response){
+
+          var users = [];   
+          var usersJSON = JSON.parse(response).users;
+
+          _.each(_.map(usersJSON, function(user) {
+
+              return user
+
+          }), function(user_info) {
+                  users.push(user_info)            
+              }           
+          )
+
+          $('.receipient_username').autocomplete({
+            source:users,
+            autoFocus:true,
+          });
+
+          $('.receipient_username').autocomplete( "option", "appendTo", "#reco-modal" );
+  });
+
+ // $("#overlay").css('visibility', 'visible');
+ $("#overlay").addClass('active');
+ $("html,body").css("overflow","hidden");
+
+  $("#recommended_song").text(recommend.trackInfo.track_name)
+
+}
+
+function recommendationPage(){
+  $.ajax({url: "/getrecommendations/" , async:true}).done(function(response){
+    $('#playlist').html(response);
+    // this is an awful way to do this...
+    $('#button-playlist').removeClass('active');
+    $('#button-recommendations').addClass('active');
+  });
+
+  refreshFeed();
+}
+
+function getUserSongs() {
+  $.ajax({url: "/", async: true}).done(function(response) {
+    $('#playlist').html(response);
+    // this is an awful way to do this...
+    $('#button-playlist').addClass('active');
+    $('#button-recommendations').removeClass('active');
+  });
+  refreshFeed();
+}
+
+function userPlaylist(user){
+  $.ajax({url: "/user/?user=" + user, async: true}).done(function(response) {
+    $('#playlist').html(response);
+  });
+  refreshFeed();
+}
+
+function deleteSong(id) {
+  $.ajax({url: "/deletesong?trackid=" + id, async:true}).done(function(response){
+      $('#song_' + id).remove();
+  });
+}
+
+function loadItemAndCheckIfPlayed(type, id){
+  loadItem(type, id);
+
+  var playing_reco_info = {track_id: id, csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()}
+
+  var checkIfPlayed = $.post('isrecoplayed/', playing_reco_info);
+
+  checkIfPlayed.done(function(response) {
+
+  });
+}
+
+function checkIfNewRecosExist(){
+  $.ajax({url: "/anynewrecos", async:true}).done(function(response){
+    //fix this. check if new resos exist for this particular user
+
+    if (response==='True'){
+
+      $('.new-recommendation-indicator').css('visibility','visible');
+    }
+
+    else{
+      $('.new-recommendation-indicator').css('visibility','hidden');
+    }
+  });
+}
+
+function closeModal(){
+    // $("#overlay").css('visibility', 'hidden');
+    $("#overlay").removeClass('active');
+    $('.receipient_username').val('');
+    $('#recomendation_description').val('');
+    $("html,body").css("overflow","auto");
+}
 
 function getURLParameter(url,name) {
   return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(url)||[,""])[1].replace(/\+/g, '%20'))||null
+}
+
+function refreshFeed() {
+  $.ajax({url: "/feed", async:true}).done(function(response) {
+
+    var users = JSON.parse(response).users;
+    var recos = JSON.parse(response).recommendations;
+
+    if(!users.length && !recos.length) {
+      $('.feedbox').hide();
+    }
+
+    $('ul.feed').html('');
+
+    _.each(_.map(users, function(user) {
+      return "<li class='feed-item'>" + user.name + " joined as <a href='#' class='user' onClick=userPlaylist('"+ user.username +"')>" + user.username + "!</li>";
+    }), function(el) {
+      $('ul.feed').append(el);
+    });
+
+    _.each(_.map(recos, function(reco) {
+      return "<li class='feed-item'><a href='#' class='user' onClick=userPlaylist('"+ reco.sender +"')>"  + reco.sender +
+             "</a> recommended " + "<a href='#' class='play-song' title='" +reco.track_name + "' song-name ='" + escape(reco.track_name) + "' song-type='"+reco.track_type+
+             "' song-id='"+ reco.track_id+"' song-art = '"+reco.track_artwork_url+"' recommendation = 'False'>" +
+             reco.track_name + "</a> to <a href='#' class='user' onClick=userPlaylist('"+ reco.receipient +"')>" + reco.receipient + "</a></li>";
+
+    }), function(el) {
+      $('ul.feed').append(el);
+    });
+
+  });
+}
+
+function showRegistrationForm(){
+  $.ajax({url: "/registrationForm/" , async:true}).done(function(response){
+
+    $('.auth').html(response);
+  });
 }
 

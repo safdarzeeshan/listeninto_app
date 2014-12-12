@@ -16,3 +16,15 @@ staticfiles
 
 #ignoring log files
 logfile
+
+# Bower Components
+bower_components/*
+
+# sass cache
+.sass-cache
+*.css.map
+
+# don't put in main.css
+main.css
+
+*.sass-cache/

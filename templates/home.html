@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+    {% include 'user.html' %}
+  
+{% endif %}
+
+{% include 'search-box.html' %}
+{% include 'player.html' %}
+{% include 'feedbox.html' %}
+
+
+
+<div id="overlay">
+     <div id='reco-modal'>
+        {% csrf_token %}
+        <a href='#' class='close-modal' onclick="closeModal()"><i class="fa fa-close"></i></a>
+        <div>
+            <p id= 'recommended_song'></p>
+        </div>
+        <input class="receipient_username" type="text" placeholder="Recommend to...."/>
+        <textarea id="recomendation_description" placeholder="Description"></textarea>
+        <a href='#' id="receipient-button" onclick="recommendTo()">Recommend</a>
+     </div>
+</div>
+
+<div class="user-songs">
+    <ol id="playlist">
+        {% for song in songs %}
+            <li id="song_{{ song.track_id }}">
+
+                <span class='song_options'>
+                    <a href='#' class="play-song" title='Play Song' song-name = '{{ song.track_name }}' song-type='{{ song.track_type }}', song-id='{{ song.track_id }}' song-art = '{{ song.track_artwork_url }}' recommendation = 'False'><i class="fa fa-play"></i></a>
+                    <a href='#' class="recommend-song" title='Recommend Song' song-type='{{ song.track_type }}' song-id='{{ song.track_id }}' song-name='{{ song.track_name }}'><i class="fa fa-share"></i></a>
+                    <a href='#' class="delete-song" song-id="{{ song.track_id }}" title="Remove Song">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </span>
+                <span class='song_name' title = '{{ song.track_name }}' song-name = '{{ song.track_name }}' song-type='{{ song.track_type }}' song-id='{{ song.track_id }}' song-art = '{{ song.track_artwork_url }}' recommendation = 'False'><p>{{ song.track_name }} </p></span>
+            </li>
+        {% empty %}
+        <p class = 'message'>Add some songs so your friends can listen to your awesome music choice. We added one of our current favorites to start you off</p>
+        <li>
+            <span class="song_options">
+                    <a href="#" class="play-song" title="Play Song" song-name="Julian le Play - Mein Anker (Filous Remix)" song-type="youtube" song-id="UXF8Fu_C0UQ" song-art="http://i.ytimg.com/vi/UXF8Fu_C0UQ/hqdefault.jpg" recommendation="False"><i class="fa fa-play"></i></a>
+            </span>
+            <span class="song_name" title="Julian le Play - Mein Anker (Filous Remix)" song-name="Julian le Play - Mein Anker (Filous Remix)" song-type="youtube" song-id="UXF8Fu_C0UQ" song-art="http://i.ytimg.com/vi/UXF8Fu_C0UQ/hqdefault.jpg" recommendation="False"><p>Julian le Play - Mein Anker (Filous Remix) </p></span>
+        </li>    
+        {% endfor %}
+    </ol>
+</div>
+
+{% endblock content %}
+

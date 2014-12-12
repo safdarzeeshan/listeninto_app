@@ -1,0 +1,110 @@
+.header
+	
+	background-color: #fff
+	margin-bottom: 2%
+	box-shadow: 0 0 4px rgba(0,0,0,.14),0 4px 8px rgba(0,0,0,.4)
+	width: 100%
+	height: 3em
+	position: relative
+
+
+	.user-sidebar
+		float: left
+		margin-left: 0em
+		height: 100%
+
+		.user-options
+			float: left
+			height: 100%
+			cursor: pointer	
+			border-top-style: solid
+			border-top-width: 5px
+			border-top-color: transparent
+
+			.new-recommendation-indicator
+				position: absolute
+				right: 0
+				top: 6px
+				font-size: 0.7em
+				color: #863360
+
+			a.button
+				text-decoration: none				
+				text-align: center
+				padding: 0em 1em
+				color: black
+				font-size: 1em
+				font-weight: bold
+				position: relative
+				top: 22%					
+
+		#button-playlist
+
+			&:hover
+				background-color: #AA3C39
+
+				a.button
+					color: white
+
+			&.active
+				border-top-color: #AA3C39
+				
+
+		#button-recommendations
+			position: relative
+
+			&:hover
+				background-color: #AB3B78
+
+				a.button
+					color: white
+
+			&.active
+				border-top-color: #AB3B78
+				
+
+	.user-welcome
+
+		position: absolute
+		right: 0	
+		top: 2px
+		text-align: center
+
+		div
+			float: left
+			margin-right: 1em
+
+		.user-profile-picture
+			height: 2.5em
+			width: 2.5em	
+			border-radius: 50%
+			background-color: grey
+			margin-top: 4px
+
+			.profile-picture
+				height: 90%
+				margin-top: 2px
+
+		.user-name
+			margin-top: 8%
+
+		.logout
+			margin-top: 8%
+			color: grey
+
+		.logout:hover
+			color: black
+
+	.title	
+		width: 16%
+		margin-left: auto
+		margin-right: auto
+		color: black
+	
+		.title-img
+			width: 100%
+			height: 100%
+			padding-top: 4px
+
+
+

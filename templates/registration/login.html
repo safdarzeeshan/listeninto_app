@@ -2,40 +2,45 @@
 
 {% block content %}
 
-<div class="auth">
 
-    <span class="lead">ListeningTo!</span>
-    <p>Please log in or register.</p>
+<div id = 'home-container'>
+  <div class="auth">
+    <div class= 'form'>
+      <div class="login-form">
 
-  <div class="login-form">
+        <p>Please Log in or Sign Up.</p>
+          <div class="error_msg">
+            {% if errors %}
+              {% for error in errors %}
+                <p>{{ error }}</p>
+              {% endfor %}
+            {% endif %}
+          </div>
 
-    {% if form.errors %}
-      <p class="error">Sorry, that's not a valid username or password</p>
-    {% endif %}
 
-    <form action="/login/" method="post">
-      {% csrf_token %}
+        <form action="/login/" method="post">
+          {% csrf_token %}
 
-      <fieldset>
-        <input type="text" name="username" value="" id="username" placeholder="Username">
-      </fieldset>
-      <fieldset>
-        <input type="password" name="password" value="" id="password" placeholder="Password">
-      </fieldset>
+          <fieldset>
+            <input type="text" name="username" value="" id="username" placeholder="Username">
+          </fieldset>
+          <fieldset>
+            <input type="password" name="password" value="" id="password" placeholder="Password">
+          </fieldset>
 
-      <input class="button" type="submit" value="Login" />
-    </form>
+          <button class="button-login" type="submit" value="Login">Login</button>
+        </form>
+        <form action="{% url 'social:begin' 'facebook' %}">
+            <button class="button-login" type="submit"><i class="fa fa-facebook"></i>acebook Login</button>
+        </form>
+      </div>
 
+      <div class='sign-up'>
+        <p><b>New to Stereogram?</b></p>
+        <a href='#' class="button-login" onClick= 'showRegistrationForm()'>Sign Up</a>
+      </div>
+    </div>
   </div>
-
-  <form action="/register">
-      <button class="button" type="submit">Register</button>
-  </form>
-
-  <form action="{% url 'social:begin' 'facebook' %}">
-      <button class="button" type="submit">Login with Facebook</button>
-  </form>
-
 </div>
 
 {% endblock %}
