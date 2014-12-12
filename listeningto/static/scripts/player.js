@@ -304,6 +304,7 @@ function convertTime(seconds) {
   var secs = Math.round((seconds / 60 % 1) * 60);
 
   if (mins > 60) {
+    console.log('min > 60')
     hours = mins / 60;
     mins = (hours / 60 % 1) * 60;
     secs = (mins / 60 % 1) * 60;
