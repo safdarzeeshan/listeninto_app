@@ -28,3 +28,6 @@ bower_components/*
 main.css
 
 *.sass-cache/
+
+# node modules
+*node_modules/*

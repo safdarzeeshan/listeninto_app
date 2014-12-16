@@ -1,11 +1,10 @@
 $(document).ready(function(){
       $('#close-search').hide();
 
-
       SC.initialize({
         client_id: 'ad504f994ee6c4b53cfb47aec786f595'
       });
-})
+});
 
 function googleApiClientReady(){
 
@@ -13,7 +12,6 @@ function googleApiClientReady(){
 }
 
 function onYouTubeApiLoad() {
-
       gapi.client.setApiKey('AIzaSyDScS0XbWgnTtadhknXXwv9eqmPu9JNsno');
 }
 
