@@ -1,11 +1,17 @@
 from django.contrib import admin
-from .models import Song, Playlist
+from .models import Song, Playlist, UserPlaylist
 
 # Register your models here.
 
 
+class UserPlaylistInline(admin.TabularInline):
+    model = UserPlaylist
+    extra = 2   # how many rows to show
+
+
 class SongAdmin(admin.ModelAdmin):
     list_display = ('track_name', )
+    inlines = (UserPlaylistInline,)
 
 
 class PlaylistAdmin(admin.ModelAdmin):
@@ -15,4 +21,4 @@ class PlaylistAdmin(admin.ModelAdmin):
         return obj.user.username
 
 admin.site.register(Song, SongAdmin)
-admin.site.register(Playlist)
+admin.site.register(Playlist, PlaylistAdmin)

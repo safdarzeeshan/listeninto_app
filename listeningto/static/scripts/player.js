@@ -152,7 +152,8 @@ $(document).ready(function(){
     }
 
     if (recommendationBoolean === 'True'){
-      loadItemAndCheckIfPlayed(type, id);
+      var senderUsername = $(this).attr('sender');
+      loadItemAndCheckIfPlayed(type, id, senderUsername);
     }
 
   });
@@ -174,7 +175,8 @@ $(document).ready(function(){
     }
 
     if (recommendationBoolean === 'True'){
-      loadItemAndCheckIfPlayed(type, id);
+      var senderUsername = $(this).attr('sender');
+      loadItemAndCheckIfPlayed(type, id, senderUsername);
     }
 
   });
@@ -607,6 +609,7 @@ function recommendationPage(){
   });
 
   refreshFeed();
+  checkIfNewRecosExist()
 }
 
 function getUserSongs() {
@@ -623,6 +626,7 @@ function userPlaylist(user){
   $.ajax({url: "/user/?user=" + user, async: true}).done(function(response) {
     $('#playlist').html(response);
   });
+  $('#button-playlist').removeClass('active');
   refreshFeed();
 }
 
@@ -632,14 +636,22 @@ function deleteSong(id) {
   });
 }
 
-function loadItemAndCheckIfPlayed(type, id){
+function loadItemAndCheckIfPlayed(type, id, senderUsername){
   loadItem(type, id);
 
-  var playing_reco_info = {track_id: id, csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()}
+  var playing_reco_info = {track_id: id, 
+                           sender: senderUsername,
+                          csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
+                          }
 
   var checkIfPlayed = $.post('isrecoplayed/', playing_reco_info);
 
   checkIfPlayed.done(function(response) {
+    //if reco was not played then remove the new icon
+    if (response === 'False'){
+        $('#song_' + id).find('.new-reco').hide();
+        checkIfNewRecosExist()
+    }
 
   });
 }
@@ -672,6 +684,7 @@ function getURLParameter(url,name) {
 }
 
 function refreshFeed() {
+  console.log('refreshing feed')
   $.ajax({url: "/feed", async:true}).done(function(response) {
 
     var users = JSON.parse(response).users;
