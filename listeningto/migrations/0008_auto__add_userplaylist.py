@@ -8,15 +8,31 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'Playlist.created_at'
-        db.add_column(u'listeningto_playlist', 'created_at',
-                      self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, default=datetime.datetime(2014, 12, 16, 0, 0), blank=True),
-                      keep_default=False)
+        # Adding model 'UserPlaylist'
+        db.create_table(u'listeningto_userplaylist', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('playlist', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['listeningto.Playlist'])),
+            ('song', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['listeningto.Song'])),
+            ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+        ))
+        db.send_create_signal(u'listeningto', ['UserPlaylist'])
+
+        # Removing M2M table for field playlists on 'Song'
+        db.delete_table(db.shorten_name(u'listeningto_song_playlists'))
 
 
     def backwards(self, orm):
-        # Deleting field 'Playlist.created_at'
-        db.delete_column(u'listeningto_playlist', 'created_at')
+        # Deleting model 'UserPlaylist'
+        db.delete_table(u'listeningto_userplaylist')
+
+        # Adding M2M table for field playlists on 'Song'
+        m2m_table_name = db.shorten_name(u'listeningto_song_playlists')
+        db.create_table(m2m_table_name, (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('song', models.ForeignKey(orm[u'listeningto.song'], null=False)),
+            ('playlist', models.ForeignKey(orm[u'listeningto.playlist'], null=False))
+        ))
+        db.create_unique(m2m_table_name, ['song_id', 'playlist_id'])
 
 
     models = {
@@ -65,7 +81,6 @@ class Migration(SchemaMigration):
         },
         u'listeningto.playlist': {
             'Meta': {'object_name': 'Playlist'},
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
         },
@@ -83,13 +98,20 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Song'},
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'playlists': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['listeningto.Playlist']", 'symmetrical': 'False', 'blank': 'True'}),
+            'playlists': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['listeningto.Playlist']", 'symmetrical': 'False', 'through': u"orm['listeningto.UserPlaylist']", 'blank': 'True'}),
             'stream_url': ('django.db.models.fields.CharField', [], {'max_length': '500'}),
             'track_artwork_url': ('django.db.models.fields.CharField', [], {'max_length': '500'}),
             'track_id': ('django.db.models.fields.CharField', [], {'max_length': '500'}),
             'track_name': ('django.db.models.fields.CharField', [], {'max_length': '500'}),
             'track_type': ('django.db.models.fields.CharField', [], {'max_length': '500'}),
             'track_url': ('django.db.models.fields.CharField', [], {'max_length': '500'})
+        },
+        u'listeningto.userplaylist': {
+            'Meta': {'object_name': 'UserPlaylist'},
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'playlist': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['listeningto.Playlist']"}),
+            'song': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['listeningto.Song']"})
         }
     }
 
