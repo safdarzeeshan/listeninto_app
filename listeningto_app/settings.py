@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'listeningto',
     'south',
+    'django_extensions',
     'social.apps.django_app.default',
 )
 
