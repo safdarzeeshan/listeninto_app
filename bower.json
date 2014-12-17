@@ -1,0 +1,28 @@
+{
+  "name": "stereogram",
+  "version": "1.0.0",
+  "homepage": "http://stereogram.me",
+  "authors": [
+    "Azhar Khan <azmanian.devil@gmail.com>"
+  ],
+  "description": "listen, discover and share your favourite music with your favourite people",
+  "keywords": [
+    "music",
+    "friends",
+    "recommendations"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "resolutions": {
+    "jplayer": "~2.7.0"
+  },
+  "dependencies": {
+    "jplayer": "~2.9.2"
+  }
+}
