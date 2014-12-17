@@ -138,15 +138,19 @@ def get_recommendations(request):
 def check_if_reco_played(request):
 
     track_id = request.POST.get('track_id')
+    senderUsername = request.POST.get('sender')
 
     song = Song.objects.get(track_id=track_id)
-    reco = Recommendation.objects.get(receipient_id=request.user.id, song_id=song.id)
+    sender = User.objects.get(username=senderUsername)
+    reco = Recommendation.objects.get(receipient_id=request.user.id, song_id=song.id, sender=sender.id)
+
+    was_reco_played = reco.played;
 
     if not reco.played:
         reco.played = True
         reco.save()
 
-    return HttpResponse(reco.played, status=201)
+    return HttpResponse(was_reco_played, status=201)
 
 
 def any_new_recos(request):
