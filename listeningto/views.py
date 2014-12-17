@@ -9,7 +9,7 @@ from forms import MyRegistrationForm
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.shortcuts import render_to_response
-from listeningto.models import Song, Playlist, Recommendation
+from listeningto.models import Song, Playlist, Recommendation, UserPlaylist
 
 
 def login_view(request):
@@ -70,10 +70,13 @@ def save_song(request):
     stream_url = request.POST.get('stream_url', 'None')
     track_artwork_url = request.POST.get('track_artwork_url')
 
+    # playlist = Playlist.objects.get(user=request.user)
     playlist = Playlist.objects.get(user=request.user)
     songs = Song.objects.filter(playlists=playlist)
 
     playlist_size = len(songs)
+
+    print playlist_size
 
     if (playlist_size >= 10):
 
@@ -90,7 +93,8 @@ def save_song(request):
             r.stream_url = stream_url
             r.track_artwork_url = track_artwork_url
 
-        r.playlists.add(playlist)
+        # r.playlists.add(playlist)
+        UserPlaylist.objects.create(playlist=playlist, song=r)
         r.save()
 
         return HttpResponse(json.dumps({'id': r.id}), status=201)
@@ -134,15 +138,19 @@ def get_recommendations(request):
 def check_if_reco_played(request):
 
     track_id = request.POST.get('track_id')
+    senderUsername = request.POST.get('sender')
 
     song = Song.objects.get(track_id=track_id)
-    reco = Recommendation.objects.get(receipient_id=request.user.id, song_id=song.id)
+    sender = User.objects.get(username=senderUsername)
+    reco = Recommendation.objects.get(receipient_id=request.user.id, song_id=song.id, sender=sender.id)
+
+    was_reco_played = reco.played;
 
     if not reco.played:
         reco.played = True
         reco.save()
 
-    return HttpResponse(reco.played, status=201)
+    return HttpResponse(was_reco_played, status=201)
 
 
 def any_new_recos(request):
@@ -163,7 +171,8 @@ def delete_song(request):
     track_id = request.GET.get('trackid')
     song = Song.objects.get(track_id=track_id)
     playlist = Playlist.objects.get(user=request.user)
-    song.playlists.remove(playlist)
+    # song.playlists.remove(playlist)
+    UserPlaylist.objects.get(playlist=playlist, song=song).delete()
 
     return HttpResponse(status=201)
 
@@ -173,7 +182,10 @@ def home(request):
         return redirect('login')
 
     playlist, created = Playlist.objects.get_or_create(user=request.user)
-    songs = Song.objects.filter(playlists=playlist)
+
+    #need each song to pick up the created at date value from the playlist table
+    user_playlist = UserPlaylist.objects.filter(playlist=playlist).order_by('-created_at')
+    songs = [entry.song for entry in user_playlist]
 
     if request.is_ajax():
         print 'ajax'
@@ -186,27 +198,20 @@ def home(request):
 
 
 def user_songs(request):
-
     username = request.GET.get('user')
     user = User.objects.get(username=username)
 
     playlist = Playlist.objects.get(user__username=username)
-    songs = Song.objects.filter(playlists=playlist)
+    user_playlist = UserPlaylist.objects.filter(playlist=playlist).order_by('-created_at')
+    songs = [entry.song for entry in user_playlist]
 
     if request.is_ajax():
         return render_to_response('_searched_user_songs.html', {'songs': songs, 'user': user})
 
 
 def get_users(request):
-
-    users = User.objects.all();
-
+    users = User.objects.all()
     users_list = {'users': []}
-    # for i in range(len(users)):
-
-    #     users_list.append(users[i].username)
-
-    # return HttpResponse(','.join(users_list), status=201)
 
     for user in users:
 
