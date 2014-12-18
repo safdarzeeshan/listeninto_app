@@ -253,7 +253,7 @@ def activity_feed(request):
     # new_songs = Song.objects.filter(created_at__gte=yesterday, created_at__lte=today)
 
     for user in new_users:
-        new_user = {'username': user.username, 'name': '{} {}'.format(user.first_name, user.last_name)}
+        new_user = {'username': user.username, 'name': '{} {}'.format(user.first_name.encode('utf8'), user.last_name.encode('utf8'))}
         feed['users'].append(new_user)
 
     for recommendation in new_recommendations:
