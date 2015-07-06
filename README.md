@@ -8,7 +8,7 @@ License
 ----
 ```
     DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
-                Version 2, December 2004
+                Version 2, July 2015
 
 Copyright (C) 2015 Stereogram <www.stereogram.me>
 
