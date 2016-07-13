@@ -722,3 +722,8 @@ function showRegistrationForm(){
   });
 }
 
+function getHistory(){
+
+  
+}
+
