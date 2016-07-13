@@ -4,7 +4,7 @@
 
 {% if user.is_authenticated %}
     {% include 'user.html' %}
-  
+
 {% endif %}
 
 {% include 'search-box.html' %}
@@ -26,7 +26,7 @@
      </div>
 </div>
 
-<div class="user-songs">
+<div class="user-songs col-lg-6 col-sm-10 col-xs-10">
     <ol id="playlist">
         {% for song in songs %}
             <li id="song_{{ song.track_id }}">
@@ -47,7 +47,7 @@
                     <a href="#" class="play-song" title="Play Song" song-name="Julian le Play - Mein Anker (Filous Remix)" song-type="youtube" song-id="UXF8Fu_C0UQ" song-art="http://i.ytimg.com/vi/UXF8Fu_C0UQ/hqdefault.jpg" recommendation="False"><i class="fa fa-play"></i></a>
             </span>
             <span class="song_name" title="Julian le Play - Mein Anker (Filous Remix)" song-name="Julian le Play - Mein Anker (Filous Remix)" song-type="youtube" song-id="UXF8Fu_C0UQ" song-art="http://i.ytimg.com/vi/UXF8Fu_C0UQ/hqdefault.jpg" recommendation="False"><p>Julian le Play - Mein Anker (Filous Remix) </p></span>
-        </li>    
+        </li>
         {% endfor %}
     </ol>
 </div>
