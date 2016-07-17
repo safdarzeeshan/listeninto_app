@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-# Create your models here.
+# Create your models here
 
 
 class Playlist(models.Model):
@@ -31,7 +31,7 @@ class UserPlaylist(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return "{} on {}'s list".format(self.song.track_name, self.playlist.user.username)
+        return "{} on {}' s list".format(self.song.track_name, self.playlist.user.username)
 
 
 class Recommendation(models.Model):

@@ -1,42 +1,78 @@
 # -*- coding: utf-8 -*-
-from south.utils import datetime_utils as datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+from __future__ import unicode_literals
+
+from django.db import models, migrations
+from django.conf import settings
 
 
-class Migration(SchemaMigration):
+class Migration(migrations.Migration):
 
-    def forwards(self, orm):
-        # Adding model 'Song'
-        db.create_table(u'listeningto_song', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('track_url', self.gf('django.db.models.fields.CharField')(max_length=500)),
-            ('track_name', self.gf('django.db.models.fields.CharField')(max_length=500)),
-            ('stream_url', self.gf('django.db.models.fields.CharField')(max_length=500)),
-            ('track_id', self.gf('django.db.models.fields.CharField')(max_length=500)),
-            ('track_artwork_url', self.gf('django.db.models.fields.CharField')(max_length=500)),
-            ('track_type', self.gf('django.db.models.fields.CharField')(max_length=500)),
-        ))
-        db.send_create_signal(u'listeningto', ['Song'])
+    dependencies = [
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+    ]
 
-
-    def backwards(self, orm):
-        # Deleting model 'Song'
-        db.delete_table(u'listeningto_song')
-
-
-    models = {
-        u'listeningto.song': {
-            'Meta': {'object_name': 'Song'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'stream_url': ('django.db.models.fields.CharField', [], {'max_length': '500'}),
-            'track_artwork_url': ('django.db.models.fields.CharField', [], {'max_length': '500'}),
-            'track_id': ('django.db.models.fields.CharField', [], {'max_length': '500'}),
-            'track_name': ('django.db.models.fields.CharField', [], {'max_length': '500'}),
-            'track_type': ('django.db.models.fields.CharField', [], {'max_length': '500'}),
-            'track_url': ('django.db.models.fields.CharField', [], {'max_length': '500'})
-        }
-    }
-
-    complete_apps = ['listeningto']
+    operations = [
+        migrations.CreateModel(
+            name='Comment',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('message', models.CharField(max_length=500)),
+                ('commenter', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Playlist',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Recommendation',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('description', models.CharField(max_length=500, blank=True)),
+                ('played', models.BooleanField(default=False)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('receipient', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('sender', models.ForeignKey(related_name='sent_recommendation', to=settings.AUTH_USER_MODEL)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Song',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('track_url', models.CharField(max_length=500)),
+                ('track_name', models.CharField(max_length=500)),
+                ('stream_url', models.CharField(max_length=500)),
+                ('track_id', models.CharField(max_length=500)),
+                ('track_artwork_url', models.CharField(max_length=500)),
+                ('track_type', models.CharField(max_length=500)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='UserPlaylist',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('playlist', models.ForeignKey(to='listeningto.Playlist')),
+                ('song', models.ForeignKey(to='listeningto.Song')),
+            ],
+        ),
+        migrations.AddField(
+            model_name='song',
+            name='playlists',
+            field=models.ManyToManyField(to='listeningto.Playlist', through='listeningto.UserPlaylist', blank=True),
+        ),
+        migrations.AddField(
+            model_name='recommendation',
+            name='song',
+            field=models.ForeignKey(to='listeningto.Song'),
+        ),
+        migrations.AddField(
+            model_name='comment',
+            name='recommendation',
+            field=models.ForeignKey(to='listeningto.Recommendation'),
+        ),
+    ]
