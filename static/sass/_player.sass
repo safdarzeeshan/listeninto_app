@@ -1,0 +1,154 @@
+$primary-color: #9AD1ED
+$secondary-color: #cbcacc
+$border-color: #C2C2C2
+
+
+
+.audio-player
+
+	margin-top: 2em
+	// margin-left: 2em
+	height: 11.5em
+	border-radius: 5px
+	background-color: whitesmoke
+	box-shadow: 10px 10px 10px rgba(0,0,0,.14),0 4px 8px rgba(0,0,0,.4)
+	overflow: hidden
+	// padding-left: 0!important
+	// padding-right: 0!important
+
+	&:hover
+		> .controls
+			display: block
+
+		> .play-time
+			display: block
+
+		> .song-art
+			opacity: 0.5
+
+		> .song-name-div
+			opacity: 0.3
+
+	.song-art
+		position: relative
+		z-index: 50
+		height: 11em
+		overflow: hidden
+
+		.song-img
+			width: 100%
+			margin-top: -2em
+
+	.song-name-div
+		position: relative
+		z-index: 100
+		width: 100%
+		height: 3em
+		text-align: center
+		margin-top: -3em
+		color: white
+		background-color: rgba(0,0,0,.4)
+		display: table
+
+		p
+			margin: 0
+			display: table-cell
+			vertical-align: middle
+			text-align: center
+			font-size: 0.9em
+
+
+	.progress-bar
+		width: 100%
+		height: 8px
+		display: block
+		background: $secondary-color
+		position: relative
+		bottom: 0px
+		cursor: pointer
+		overflow: hidden
+		border-radius: 0
+		border: none
+
+
+		span
+			border: none
+			background: none
+			cursor: move
+			outline: none
+
+	.play-time
+		display: none
+		position: relative
+		z-index: 150
+		color: white
+		margin-top: -2em
+		font-family: sans-serif
+
+		.startTime
+			padding-left: 0.5em
+
+		.endTime
+			float: right
+			padding-right: 0.5em
+
+
+
+	.controls
+		margin-left: auto
+		margin-right: auto
+		display: none
+		position: relative
+		z-index: 200
+		margin-top: -10em
+		width: 9em
+		height: 9em
+
+
+		div
+			width: 100%
+			height: 100%
+			border-radius: 50%
+			background-color: none
+
+			a
+
+				> i
+					font-size: 5em
+					color: #D0D1D1
+
+				&:hover	> i
+					color: #EFEFEF
+
+			#play-icon
+				padding-left: 33%
+				padding-top: 23%
+
+			#pause-icon
+				padding-left: 27%
+				padding-top: 21%
+
+			#stop-icon
+				padding-left: 0.55em
+				padding-top: 0.5em
+
+
+.ui-slider-horizontal .ui-slider-range-min
+	background: #7E0027
+	border-radius: 0
+	border-bottom-right-radius: 2px
+	border-top-right-radius: 2px
+	display: block
+	height: 8px
+
+// .ui-slider-handle
+// 	position: absolute
+// 	top: -8px
+// 	width: 8px
+// 	height: 22px
+// 	border: none
+// 	outline: none
+// 	margin: 0
+// 	cursor: move
+// 	background: none
+
