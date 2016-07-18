@@ -6,7 +6,7 @@ var gulp = require('gulp')
     concat = require('gulp-concat'),
     rename = require('gulp-rename'),
     notify = require('gulp-notify'),
-    // livereload = require('gulp-livereload'),
+    livereload = require('gulp-livereload'),
     del = require('del');
 
 gulp.task('styles', function() {
@@ -29,6 +29,26 @@ gulp.task('scripts', function() {
     .pipe(gulp.dest('listeningto/static/js'))
     .pipe(livereload())
     .pipe(notify({ message: 'completed scripts task.' }));
+});
+
+gulp.task('build_scripts', function() {
+  return gulp.src('listeningto/static/scripts/**/*.js')
+    .pipe(concat('main.js'))
+    .pipe(gulp.dest('listeningto/static/js'))
+    .pipe(rename({ suffix: '.min' }))
+    .pipe(uglify())
+    .pipe(gulp.dest('listeningto/static/js'))
+    .pipe(notify({ message: 'completed scripts task.' }));
+});
+
+gulp.task('build_styles', function() {
+  return gulp.src('listeningto/static/sass/**/*.sass')
+    .pipe(sass({ style: 'expanded' }))
+    .pipe(gulp.dest('listeningto/static/css'))
+    .pipe(rename({ suffix: '.min' }))
+    .pipe(minifycss())
+    .pipe(gulp.dest('listeningto/static/css'))
+    .pipe(notify({ message: 'completed styles task.' }));
 });
 
 // HTML
