@@ -6,7 +6,7 @@ var gulp = require('gulp')
     concat = require('gulp-concat'),
     rename = require('gulp-rename'),
     notify = require('gulp-notify'),
-    livereload = require('gulp-livereload'),
+    // livereload = require('gulp-livereload'),
     del = require('del');
 
 gulp.task('styles', function() {
