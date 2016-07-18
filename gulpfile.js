@@ -37,8 +37,7 @@ gulp.task('build_scripts', function() {
     .pipe(gulp.dest('listeningto/static/js'))
     .pipe(rename({ suffix: '.min' }))
     .pipe(uglify())
-    .pipe(gulp.dest('listeningto/static/js'))
-    .pipe(notify({ message: 'completed scripts task.' }));
+    .pipe(gulp.dest('listeningto/static/js'));
 });
 
 gulp.task('build_styles', function() {
@@ -47,8 +46,7 @@ gulp.task('build_styles', function() {
     .pipe(gulp.dest('listeningto/static/css'))
     .pipe(rename({ suffix: '.min' }))
     .pipe(minifycss())
-    .pipe(gulp.dest('listeningto/static/css'))
-    .pipe(notify({ message: 'completed styles task.' }));
+    .pipe(gulp.dest('listeningto/static/css'));
 });
 
 // HTML
