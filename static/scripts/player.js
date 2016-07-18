@@ -501,7 +501,7 @@ function recommendSong(track_type, track_id, track_name){
      $.ajax({url: "/getusers", async:true}).done(function(response){
 
       //this change was made to incorporate first name and last name instead of username
-          var users = [];   
+          var users = [];
           var usersJSON = JSON.parse(response).users;
 
           _.each(_.map(usersJSON, function(user) {
@@ -509,8 +509,8 @@ function recommendSong(track_type, track_id, track_name){
               return user
 
           }), function(user_info) {
-                  users.push(user_info)            
-              }           
+                  users.push(user_info)
+              }
           )
 
           $('.receipient_username').autocomplete({
@@ -572,7 +572,7 @@ function saveAndRecommend(type, url,id,title,stream_url,artwork_url) {
 
   $.ajax({url: "/getusers", async:true}).done(function(response){
 
-          var users = [];   
+          var users = [];
           var usersJSON = JSON.parse(response).users;
 
           _.each(_.map(usersJSON, function(user) {
@@ -580,8 +580,8 @@ function saveAndRecommend(type, url,id,title,stream_url,artwork_url) {
               return user
 
           }), function(user_info) {
-                  users.push(user_info)            
-              }           
+                  users.push(user_info)
+              }
           )
 
           $('.receipient_username').autocomplete({
@@ -639,7 +639,7 @@ function deleteSong(id) {
 function loadItemAndCheckIfPlayed(type, id, senderUsername){
   loadItem(type, id);
 
-  var playing_reco_info = {track_id: id, 
+  var playing_reco_info = {track_id: id,
                            sender: senderUsername,
                           csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
                           }
@@ -724,6 +724,6 @@ function showRegistrationForm(){
 
 function getHistory(){
 
-  
+
 }
 

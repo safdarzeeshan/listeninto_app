@@ -1,60 +1,38 @@
-<!-- <div class='header'> -->
-<!--     <span>
-        <div class="user-sidebar">
-            <div class= 'user-options' id='button-playlist' onClick=getUserSongs()>
-                <a href="#" class="button" onClick=getUserSongs()>Playlist</a>
-            </div>
-            <div class= 'user-options' id='button-recommendations' onClick=recommendationPage()>
-                <a href="#" class="button" onClick=recommendationPage()>Recommendations</a>
-                <div class = 'new-recommendation-indicator' style="visibility: hidden;"><i class="fa fa-star"></i></div>
-            </div>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#"><img class= 'title-img' src="/static/images/icon.png"></a>
         </div>
-    </span>
-    <span>
-    <div class= 'title'> <img class= 'title-img' src="/static/images/logo-grey.png"></div>
-    </span>
-    <span>
-        <div class="user-welcome">
-            <div class='user-name'>{{ user.username }}</div>
-            <div class='logout'><a href='/logout' title='Log out' class="logout"><i class="fa fa-power-off"></i></a></div>
-        </div>
-    </span> -->
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">Brand</a>
-            </div>
 
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="#" onClick=getUserSongs()>Playlist</a></li>
-                    <li><a href="#" onClick=recommendationPage()>Recommendations</a></li>
-                </ul>
-                {% csrf_token %}
-                <form class="navbar-form navbar-left" role="search" onsubmit="saveSong()">
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search for a song" id="song_url">
-                    </div>
-                    <a href='#' id="search"><i class="fa fa-search search-icon"></i></a>
-                    <input type="submit" style="visibility: hidden;" />
-                </form>
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown">
-                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ user.username }} <span class="caret"></span></a>
-                      <ul class="dropdown-menu">
-                        <li><a href='/logout'>Logout</a></li>
-                      </ul>
-                    </li>
-                </ul>
-            </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
-    </nav>
-<!-- </div> -->
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li id='button-playlist'><a href="#" onClick=getUserSongs()>Playlist</a></li>
+                <li id='button-recommendations'><a href="#" onClick=recommendationPage()>Recommendations</a></li>
+            </ul>
+            {% csrf_token %}
+            <form class="navbar-form navbar-left" role="search" onsubmit="saveSong()">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search for a song" id="song_url">
+                </div>
+                <a href='#' id="search"><i class="fa fa-search search-icon"></i></a>
+                <input type="submit" style="visibility: hidden;" />
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ user.username }} <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href='/logout'>Logout</a></li>
+                  </ul>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
