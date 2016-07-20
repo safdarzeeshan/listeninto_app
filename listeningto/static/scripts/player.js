@@ -380,25 +380,22 @@ function getSongInfo(song_url, type, save){
 
       var id = getURLParameter(url, 'v' )
 
-      $.getJSON('http://gdata.youtube.com/feeds/api/videos/'+id+'?v=2&alt=jsonc',function(data,status,xhr){
+      $.getJSON('https://www.googleapis.com/youtube/v3/videos?part=snippet&id=' + id + '&key=AIzaSyCIAcOpmbnCDpnmcm8Y3WnJs788bflySOQ',function(data,status,xhr){
         trackInfo = {
           track_type: 'youtube',
           track_url: url,
-          track_name: data.data.title,
+          track_name: data.items[0].snippet.title,
           track_id: id,
-          track_artwork_url: data.data.thumbnail.hqDefault,
+          track_artwork_url: data.items[0].snippet.thumbnails.high.url,
           csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
         };
 
         if (save) {
                   saveSongToDb(trackInfo);
            }
-
         else{
               displayInsertedUrl(trackInfo);
-
         }
-        // return trackInfo;
       });
 
 
@@ -448,16 +445,18 @@ function getSongInfo(song_url, type, save){
 }
 
 function saveSongToDb(trackInfo) {
-  $('#song_url').val('');
+  $('#song_url').val('')
+  $('#song_' + trackInfo.track_id).children('.song_options').children('#add-song').html("<i class='fa fa-check'></i>");
 
-  var savingSong = $.post('addsong/', trackInfo);
+  // var savingSong = $.post('addsong/', trackInfo);
 
-  savingSong.done(function(data) {
-  });
+  // savingSong.done(function(data) {
+  //   $('#song_' + trackInfo.track_id).children('.song_options').('#add-song').html("<i class='fa fa-check'></i>");
+  // });
 
-  savingSong.fail(function(){
-    $('#song_' + trackInfo.track_id).children('.song_name').html("<p class='error-playlistmax'>Error: Your playlist is full. Please delete a song first</p>");
-  });
+  // savingSong.fail(function(){
+  //   $('#song_' + trackInfo.track_id).children('.song_name').html("<p class='error-playlistmax'>Error: Your playlist is full. Please delete a song first</p>");
+  // });
 }
 
 function displayInsertedUrl(trackInfo){
@@ -501,7 +500,7 @@ function recommendSong(track_type, track_id, track_name){
      $.ajax({url: "/getusers", async:true}).done(function(response){
 
       //this change was made to incorporate first name and last name instead of username
-          var users = [];   
+          var users = [];
           var usersJSON = JSON.parse(response).users;
 
           _.each(_.map(usersJSON, function(user) {
@@ -509,8 +508,8 @@ function recommendSong(track_type, track_id, track_name){
               return user
 
           }), function(user_info) {
-                  users.push(user_info)            
-              }           
+                  users.push(user_info)
+              }
           )
 
           $('.receipient_username').autocomplete({
@@ -572,7 +571,7 @@ function saveAndRecommend(type, url,id,title,stream_url,artwork_url) {
 
   $.ajax({url: "/getusers", async:true}).done(function(response){
 
-          var users = [];   
+          var users = [];
           var usersJSON = JSON.parse(response).users;
 
           _.each(_.map(usersJSON, function(user) {
@@ -580,8 +579,8 @@ function saveAndRecommend(type, url,id,title,stream_url,artwork_url) {
               return user
 
           }), function(user_info) {
-                  users.push(user_info)            
-              }           
+                  users.push(user_info)
+              }
           )
 
           $('.receipient_username').autocomplete({
@@ -639,7 +638,7 @@ function deleteSong(id) {
 function loadItemAndCheckIfPlayed(type, id, senderUsername){
   loadItem(type, id);
 
-  var playing_reco_info = {track_id: id, 
+  var playing_reco_info = {track_id: id,
                            sender: senderUsername,
                           csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
                           }
@@ -724,6 +723,6 @@ function showRegistrationForm(){
 
 function getHistory(){
 
-  
+
 }
 

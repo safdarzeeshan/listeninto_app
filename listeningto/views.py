@@ -171,7 +171,7 @@ def delete_song(request):
     song = Song.objects.get(track_id=track_id)
     playlist = Playlist.objects.get(user=request.user)
     # song.playlists.remove(playlist)
-    UserPlaylist.objects.get(playlist=playlist, song=song).delete()
+    UserPlaylist.objects.filter(playlist=playlist, song=song)[0].delete()
 
     return HttpResponse(status=201)
 

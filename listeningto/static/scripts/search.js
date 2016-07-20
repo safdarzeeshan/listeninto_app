@@ -7,12 +7,11 @@ $(document).ready(function(){
 });
 
 function googleApiClientReady(){
-
       gapi.client.load('youtube', 'v3',onYouTubeApiLoad );
 }
 
 function onYouTubeApiLoad() {
-      gapi.client.setApiKey('AIzaSyDScS0XbWgnTtadhknXXwv9eqmPu9JNsno');
+      gapi.client.setApiKey('AIzaSyCIAcOpmbnCDpnmcm8Y3WnJs788bflySOQ');
 }
 
 function search(search_query){

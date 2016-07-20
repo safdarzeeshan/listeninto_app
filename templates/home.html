@@ -8,7 +8,6 @@
 {% endif %}
 
 <div class='row'>
-<!-- {% include 'search-box.html' %} -->
     {% include 'player.html' %}
     <div id="overlay">
          <div id='reco-modal'>
@@ -22,8 +21,6 @@
             <a href='#' id="receipient-button" onclick="recommendTo()">Recommend</a>
          </div>
     </div>
-
-    <!-- <div class="col-lg-6 col-md-6 col-sm-10 col-xs-10"> -->
     <div class="user-songs col-lg-6 col-lg-offset-0 col-md-7 col-md-offset-0 col-sm-10 col-sm-offset-1 col-xs-12">
         <ol id="playlist">
             {% for song in songs %}
