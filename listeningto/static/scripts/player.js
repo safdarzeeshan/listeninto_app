@@ -446,17 +446,16 @@ function getSongInfo(song_url, type, save){
 
 function saveSongToDb(trackInfo) {
   $('#song_url').val('')
-  $('#song_' + trackInfo.track_id).children('.song_options').children('#add-song').html("<i class='fa fa-check'></i>");
 
-  // var savingSong = $.post('addsong/', trackInfo);
+  var savingSong = $.post('addsong/', trackInfo);
 
-  // savingSong.done(function(data) {
-  //   $('#song_' + trackInfo.track_id).children('.song_options').('#add-song').html("<i class='fa fa-check'></i>");
-  // });
+  savingSong.done(function(data) {
+    $('#song_' + trackInfo.track_id).children('.song_options').children('#add-song').html("<i class='fa fa-check'></i>");
+  });
 
-  // savingSong.fail(function(){
-  //   $('#song_' + trackInfo.track_id).children('.song_name').html("<p class='error-playlistmax'>Error: Your playlist is full. Please delete a song first</p>");
-  // });
+  savingSong.fail(function(){
+    $('#song_' + trackInfo.track_id).children('.song_name').html("<p class='error-playlistmax'>Error: Your playlist is full. Please delete a song first</p>");
+  });
 }
 
 function displayInsertedUrl(trackInfo){
